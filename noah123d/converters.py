@@ -210,6 +210,157 @@ class STLConverter:
                 converted_files.append(str(output_path))
         
         return converted_files
+
+    def convert_multiple_stl_with_counts(self, stl_objects: List[Dict[str, Union[str, Path, int]]], 
+                                        output_path: Union[str, Path],
+                                        layout_mode: str = "grid",
+                                        spacing_factor: float = 1.1,
+                                        center_layout: bool = True) -> bool:
+        """
+        Convert multiple STL files to a single 3MF file with specified counts for each.
+        
+        Args:
+            stl_objects: List of dictionaries with keys:
+                        - 'path': Path to STL file
+                        - 'count': Number of copies (default: 1)
+                        - 'name': Optional name for the object (default: filename)
+            output_path: Path for the output 3MF file
+            layout_mode: Layout arrangement - "grid", "linear", or "stack" (default: "grid")
+            spacing_factor: Multiplier for object spacing (1.0 = touching, 1.1 = 10% gap)
+            center_layout: Whether to center the layout around the origin
+            
+        Returns:
+            True if conversion was successful, False otherwise
+            
+        Example:
+            >>> stl_objects = [
+            ...     {'path': 'part1.stl', 'count': 3},
+            ...     {'path': 'part2.stl', 'count': 2, 'name': 'CustomPart'},
+            ...     {'path': 'part3.stl', 'count': 1}
+            ... ]
+            >>> converter.convert_multiple_stl_with_counts(stl_objects, 'assembly.3mf')
+        """
+        try:
+            output_path = Path(output_path)
+            
+            # Validate and process input objects
+            processed_objects = []
+            total_objects = 0
+            
+            for obj_spec in stl_objects:
+                stl_path = Path(obj_spec['path'])
+                count = obj_spec.get('count', 1)
+                name = obj_spec.get('name', stl_path.stem)
+                
+                if not stl_path.exists():
+                    raise FileNotFoundError(f"STL file not found: {stl_path}")
+                
+                if count < 1:
+                    raise ValueError(f"Count must be at least 1, got {count} for {stl_path}")
+                
+                if self.validate:
+                    self._validate_stl(stl_path)
+                
+                # Get STL info for layout calculations
+                stl_info = self.get_stl_info(stl_path)
+                if not stl_info or 'error' in stl_info:
+                    raise ValueError(f"Could not analyze STL file: {stl_path}")
+                
+                processed_objects.append({
+                    'path': stl_path,
+                    'count': count,
+                    'name': name,
+                    'info': stl_info
+                })
+                total_objects += count
+            
+            # Track conversion start
+            import time
+            start_time = time.time()
+            
+            # Calculate layout positions for all objects
+            positions = self._calculate_multi_object_layout(
+                processed_objects, layout_mode, spacing_factor, center_layout
+            )
+            
+            # Create the 3MF archive
+            with Archive3mf(output_path, 'w') as archive:
+                # Create the 3D directory
+                with Directory('3D') as models_dir:
+                    # Create a model and add all objects
+                    with Model() as model:
+                        object_index = 0
+                        total_vertices = 0
+                        total_triangles = 0
+                        object_details = []
+                        
+                        # Process each STL file and its copies
+                        for obj_spec in processed_objects:
+                            stl_path = obj_spec['path']
+                            count = obj_spec['count']
+                            name = obj_spec['name']
+                            stl_info = obj_spec['info']
+                            
+                            # Load the STL and get object data
+                            master_obj_id = model.add_object_from_stl(stl_path)
+                            master_obj = model.get_object(master_obj_id)
+                            
+                            # Remove the original object since we'll place all objects at calculated positions
+                            model.remove_object(master_obj_id)
+                            
+                            # Create objects at calculated positions for this STL
+                            for i in range(count):
+                                position = positions[object_index]
+                                
+                                # Create translated copy
+                                translated_vertices = self._translate_vertices(
+                                    master_obj['vertices'], position
+                                )
+                                obj_id = model.add_object(
+                                    translated_vertices, 
+                                    master_obj['triangles'],
+                                    name=f"{name}_{i+1}" if count > 1 else name
+                                )
+                                
+                                object_details.append({
+                                    'id': obj_id,
+                                    'source_stl': str(stl_path),
+                                    'name': name,
+                                    'copy_number': i + 1,
+                                    'position': position,
+                                    'vertices': len(master_obj['vertices']),
+                                    'triangles': len(master_obj['triangles'])
+                                })
+                                
+                                object_index += 1
+                            
+                            total_vertices += len(master_obj['vertices']) * count
+                            total_triangles += len(master_obj['triangles']) * count
+                        
+                        # Calculate combined statistics
+                        stats = {
+                            'total_stl_files': len(processed_objects),
+                            'total_objects': total_objects,
+                            'total_vertices': total_vertices,
+                            'total_triangles': total_triangles,
+                            'conversion_time': time.time() - start_time,
+                            'timestamp': time.time(),
+                            'layout_mode': layout_mode,
+                            'spacing_factor': spacing_factor,
+                            'object_details': object_details
+                        }
+                        
+                        if self.include_metadata:
+                            self._add_multi_object_metadata(stats, output_path, processed_objects)
+                        
+                        # Store conversion statistics
+                        self.conversion_stats[str(output_path)] = stats
+            
+            return True
+            
+        except Exception as e:
+            self.conversion_stats[str(output_path)] = {'error': str(e)}
+            return False
     
     def get_stl_info(self, stl_path: Union[str, Path]) -> Optional[Dict[str, Any]]:
         """
@@ -461,6 +612,156 @@ Object Positions:
             
             metadata_dir.create_file('grid_conversion_report.txt', metadata_content)
 
+    def _calculate_multi_object_layout(self, processed_objects: List[Dict], 
+                                     layout_mode: str, spacing_factor: float, 
+                                     center_layout: bool) -> List[List[float]]:
+        """Calculate positions for multiple different objects with counts."""
+        import math
+        
+        positions = []
+        
+        if layout_mode == "linear":
+            # Arrange all objects in a single line
+            current_x = 0
+            
+            for obj_spec in processed_objects:
+                dimensions = obj_spec['info']['dimensions']
+                count = obj_spec['count']
+                
+                # Place copies of this object
+                for i in range(count):
+                    positions.append([current_x, 0, 0])
+                    current_x += dimensions[0] * spacing_factor
+                
+                # Add extra space between different object types
+                current_x += dimensions[0] * 0.5
+                
+            # Center the layout if requested
+            if center_layout and positions:
+                total_width = max(pos[0] for pos in positions) + dimensions[0]
+                offset_x = -total_width / 2
+                for pos in positions:
+                    pos[0] += offset_x
+                    
+        elif layout_mode == "stack":
+            # Stack all objects vertically
+            current_z = 0
+            
+            for obj_spec in processed_objects:
+                dimensions = obj_spec['info']['dimensions']
+                count = obj_spec['count']
+                
+                # Place copies of this object
+                for i in range(count):
+                    positions.append([0, 0, current_z])
+                    current_z += dimensions[2] * spacing_factor
+                
+                # Add extra space between different object types
+                current_z += dimensions[2] * 0.5
+                
+            # Center the layout if requested
+            if center_layout and positions:
+                total_height = max(pos[2] for pos in positions) + dimensions[2]
+                offset_z = -total_height / 2
+                for pos in positions:
+                    pos[2] += offset_z
+                    
+        else:  # grid layout (default)
+            # Calculate total number of objects
+            total_objects = sum(obj['count'] for obj in processed_objects)
+            
+            # Calculate grid dimensions
+            grid_cols = math.ceil(math.sqrt(total_objects))
+            grid_rows = math.ceil(total_objects / grid_cols)
+            
+            # Find maximum dimensions for spacing
+            max_dimensions = [0, 0, 0]
+            for obj_spec in processed_objects:
+                dimensions = obj_spec['info']['dimensions']
+                for i in range(3):
+                    max_dimensions[i] = max(max_dimensions[i], dimensions[i])
+            
+            # Calculate spacing
+            x_spacing = max_dimensions[0] * spacing_factor
+            y_spacing = max_dimensions[1] * spacing_factor
+            
+            # Calculate grid positions
+            total_width = (grid_cols - 1) * x_spacing
+            total_height = (grid_rows - 1) * y_spacing
+            
+            start_x = -total_width / 2 if center_layout else 0
+            start_y = -total_height / 2 if center_layout else 0
+            
+            object_index = 0
+            for obj_spec in processed_objects:
+                count = obj_spec['count']
+                
+                for i in range(count):
+                    if object_index >= total_objects:
+                        break
+                        
+                    row = object_index // grid_cols
+                    col = object_index % grid_cols
+                    
+                    x = start_x + col * x_spacing
+                    y = start_y + row * y_spacing
+                    
+                    positions.append([x, y, 0])
+                    object_index += 1
+        
+        return positions
+
+    def _add_multi_object_metadata(self, stats: Dict[str, Any], output_path: Path,
+                                  processed_objects: List[Dict]):
+        """Add multi-object conversion metadata to the 3MF file."""
+        with Directory('Metadata') as metadata_dir:
+            metadata_content = f"""Multi-STL to 3MF Conversion Report
+Generated by: Noah123d STL Converter v2025.0.1
+Date: {Path(__file__).stat().st_mtime}
+
+Conversion Summary:
+- Total STL Files: {stats['total_stl_files']}
+- Total Objects: {stats['total_objects']}
+- Layout Mode: {stats['layout_mode']}
+- Spacing Factor: {stats['spacing_factor']:.2f}
+
+Output Information:
+- File: {output_path.name}
+- Total Vertices: {stats['total_vertices']:,}
+- Total Triangles: {stats['total_triangles']:,}
+
+Performance:
+- Conversion Time: {stats['conversion_time']:.3f} seconds
+- Triangles/Second: {stats['total_triangles'] / stats['conversion_time']:,.0f}
+
+Source Files and Object Details:
+"""
+            
+            for obj_spec in processed_objects:
+                stl_path = obj_spec['path']
+                count = obj_spec['count']
+                name = obj_spec['name']
+                info = obj_spec['info']
+                
+                metadata_content += f"""
+- STL File: {stl_path.name}
+  Name: {name}
+  Copies: {count}
+  Vertices per copy: {info['unique_vertices']:,}
+  Triangles per copy: {info['triangles']:,}
+  Dimensions: {info['dimensions'][0]:.2f} × {info['dimensions'][1]:.2f} × {info['dimensions'][2]:.2f}
+  Volume: {info['volume']:.3f} cubic units
+"""
+            
+            metadata_content += f"\nObject Placement Details:\n"
+            for detail in stats['object_details']:
+                pos = detail['position']
+                metadata_content += f"- {detail['name']}: Position=({pos[0]:.2f}, {pos[1]:.2f}, {pos[2]:.2f})\n"
+            
+            metadata_content += "\nMulti-object conversion successful!"
+            
+            metadata_dir.create_file('multi_object_conversion_report.txt', metadata_content)
+
 
 # Convenience functions for backward compatibility and simple usage
 def stl_to_3mf(stl_path: Union[str, Path], output_path: Union[str, Path], 
@@ -538,3 +839,40 @@ def stl_to_3mf_grid(stl_path: Union[str, Path], output_path: Union[str, Path],
     converter = STLConverter(include_metadata=include_metadata)
     return converter.convert_with_copies(stl_path, output_path, count, 
                                        grid_cols, spacing_factor, center_grid)
+
+
+def multi_stl_to_3mf(stl_objects: List[Dict[str, Union[str, Path, int]]], 
+                     output_path: Union[str, Path],
+                     layout_mode: str = "grid",
+                     spacing_factor: float = 1.1,
+                     center_layout: bool = True,
+                     include_metadata: bool = True) -> bool:
+    """
+    Convert multiple STL files with specified counts to a single 3MF file.
+    
+    Args:
+        stl_objects: List of dictionaries with keys:
+                    - 'path': Path to STL file (required)
+                    - 'count': Number of copies (default: 1)
+                    - 'name': Optional name for the object (default: filename)
+        output_path: Path for the output 3MF file
+        layout_mode: Layout arrangement - "grid", "linear", or "stack" (default: "grid")
+        spacing_factor: Multiplier for object spacing (1.0 = touching, 1.1 = 10% gap)
+        center_layout: Whether to center the layout around the origin
+        include_metadata: Whether to include conversion metadata
+        
+    Returns:
+        True if conversion was successful, False otherwise
+        
+    Example:
+        >>> # Create assembly with multiple different parts
+        >>> stl_objects = [
+        ...     {'path': 'base.stl', 'count': 1, 'name': 'Base'},
+        ...     {'path': 'screw.stl', 'count': 4, 'name': 'Screw'},
+        ...     {'path': 'washer.stl', 'count': 4, 'name': 'Washer'}
+        ... ]
+        >>> success = multi_stl_to_3mf(stl_objects, 'assembly.3mf', layout_mode='grid')
+    """
+    converter = STLConverter(include_metadata=include_metadata)
+    return converter.convert_multiple_stl_with_counts(stl_objects, output_path,
+                                                    layout_mode, spacing_factor, center_layout)

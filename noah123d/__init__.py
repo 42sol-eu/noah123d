@@ -6,7 +6,7 @@ from .__main__ import main
 from .archive3mf import Archive3mf
 from .directory import Directory
 from .model import Model
-from .converters import STLConverter, stl_to_3mf, get_stl_info, batch_stl_to_3mf, stl_to_3mf_grid
+from .converters import STLConverter, stl_to_3mf, get_stl_info, batch_stl_to_3mf, stl_to_3mf_grid, multi_stl_to_3mf
 from .analyzer import Analysis3MF, analyze_3mf, get_model_center_of_mass, get_model_dimensions
 
 __all__ = [
@@ -19,6 +19,7 @@ __all__ = [
     "get_stl_info", 
     "batch_stl_to_3mf",
     "stl_to_3mf_grid",
+    "multi_stl_to_3mf",
     "Analysis3MF",
     "analyze_3mf",
     "get_model_center_of_mass",
