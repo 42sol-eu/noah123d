@@ -52,8 +52,9 @@ class Model:
         
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Exit the context manager."""
-        # Save the model to the archive
-        self._save_model()
+        # Only save the model if the archive is writable
+        if self._parent_archive and self._parent_archive.is_writable():
+            self._save_model()
         
         # Reset the context variable
         if self._context_token:

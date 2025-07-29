@@ -124,6 +124,10 @@ class Archive3mf:
             if isinstance(data, str):
                 data = data.encode('utf-8')
             self._zipfile.writestr(filename, data)
+    
+    def is_writable(self) -> bool:
+        """Check if the archive is opened in a writable mode."""
+        return self.mode in ('w', 'a')
             
     @classmethod
     def get_current(cls) -> Optional['Archive3mf']:
