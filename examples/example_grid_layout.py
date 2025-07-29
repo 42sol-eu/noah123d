@@ -263,7 +263,7 @@ def analyze_grid_files():
 if __name__ == "__main__":
     console = Console()
     
-    console.print("[bold magenta]🎯 Noah123D Grid Layout Examples[/bold magenta]")
+    console.print("[bold magenta]🎯 Noah123d Grid Layout Examples[/bold magenta]")
     console.print("=" * 60)
     
     # Run all examples

@@ -1,4 +1,4 @@
-"""Test module for Noah123D."""
+"""Test module for Noah123d."""
 
 import pytest
 from noah123d import main
@@ -18,4 +18,4 @@ def test_main_help():
     runner = CliRunner()
     result = runner.invoke(main, ['--help'])
     assert result.exit_code == 0
-    assert "Noah123D - Building assemblies from STL models" in result.output
+    assert "Noah123d - Building assemblies from STL models" in result.output

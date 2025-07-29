@@ -171,7 +171,7 @@ def demo_batch_conversion():
 if __name__ == "__main__":
     console = Console()
     
-    console.print("[bold magenta]🎯 Noah123D Advanced STL Converter Examples[/bold magenta]")
+    console.print("[bold magenta]🎯 Noah123d Advanced STL Converter Examples[/bold magenta]")
     console.print("=" * 60)
     
     # Run all demos

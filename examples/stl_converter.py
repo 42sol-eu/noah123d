@@ -51,7 +51,7 @@ def stl_to_3mf(stl_path: Union[str, Path], output_path: Union[str, Path],
                             metadata_content = f"""STL to 3MF Conversion Report
 Source File: {stl_path.name}
 Output File: {output_path.name}
-Converter: Noah123D STL Converter
+Converter: Noah123d STL Converter
 Date: {Path(__file__).stat().st_mtime}
 
 Model Statistics:
@@ -160,7 +160,7 @@ def batch_stl_to_3mf(input_pattern: str, output_dir: Union[str, Path] = "convert
 
 if __name__ == "__main__":
     # Simple test/demo
-    print("Noah123D STL to 3MF Converter")
+    print("Noah123d STL to 3MF Converter")
     print("=============================")
     
     # Test with the available STL file

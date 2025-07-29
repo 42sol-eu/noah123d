@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Noah123D STL converter now supports creating grid layouts with multiple copies of the same object. This feature automatically calculates spacing based on the object's dimensions to prevent overlapping and creates perfectly arranged grids for 3D printing.
+The Noah123d STL converter now supports creating grid layouts with multiple copies of the same object. This feature automatically calculates spacing based on the object's dimensions to prevent overlapping and creates perfectly arranged grids for 3D printing.
 
 ## New Features Added
 

@@ -50,7 +50,7 @@ def create_sample_3mf():
                 
         # Create additional directories for metadata
         with Directory('Metadata') as metadata_dir:
-            metadata_dir.create_file('info.txt', 'Created with Noah123D')
+            metadata_dir.create_file('info.txt', 'Created with Noah123d')
             print(f"Created metadata directory with info file")
             
     print(f"3MF file created successfully: {output_path}")

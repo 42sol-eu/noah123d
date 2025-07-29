@@ -47,7 +47,7 @@ def create_multi_model_3mf():
         # Create metadata with build information
         with Directory('Metadata') as metadata_dir:
             build_info = {
-                "created_by": "Noah123D Example 2",
+                "created_by": "Noah123d Example 2",
                 "creation_date": "2025-07-29",
                 "models": ["Cylinder", "Pyramid", "Assembly"],
                 "total_objects": 5,

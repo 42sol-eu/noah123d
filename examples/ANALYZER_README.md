@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Noah123D library now includes a comprehensive 3MF file analyzer that can extract detailed information about models including center of mass, dimensions, volume, surface area, and mesh quality metrics. This is perfect for inspecting 3MF files before 3D printing or for analyzing model properties.
+The Noah123d library now includes a comprehensive 3MF file analyzer that can extract detailed information about models including center of mass, dimensions, volume, surface area, and mesh quality metrics. This is perfect for inspecting 3MF files before 3D printing or for analyzing model properties.
 
 ## New Analyzer Features
 

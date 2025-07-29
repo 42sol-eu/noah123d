@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Noah123D library now includes a powerful STL to 3MF converter that uses numpy-stl to read binary STL files and convert them to 3MF format. The converter supports both simple one-line conversions and advanced batch processing with detailed statistics.
+The Noah123d library now includes a powerful STL to 3MF converter that uses numpy-stl to read binary STL files and convert them to 3MF format. The converter supports both simple one-line conversions and advanced batch processing with detailed statistics.
 
 ## Features
 

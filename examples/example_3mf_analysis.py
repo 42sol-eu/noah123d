@@ -259,7 +259,7 @@ def demo_analysis_export():
 if __name__ == "__main__":
     console = Console()
     
-    console.print("[bold magenta]🎯 Noah123D 3MF File Analyzer Examples[/bold magenta]")
+    console.print("[bold magenta]🎯 Noah123d 3MF File Analyzer Examples[/bold magenta]")
     console.print("=" * 70)
     
     # Run all demo functions

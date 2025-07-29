@@ -1,4 +1,4 @@
-"""Main module for Noah123D CLI application."""
+"""Main module for Noah123d CLI application."""
 
 import click
 from rich.console import Console
@@ -12,9 +12,9 @@ console = Console()
 @click.option('--file', '-f', type=click.Path(exists=True), help='STL file path')
 @click.option('--verbose', '-v', is_flag=True, help='Enable verbose output')
 def main(file, verbose):
-    """Noah123D - Building assemblies from STL models."""
+    """Noah123d - Building assemblies from STL models."""
     if verbose:
-        console.print("[green]Noah123D started[/green]")
+        console.print("[green]Noah123d started[/green]")
     
     if file:
         console.print(f"[blue]Loading STL file:[/blue] {file}")

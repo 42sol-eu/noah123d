@@ -18,6 +18,15 @@ noah = "noah123d.__main__:main"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.6.0"
+mkdocs-material = "^9.5.0"
+mkdocstrings = {extras = ["python"], version = "^0.30.0"}
+mkdocstrings-python = "^1.12.0"
+mkdocs-autorefs = "^1.2.0"
+mkdocs-minify-plugin = "^0.8.0"
+markdown-exec = "^1.9.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

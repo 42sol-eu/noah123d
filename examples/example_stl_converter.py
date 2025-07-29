@@ -54,7 +54,7 @@ def convert_stl_to_3mf(stl_path: Path, output_path: Path):
         with Directory('Metadata') as metadata_dir:
             metadata_content = f"""STL to 3MF Conversion
 Source STL: {stl_path.name}
-Converted by: Noah123D STL Converter
+Converted by: Noah123d STL Converter
 Objects: {model.get_object_count()}
 """
             metadata_dir.create_file('conversion_info.txt', metadata_content)
@@ -185,7 +185,7 @@ def batch_convert_stl_files(input_dir: Path, output_dir: Path):
 
 if __name__ == "__main__":
     console = Console()
-    console.print("[bold blue]🚀 Noah123D STL to 3MF Converter Examples[/bold blue]")
+    console.print("[bold blue]🚀 Noah123d STL to 3MF Converter Examples[/bold blue]")
     
     # Example 1: Convert a single STL file
     console.print("\n[yellow]Example 1: Single STL conversion[/yellow]")

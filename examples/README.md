@@ -1,6 +1,6 @@
-# Noah123D Examples
+# Noah123d Examples
 
-This directory contains comprehensive examples demonstrating how to use the Noah123D library for creating and managing 3MF archives.
+This directory contains comprehensive examples demonstrating how to use the Noah123d library for creating and managing 3MF archives.
 
 ## Examples Overview
 
@@ -14,7 +14,7 @@ This directory contains comprehensive examples demonstrating how to use the Noah
 - Reading back created archives
 - Basic metadata management
 
-**Best for**: Getting started with Noah123D, understanding the basic API.
+**Best for**: Getting started with Noah123d, understanding the basic API.
 
 ### 2. `example_batch_processing.py` - Complex Multi-Model Assembly
 **Purpose**: Shows advanced features for creating complex 3MF files with multiple models.
@@ -43,7 +43,7 @@ This directory contains comprehensive examples demonstrating how to use the Noah
 
 ## Running the Examples
 
-Make sure you have the Noah123D package installed:
+Make sure you have the Noah123d package installed:
 
 ```bash
 # Install the package in development mode
