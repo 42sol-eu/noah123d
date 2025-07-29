@@ -318,14 +318,13 @@ class STLConverter:
                                 )
                                 obj_id = model.add_object(
                                     translated_vertices, 
-                                    master_obj['triangles'],
-                                    name=f"{name}_{i+1}" if count > 1 else name
+                                    master_obj['triangles']
                                 )
                                 
                                 object_details.append({
                                     'id': obj_id,
                                     'source_stl': str(stl_path),
-                                    'name': name,
+                                    'name': f"{name}_{i+1}" if count > 1 else name,
                                     'copy_number': i + 1,
                                     'position': position,
                                     'vertices': len(master_obj['vertices']),
