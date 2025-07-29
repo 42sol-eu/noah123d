@@ -13,7 +13,7 @@ click = "^8.2.1"
 numpy-stl = "^3.2.0"
 
 [tool.poetry.scripts]
-noah123d = "noah123d.main:main"
+noah = "noah123d.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"

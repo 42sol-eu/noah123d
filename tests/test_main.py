@@ -1,7 +1,7 @@
 """Test module for Noah123D."""
 
 import pytest
-from noah123d.main import main
+from noah123d import main
 from click.testing import CliRunner
 
 
