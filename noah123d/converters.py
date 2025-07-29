@@ -132,24 +132,20 @@ class STLConverter:
                 with Directory('3D') as models_dir:
                     # Create a model and add multiple copies
                     with Model() as model:
-                        # Add the first object (master copy)
+                        # Load the STL and get object data
                         master_obj_id = model.add_object_from_stl(stl_path)
                         master_obj = model.get_object(master_obj_id)
                         
-                        # Create copies at calculated positions
+                        # Remove the original object since we'll place all objects at calculated positions
+                        model.remove_object(master_obj_id)
+                        
+                        # Create objects at calculated positions
                         for i, position in enumerate(positions):
-                            if i == 0:
-                                # First object is already at origin, just move it if needed
-                                if not (position[0] == 0 and position[1] == 0 and position[2] == 0):
-                                    self._translate_object(master_obj, position)
-                                    model.remove_object(master_obj_id)
-                                    model.add_object(master_obj['vertices'], master_obj['triangles'])
-                            else:
-                                # Create translated copy
-                                translated_vertices = self._translate_vertices(
-                                    master_obj['vertices'], position
-                                )
-                                model.add_object(translated_vertices, master_obj['triangles'])
+                            # Create translated copy for each position (including the first one)
+                            translated_vertices = self._translate_vertices(
+                                master_obj['vertices'], position
+                            )
+                            model.add_object(translated_vertices, master_obj['triangles'])
                         
                         # Calculate combined statistics
                         total_vertices = len(master_obj['vertices']) * count
@@ -358,10 +354,8 @@ class STLConverter:
                 y = start_y + row * y_spacing
                 z = 0  # Keep all objects at the same Z level
                 
-                # Adjust for object's bounding box to place objects properly
-                x -= bounding_box['min'][0]
-                y -= bounding_box['min'][1]
-                z -= bounding_box['min'][2]
+                # Don't adjust for bounding box here - the STL is already properly positioned
+                # The adjustment will be done consistently in the object creation logic
                 
                 positions.append([x, y, z])
             

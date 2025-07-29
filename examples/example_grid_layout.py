@@ -169,7 +169,7 @@ def demo_advanced_grid():
 
 
 def analyze_grid_files():
-    """Analyze the created grid files."""
+    """Analyze the created grid files with detailed model information."""
     console = Console()
     console.print(f"\n[bold blue]📋 Grid File Analysis[/bold blue]")
     
@@ -180,7 +180,7 @@ def analyze_grid_files():
         console.print("[yellow]No grid files found to analyze[/yellow]")
         return
     
-    from noah123d import Archive3mf, Directory, Model
+    from noah123d import Archive3mf, Directory, Model, analyze_3mf, get_model_center_of_mass, get_model_dimensions
     
     analysis_table = Table(title="Grid File Analysis")
     analysis_table.add_column("File", style="cyan")
@@ -218,6 +218,46 @@ def analyze_grid_files():
             analysis_table.add_row(grid_file.name, "Error", "-", "-", f"Error: {e}")
     
     console.print(analysis_table)
+    
+    # Detailed analysis of first grid file using new analyzer
+    if grid_files:
+        console.print(f"\n[bold cyan]🔍 Detailed Analysis of {grid_files[0].name}[/bold cyan]")
+        
+        analysis = analyze_3mf(grid_files[0])
+        if 'error' not in analysis:
+            summary = analysis['summary']
+            
+            # Overall information
+            console.print(f"Overall center of mass: {summary.get('overall_center_of_mass', 'N/A')}")
+            console.print(f"Overall dimensions: {summary.get('overall_dimensions', 'N/A')}")
+            
+            # Individual model analysis
+            if analysis['models']:
+                model_table = Table(title="Individual Model Analysis")
+                model_table.add_column("Model ID", style="cyan")
+                model_table.add_column("Center of Mass", style="green")
+                model_table.add_column("Dimensions", style="yellow")
+                model_table.add_column("Volume", style="blue")
+                model_table.add_column("Surface Area", style="red")
+                
+                for model in analysis['models'][:5]:  # Show first 5 models
+                    com = model['center_of_mass']
+                    dims = model['dimensions']
+                    
+                    model_table.add_row(
+                        str(model['object_id']),
+                        f"({com[0]:.1f}, {com[1]:.1f}, {com[2]:.1f})",
+                        f"{dims[0]:.1f}×{dims[1]:.1f}×{dims[2]:.1f}",
+                        f"{model['volume']:.1f} mm³",
+                        f"{model['surface_area']:.1f} mm²"
+                    )
+                
+                console.print(model_table)
+                
+                if len(analysis['models']) > 5:
+                    console.print(f"[dim]... and {len(analysis['models']) - 5} more models[/dim]")
+        else:
+            console.print(f"[red]Analysis failed: {analysis['error']}[/red]")
 
 
 if __name__ == "__main__":
