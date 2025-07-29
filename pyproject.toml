@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "noah123d"
+version = "2025.0.1"
+description = "Building assemblies from STL models"
+authors = ["Andreas Felix Häberle <felix>"]
+readme = "README.md"
+packages = [{include = "noah123d"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+rich = "^14.1.0"
+click = "^8.2.1"
+numpy-stl = "^3.2.0"
+
+[tool.poetry.scripts]
+noah123d = "noah123d.main:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
