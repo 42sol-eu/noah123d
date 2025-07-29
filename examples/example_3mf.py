@@ -1,6 +1,7 @@
 """Example usage of the Archive3mf, Directory, and Model classes."""
 
 from pathlib import Path
+from rich import print
 from noah123d import Archive3mf, Directory, Model
 
 
@@ -82,4 +83,4 @@ if __name__ == "__main__":
     # Read it back
     read_3mf_info(sample_file)
     
-    print("\nExample completed successfully!")
+    print(f"\nExample {__file__} completed successfully!")
