@@ -1,0 +1,18 @@
+[export]
+# Output directory for exported 3MF files
+output_dir = "_exported/3mf"
+
+[processing]
+# Create backup files before modification
+create_backup = true
+backup_dir = "_exported/backup"
+
+# File patterns to include (glob patterns)
+include_patterns = ["*.3mf"]
+
+# File patterns to exclude (glob patterns)  
+exclude_patterns = ["*.backup", "*_temp.3mf"]
+
+[logging]
+# Enable verbose logging
+verbose = true

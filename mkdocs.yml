@@ -1,5 +1,5 @@
 site_name: Noah123d
-site_description: Building assemblies from STL models - A comprehensive STL to 3MF converter with grid layout capabilities
+site_description: Building assemblies from STL models - A (comprehensive) toolbox to build your 3MF, includes STL converter and layout capabilities
 site_url: https://noah123d.readthedocs.io/
 repo_url: https://github.com/42sol-eu/noah123d
 repo_name: 42sol-eu/noah123d
@@ -23,9 +23,11 @@ nav:
     - Overview: "reference/index.md"
     - STLConverter: "reference/converters.md"
     - Archive3mf: "reference/archive3mf.md"
-    - Model: "reference/model.md"
     - Directory: "reference/directory.md"
-    - Analysis3MF: "reference/analyzer.md"
+    - Model: "reference/model.md"
+    - Grid Layout: "reference/grid-layouts.md"
+    - Multi Assembly: "reference/multi-assembly.md"
+    - Analyzer: "reference/analyzer.md"
   - Examples:
     - Simple Conversion: "examples/simple-conversion.md"
     - Grid Layouts: "examples/grid-layouts.md"
@@ -35,6 +37,7 @@ nav:
     - Contributing: "development/contributing.md"
     - Architecture: "development/architecture.md"
     - Testing: "development/testing.md"
+    - Documentation Structure: "structure.md"
   - Changelog: "changelog.md"
 
 theme:

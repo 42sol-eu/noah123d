@@ -11,6 +11,7 @@ python = "^3.10"
 rich = "^14.1.0"
 click = "^8.2.1"
 numpy-stl = "^3.2.0"
+toml = "^0.10.2"
 
 [tool.poetry.scripts]
 noah = "noah123d.__main__:main"
