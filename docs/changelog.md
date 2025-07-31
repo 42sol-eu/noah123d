@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **High Performance**: Process 80,000+ triangles/second
 - **Rich Metadata**: Detailed conversion statistics and model info
 
-### Technical Details
+### Technical details
 - Python 3.10+ support
 - numpy-stl integration for STL processing
 - Rich library for beautiful console output
@@ -45,16 +45,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vectorized position calculations
 - Multi-threaded processing where applicable
 
-### Examples Included
+### Examples included
 - Basic STL conversion examples
 - Grid layout demonstrations
 - 3MF analysis workflows
 - Advanced usage patterns
 - Batch processing scripts
 
-## [Future Releases]
+## [Future releases]
 
-### Planned Features
+### Planned features
 - Hexagonal and circular grid patterns
 - Multi-material 3MF support
 - Advanced object transformations (rotation, scaling)
@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web interface for grid configuration
 - Support for additional 3D formats (OBJ, PLY)
 
-### Performance Improvements
+### Performance improvements
 - GPU acceleration for large grids
 - Streaming processing for massive files
 - Advanced memory management
@@ -70,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## Release Notes Format
+## Release notes format
 
 Each release includes:
 - **Added**: New features and capabilities
@@ -80,7 +80,7 @@ Each release includes:
 - **Fixed**: Bug fixes and corrections
 - **Security**: Security-related changes
 
-## Version Numbering
+## Version numbering
 
 Noah123d uses [Calendar Versioning](https://calver.org/) with the format:
 - **YYYY.MINOR.PATCH** (e.g., 2025.0.1)

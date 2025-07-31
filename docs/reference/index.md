@@ -1,4 +1,4 @@
-# API Reference
+# API reference
 
 Complete API documentation for Noah123d classes and functions.
 
@@ -6,9 +6,9 @@ Complete API documentation for Noah123d classes and functions.
 
 Noah123d provides a clean, modular API for STL to 3MF conversion, grid layouts, and 3MF analysis.
 
-## Core Modules
+## Core modules
 
-### Main Functions
+### Main functions
 
 High-level convenience functions for common tasks:
 
@@ -17,7 +17,7 @@ High-level convenience functions for common tasks:
 - **[`analyze_3mf()`](#analyze_3mf)** - 3MF file analysis
 - **[`get_stl_info()`](#get_stl_info)** - STL file information
 
-### Core Classes
+### Core classes
 
 Low-level classes for advanced control:
 
@@ -27,9 +27,9 @@ Low-level classes for advanced control:
 - **[`Directory`](directory.md)** - 3MF directory structure
 - **[`Analysis3MF`](analyzer.md)** - 3MF analysis engine
 
-## Quick Reference
+## Quick reference
 
-### Import Statements
+### Import statements
 
 ```python
 # High-level functions
@@ -56,7 +56,7 @@ from noah123d import (
 )
 ```
 
-## Main Functions
+## Main functions
 
 ### `stl_to_3mf()`
 
@@ -181,7 +181,7 @@ if info:
     print(f"Dimensions: {info['dimensions']}")
 ```
 
-## Rich Output Functions
+## Rich output functions
 
 ### `analyze_3mf_rich()`
 
@@ -205,7 +205,7 @@ from noah123d import analyze_3mf_json
 analyze_3mf_json("model.3mf", "analysis.json")
 ```
 
-## Type Hints
+## Type hints
 
 Noah123d uses comprehensive type hints for better IDE support:
 
@@ -223,7 +223,7 @@ AnalysisResult = Dict[str, Any]
 STLInfo = Optional[Dict[str, Any]]
 ```
 
-## Error Handling
+## Error handling
 
 All functions use consistent error handling patterns:
 
@@ -248,9 +248,9 @@ else:
     print("Analysis successful")
 ```
 
-## Performance Tips
+## Performance tips
 
-### Memory Management
+### Memory management
 
 For large files or grids:
 
@@ -268,7 +268,7 @@ finally:
     del converter
 ```
 
-### Batch Processing
+### Batch processing
 
 Process multiple files efficiently:
 
@@ -283,9 +283,9 @@ for stl_file in files:
     converter.convert(stl_file, output_file)
 ```
 
-## Constants and Enums
+## Constants and enums
 
-### Default Values
+### Default values
 
 ```python
 # Default spacing factor for grids
@@ -301,7 +301,7 @@ DEFAULT_INCLUDE_METADATA = True
 DEFAULT_VALIDATE = False
 ```
 
-## Next Steps
+## Next steps
 
 Explore the detailed documentation for each module:
 

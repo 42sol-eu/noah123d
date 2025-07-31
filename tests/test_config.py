@@ -12,6 +12,7 @@ def test_config():
         print("Configuration loaded successfully:")
         print(f"  Output directory: {config.get('export', {}).get('output_dir', 'NOT FOUND')}")
         print(f"  Create backup: {config.get('processing', {}).get('create_backup', 'NOT FOUND')}")
+        print(f"  Backup directory: {config.get('processing', {}).get('backup_dir', 'NOT FOUND')}")
         print(f"  Verbose: {config.get('logging', {}).get('verbose', 'NOT FOUND')}")
         
         return config

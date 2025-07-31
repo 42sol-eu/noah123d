@@ -12,24 +12,24 @@
 
 Noah123d is a powerful Python library and CLI tool for converting STL files to 3MF format with advanced features for 3D printing workflows. It specializes in creating grid layouts, analyzing 3D models, and managing complex assemblies.
 
-## Key Features
+## Key features
 
-### 🔄 STL to 3MF Conversion
+### 🔄 STL to 3MF conversion
 Convert binary and ASCII STL files to industry-standard 3MF format with high performance and accuracy.
 
-### 🔲 Grid Layout System
+### 🔲 grid layout system
 Automatically arrange multiple copies of objects in optimized grid patterns with intelligent spacing.
 
-### 🔍 3MF Analysis
+### 🔍 3MF analysis
 Analyze existing 3MF files to extract model information, dimensions, and center of mass calculations.
 
-### ⚡ High Performance
+### ⚡ high performance
 Process complex models with 80,000+ triangles/second with efficient memory usage.
 
-### 📊 Rich Metadata
+### 📊 rich metadata
 Generate detailed conversion statistics and model information for quality assurance.
 
-## Quick Start
+## Quick start
 
 ### Installation
 
@@ -37,7 +37,7 @@ Generate detailed conversion statistics and model information for quality assura
 pip install noah123d
 ```
 
-### Basic Usage
+### Basic usage
 
 === "Simple Conversion"
 
@@ -74,18 +74,18 @@ pip install noah123d
     print(f"Dimensions: {analysis['summary']['overall_dimensions']}")
     ```
 
-## Use Cases
+## Use cases
 
-### 🏭 Production Manufacturing
+### 🏭 production manufacturing
 Create optimized print layouts for batch production with consistent spacing and arrangement.
 
-### 🔬 Prototyping
+### 🔬 prototyping
 Quickly generate test arrays with different configurations and spacing options.
 
-### 📦 Assembly Kits
+### 📦 assembly kits
 Organize multiple components in logical arrangements for packaging and assembly.
 
-### 🔧 3D Printing Optimization
+### 🔧 3D printing optimization
 Maximize print bed utilization with intelligent grid layouts and spacing calculations.
 
 ## Performance
@@ -116,12 +116,12 @@ graph TD
     L --> M[Spacing Engine]
 ```
 
-## Getting Started
+## Getting started
 
-1. **[Installation](getting-started/installation.md)** - Install Noah123d and dependencies
-2. **[Quick Start](getting-started/quickstart.md)** - Basic usage examples
-3. **[Grid Layouts](user-guide/grid-layouts.md)** - Advanced grid configuration
-4. **[API Reference](reference/index.md)** - Complete API documentation
+1. **[Installation](getting-started/installation.md)** - install Noah123d and dependencies
+2. **[Quick start](getting-started/quickstart.md)** - basic usage examples
+3. **[Grid layouts](user-guide/grid-layouts.md)** - advanced grid configuration
+4. **[API reference](reference/index.md)** - complete API documentation
 
 ## Examples
 

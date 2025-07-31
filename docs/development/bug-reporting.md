@@ -1,4 +1,4 @@
-# 🐛 Bug Reports
+# Bug reports
 
 ## Creating an issue 
 

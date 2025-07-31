@@ -1,6 +1,6 @@
-## Coding Standards
+## Coding standards
 
-### Python Style
+### Python style
 
 We follow [PEP 8](https://pep8.org/) with some modifications:
 
@@ -9,12 +9,12 @@ We follow [PEP 8](https://pep8.org/) with some modifications:
 - **Imports**: Organized with isort
 - **Type hints**: Required for public APIs
 
-### Code Formatting
+### Code formatting
 
 We use automated formatting tools:
 
 ```bash
-# Format code with Black
+# Format code with black
 black noah123d/ tests/
 
 # Sort imports with isort
@@ -24,7 +24,7 @@ isort noah123d/ tests/
 black noah123d/ tests/ && isort noah123d/ tests/
 ```
 
-### Type Hints
+### Type hints
 
 All public functions must have type hints:
 
@@ -41,7 +41,7 @@ def convert_stl(
     pass
 ```
 
-### Documentation Strings
+### Documentation strings
 
 Use Google-style docstrings:
 
@@ -75,9 +75,9 @@ def stl_to_3mf_grid(
     pass
 ```
 
-## Testing Guidelines
+## Testing guidelines
 
-### Test Structure
+### Test structure
 
 Tests are organized by module:
 
@@ -93,7 +93,7 @@ tests/
     └── sample.3mf
 ```
 
-### Writing Tests
+### Writing tests
 
 Use pytest conventions:
 
@@ -142,30 +142,30 @@ class TestSTLConverter:
         # Add more specific assertions
 ```
 
-### Test Data
+### Test data
 
 - Keep test files small (< 1MB)
 - Use synthetic/generated test data when possible
 - Don't commit large binary files
 - Document test file sources and licenses
 
-## Documentation Guidelines
+## Documentation guidelines
 
-### API Documentation
+### API documentation
 
 - Every public function needs docstrings
 - Include usage examples
 - Document parameters and return values
 - Note any exceptions that might be raised
 
-### User Documentation
+### User documentation
 
 - Write for different skill levels
 - Include practical examples
 - Use consistent terminology
 - Keep examples up to date
 
-### Building Documentation
+### Building documentation
 
 ```bash
 # Install documentation dependencies
@@ -177,11 +177,11 @@ mkdocs serve
 # Build documentation
 mkdocs build
 
-# Deploy to GitHub Pages (maintainers only)
+# Deploy to GitHub pages (maintainers only)
 mkdocs gh-deploy
 ```
 
-## Performance Considerations
+## Performance considerations
 
 ### Benchmarking
 
@@ -202,7 +202,7 @@ def benchmark_conversion():
     print(f"Conversion took {end_time - start_time:.2f} seconds")
 ```
 
-### Memory Usage
+### Memory usage
 
 Monitor memory usage for large operations:
 

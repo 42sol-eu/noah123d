@@ -18,6 +18,7 @@ noah = "noah123d.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
+ruff = "^0.12.7"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.0"

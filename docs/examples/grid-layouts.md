@@ -1,12 +1,12 @@
-# Grid Layout Feature Documentation
+# Grid layout feature documentation
 
 ## Overview
 
 The Noah123d STL converter now supports creating grid layouts with multiple copies of the same object. This feature automatically calculates spacing based on the object's dimensions to prevent overlapping and creates perfectly arranged grids for 3D printing.
 
-## New Features Added
+## New features added
 
-### 🔲 Grid Layout Functions
+### 🔲 grid layout functions
 
 #### `stl_to_3mf_grid()`
 Simple function for creating grid layouts:
@@ -47,37 +47,37 @@ stats = converter.get_conversion_stats()
 
 ## Parameters
 
-### Core Parameters
+### Core parameters
 - **`count`**: Total number of copies to create
 - **`grid_cols`**: Number of columns (auto-calculated if None)
 - **`spacing_factor`**: Spacing multiplier (1.0 = touching, 1.1 = 10% gap)
 - **`center_grid`**: Center the grid around origin (default: True)
 
-### Spacing Factor Examples
+### Spacing factor examples
 - `1.0` - Objects touching (no gap)
 - `1.1` - 10% spacing (recommended minimum)
 - `1.2` - 20% spacing (good for most prints)
 - `1.5` - 50% spacing (wide spacing)
 
-## Grid Layout Logic
+## Grid layout logic
 
 The system automatically:
 
-1. **Calculates Object Dimensions**: Analyzes STL bounding box
-2. **Determines Grid Layout**: Optimal rows×columns for given count
+1. **Calculates object Dimensions**: Analyzes STL bounding box
+2. **Determines grid Layout**: Optimal rows×columns for given count
 3. **Computes Spacing**: Based on object size and spacing factor
 4. **Positions Objects**: Places copies without overlapping
 5. **Centers Grid**: Optional centering around origin
 
-### Auto-Layout Examples
+### Auto-Layout examples
 - 4 copies → 2×2 grid
 - 6 copies → 3×2 grid  
 - 9 copies → 3×3 grid
 - 12 copies → 4×3 grid
 
-## Usage Examples
+## Usage examples
 
-### Example 1: Simple 2×2 Grid
+### Example 1: Simple 2×2 grid
 ```python
 from noah123d import stl_to_3mf_grid
 
@@ -85,19 +85,19 @@ from noah123d import stl_to_3mf_grid
 stl_to_3mf_grid("part.stl", "quad.3mf", count=4, grid_cols=2, spacing_factor=1.2)
 ```
 
-### Example 2: Single Row Layout
+### Example 2: Single row layout
 ```python
 # Create 5 copies in a single row
 stl_to_3mf_grid("part.stl", "row.3mf", count=5, grid_cols=5, spacing_factor=1.5)
 ```
 
-### Example 3: Auto-Layout
+### Example 3: Auto-layout
 ```python
 # Let the system choose optimal layout for 6 copies
 stl_to_3mf_grid("part.stl", "auto.3mf", count=6, spacing_factor=1.1)
 ```
 
-### Example 4: Advanced Control
+### Example 4: Advanced control
 ```python
 from noah123d import STLConverter
 
@@ -120,7 +120,7 @@ if success:
     print(f"Total triangles: {stats['triangles']:,}")
 ```
 
-## Output Files
+## Output files
 
 Grid conversion creates 3MF files with:
 
@@ -129,7 +129,7 @@ Grid conversion creates 3MF files with:
 - ✅ **Grid Metadata**: Detailed conversion report
 - ✅ **Build Items**: All objects included in build plate
 
-### Metadata Information
+### Metadata information
 The generated 3MF includes metadata with:
 - Grid configuration (rows×columns)
 - Spacing factor used
@@ -145,7 +145,7 @@ Grid conversion performance:
 - Fast positioning calculations
 - Scales well with object count
 
-### Test Results
+### Test results
 Based on tile_2x2_borde.stl (33,448 triangles):
 
 | Grid Size | Objects | Total Triangles | File Size | Time |
@@ -162,7 +162,7 @@ Perfect for:
 - **Assembly Kits**: Organized part arrangements
 - **Prototyping**: Quick test arrays with different spacings
 
-## File Examples
+## File examples
 
 Run the examples to see the grid functionality:
 
@@ -182,7 +182,7 @@ python examples/example_grid_layout.py
 The grid feature integrates seamlessly with existing noah123d workflow:
 
 1. **STL Analysis**: Uses existing `get_stl_info()` for dimensions
-2. **3MF Creation**: Uses `Archive3mf`, `Directory`, `Model` classes
+2. **3MF Creation**: Uses `Archive3mf`, `Directory`, `model` classes
 3. **Object Management**: Leverages existing object handling
 4. **Metadata**: Enhanced metadata with grid information
 

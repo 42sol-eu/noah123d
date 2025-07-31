@@ -1,4 +1,4 @@
-## Release Process
+## Release process
 
 ### Versioning
 
@@ -6,12 +6,12 @@ Noah123d uses Calendar Versioning (CalVer):
 - Format: `YYYY.MINOR.PATCH`
 - Example: `2025.1.0`
 
-### Release Checklist
+### Release checklist
 
 For maintainers:
 
 1. Update version in `pyproject.toml`
-2. Update `CHANGELOG.md`
+2. Update `changelog.md`
 3. Run full test suite
 4. Build and test documentation
 5. Create release tag

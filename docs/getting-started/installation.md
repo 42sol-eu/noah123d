@@ -5,11 +5,10 @@
 Noah123d requires:
 
 - **Python 3.10+** (3.12+ recommended)
-- **Git** (for development installation)
 
-## Installation Methods
+## Installation methods
 
-### 📦 PyPI Installation (Recommended)
+### 📦 PyPI installation (Recommended)
 
 Install the latest stable release from PyPI:
 
@@ -17,7 +16,7 @@ Install the latest stable release from PyPI:
 pip install noah123d
 ```
 
-### 🚀 Development Installation
+### 🚀 Development installation
 
 For the latest features and development version:
 
@@ -33,9 +32,23 @@ poetry install
 pip install -e .
 ```
 
-### 🐍 Virtual Environment
+### 🐍 Virtual environment
 
 We recommend using a virtual environment:
+
+
+
+=== "poetry"
+
+    ```bash
+    # Clone and install with poetry
+    git clone https://github.com/42sol-eu/noah123d.git
+    cd noah123d
+    poetry install
+    
+    # Activate poetry shell
+    poetry shell
+    ```
 
 === "venv"
 
@@ -64,18 +77,6 @@ We recommend using a virtual environment:
     pip install noah123d
     ```
 
-=== "poetry"
-
-    ```bash
-    # Clone and install with poetry
-    git clone https://github.com/42sol-eu/noah123d.git
-    cd noah123d
-    poetry install
-    
-    # Activate poetry shell
-    poetry shell
-    ```
-
 ## Dependencies
 
 Noah123d automatically installs these dependencies:
@@ -84,17 +85,19 @@ Noah123d automatically installs these dependencies:
 - **[rich](https://pypi.org/project/rich/)** `^14.1.0` - Beautiful console output
 - **[click](https://pypi.org/project/click/)** `^8.2.1` - Command line interface
 
-### Development Dependencies
+### Development dependencies
 
 For development and testing:
 
 - **[pytest](https://pypi.org/project/pytest/)** `^8.4.1` - Testing framework
+- **[ruff](https://pypi.org/project/ruff/)** `^0.0.292` - Linter
+- **[mkdocs](https://pypi.org/project/mkdocs/)** `^1.5.3` - Documentation generator
 
 ## Verification
 
 Verify your installation:
 
-### Command Line
+### Command line
 
 ```bash
 # Check if noah123d CLI is available
@@ -104,7 +107,7 @@ noah --help
 noah --version
 ```
 
-### Python Import
+### Python import
 
 ```python
 # Test basic import
@@ -116,7 +119,7 @@ from noah123d import stl_to_3mf, stl_to_3mf_grid, analyze_3mf
 print("✅ Noah123d installed successfully!")
 ```
 
-### Quick Test
+### Quick test
 
 ```python
 from noah123d import STLConverter
@@ -130,7 +133,7 @@ from noah123d import get_stl_info
 print("✅ All core functions available!")
 ```
 
-## Platform Support
+## Platform support
 
 Noah123d is tested on:
 
@@ -140,7 +143,7 @@ Noah123d is tested on:
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 #### ImportError: No module named 'stl'
 
@@ -149,14 +152,14 @@ Noah123d is tested on:
 pip install --upgrade numpy-stl
 ```
 
-#### Permission Errors (Windows)
+#### Permission errors (Windows)
 
 ```bash
 # Run as administrator or use --user flag
 pip install --user noah123d
 ```
 
-#### Python Version Issues
+#### Python version issues
 
 ```bash
 # Check Python version
@@ -169,19 +172,19 @@ python -m pip install --upgrade python
 python3.12 -m pip install noah123d
 ```
 
-### Getting Help
+### Getting help
 
 If you encounter issues:
 
 1. **Check the version**: `pip show noah123d`
 2. **Update dependencies**: `pip install --upgrade noah123d`
-3. **Create an issue**: [GitHub Issues](https://github.com/42sol-eu/noah123d/issues)
-4. **Join discussions**: [GitHub Discussions](https://github.com/42sol-eu/noah123d/discussions)
+3. **Create an issue**: [GitHub issues](https://github.com/42sol-eu/noah123d/issues)
+4. **Join discussions**: [GitHub discussions](https://github.com/42sol-eu/noah123d/discussions)
 
-## Next Steps
+## Next steps
 
 After installation:
 
-1. **[Quick Start](quickstart.md)** - Run your first conversion
-2. **[Basic Usage](basic-usage.md)** - Learn core concepts
-3. **[Grid Layouts](../user-guide/grid-layouts.md)** - Explore advanced features
+1. **[Quick start](quickstart.md)** - run your first conversion
+2. **[Basic usage](basic-usage.md)** - learn core concepts
+3. **[Grid layouts](../user-guide/grid-layouts.md)** - explore advanced features

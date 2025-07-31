@@ -92,22 +92,22 @@ Documentation improvements are always welcome:
 
 ## Development workflow
 
-### 1. Create a branch
+### 1. create a branch
 
 ```bash
 git checkout -b feature/your-feature-name
-# or
+# Or
 git checkout -b fix/issue-number-description
 ```
 
-### 2. Make changes
+### 2. make changes
 
 - Follow the [coding standards](#coding-standards)
 - Add tests for new functionality
 - Update documentation as needed
 - Keep commits small and focused
 
-### 3. Test changes
+### 3. test changes
 
 Run the full test suite:
 
@@ -125,7 +125,7 @@ pytest tests/test_converters.py
 pytest -v
 ```
 
-### 4. Documentation
+### 4. documentation
 
 Build and test documentation:
 
@@ -140,7 +140,7 @@ mkdocs serve
 mkdocs build
 ```
 
-### 5. Submit pull request
+### 5. submit pull request
 
 1. Push your branch to your fork
 2. Create a pull request with:

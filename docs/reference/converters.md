@@ -1,4 +1,4 @@
-# STL to 3MF Converter Documentation
+# STL to 3MF converter documentation
 
 ## Overview
 
@@ -20,13 +20,13 @@ The converter uses `numpy-stl` which is already included in the noah123d depende
 
 ```bash
 pip install noah123d
-# or for development
+# Or for development
 pip install -e .
 ```
 
-## Quick Start
+## Quick start
 
-### Simple Conversion
+### Simple conversion
 
 ```python
 from noah123d import stl_to_3mf
@@ -36,7 +36,7 @@ success = stl_to_3mf("model.stl", "model.3mf")
 print(f"Conversion {'successful' if success else 'failed'}")
 ```
 
-### Get STL Information
+### Get STL information
 
 ```python
 from noah123d import get_stl_info
@@ -48,7 +48,7 @@ if info:
     print(f"Dimensions: {info['dimensions']}")
 ```
 
-### Batch Conversion
+### Batch conversion
 
 ```python
 from noah123d import batch_stl_to_3mf
@@ -58,9 +58,9 @@ converted_files = batch_stl_to_3mf("models/*.stl", "output_dir")
 print(f"Converted {len(converted_files)} files")
 ```
 
-## Advanced Usage
+## Advanced usage
 
-### Using the STLConverter Class
+### Using the stlconverter class
 
 ```python
 from noah123d import STLConverter
@@ -80,7 +80,7 @@ for file_path, file_stats in stats.items():
     print(f"{file_path}: {file_stats['triangles']:,} triangles")
 ```
 
-### Manual 3MF Creation with STL Data
+### Manual 3MF creation with STL data
 
 ```python
 from noah123d import Archive3mf, Directory, Model
@@ -96,7 +96,7 @@ with Archive3mf("output.3mf", 'w') as archive:
 
 ## Examples
 
-### Example 1: Simple Converter (`examples/stl_converter.py`)
+### Example 1: Simple converter (`examples/stl_converter.py`)
 
 A minimal example showing basic conversion functionality:
 
@@ -111,7 +111,7 @@ print(f"File has {info['triangles']:,} triangles")
 success = stl_to_3mf("model.stl", "model.3mf")
 ```
 
-### Example 2: Comprehensive Converter (`examples/example_stl_converter.py`)
+### Example 2: Comprehensive converter (`examples/example_stl_converter.py`)
 
 A full-featured example with rich console output, batch processing, and analysis:
 
@@ -120,7 +120,7 @@ A full-featured example with rich console output, batch processing, and analysis
 - Detailed 3MF file analysis
 - Rich console tables and progress bars
 
-### Example 3: Advanced Converter (`examples/example_advanced_converter.py`)
+### Example 3: Advanced converter (`examples/example_advanced_converter.py`)
 
 Demonstrates the advanced STLConverter class with:
 
@@ -129,7 +129,7 @@ Demonstrates the advanced STLConverter class with:
 - Progress bars for batch operations
 - Detailed conversion reports
 
-## API Reference
+## API reference
 
 ### Functions
 
@@ -169,7 +169,7 @@ Convert multiple STL files using glob patterns.
 
 **Returns:** `list` - List of converted file paths
 
-### STLConverter Class
+### STLConverter class
 
 #### Constructor
 ```python
@@ -193,7 +193,7 @@ The converter is highly optimized and can process:
 - Minimal memory usage through streaming processing
 - Efficient vertex deduplication
 
-## File Format Support
+## File format support
 
 ### Input (STL)
 - ✅ Binary STL files
@@ -222,7 +222,7 @@ python examples/example_stl_converter.py
 python examples/example_advanced_converter.py
 ```
 
-## Error Handling
+## Error handling
 
 The converter includes comprehensive error handling:
 
@@ -248,9 +248,9 @@ This metadata is stored in `Metadata/conversion_report.txt` within the 3MF archi
 
 The converter integrates seamlessly with the existing noah123d workflow:
 
-1. Use `Archive3mf` for 3MF file management
-2. Use `Directory` for organizing 3MF content
-3. Use `Model` for 3D object management
-4. Use `STLConverter` for STL file processing
+1. Use `archive3mf` for 3MF file management
+2. Use `directory` for organizing 3MF content
+3. Use `model` for 3D object management
+4. Use `stlconverter` for STL file processing
 
 This provides a complete pipeline from STL files to complex 3MF assemblies.

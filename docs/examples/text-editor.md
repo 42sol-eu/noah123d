@@ -1,4 +1,4 @@
-# 3MF Text Editor
+# 3MF text editor
 
 A powerful utility for modifying text content in 3MF files. This tool allows you to edit text strings stored in slicer metadata, such as object names and embedded text elements created by CAD software or slicers like PrusaSlicer.
 
@@ -30,7 +30,7 @@ pip install numpy-stl
 
 ## Usage
 
-### 1. List Text Content
+### 1. list text content
 
 Display all modifiable text in a 3MF file:
 
@@ -46,13 +46,13 @@ python text_3mf_editor.py input.3mf --list-text
 
  1. "Form-Kubus"
     Location: Metadata/Slic3r_PE_model.config
- 2. "Rissen Text"
+ 2. "Rissen text"
     Location: Metadata/Slic3r_PE_model.config
- 3. "Sunken Text"
+ 3. "Sunken text"
     Location: Metadata/Slic3r_PE_model.config
 ```
 
-### 2. Single Text Replacement
+### 2. single text replacement
 
 Replace one text string with another:
 
@@ -65,7 +65,7 @@ python text_3mf_editor.py input.3mf output.3mf "Old Text" "New Text"
 python text_3mf_editor.py text.3mf custom_text.3mf "Rissen Text" "Raised Text"
 ```
 
-### 3. Interactive Mode
+### 3. interactive mode
 
 Replace multiple text strings in one session:
 
@@ -80,8 +80,8 @@ python text_3mf_editor.py input.3mf output.3mf --interactive
 Found 3 unique text string(s):
 
  1. "Form-Kubus"
- 2. "Rissen Text"
- 3. "Sunken Text"
+ 2. "Rissen text"
+ 3. "Sunken text"
 
 Enter text to replace (or press Enter to finish):
 > Rissen Text
@@ -100,7 +100,7 @@ Enter text to replace (or press Enter to finish):
 ✅ Successfully created modified 3MF: output.3mf
 ```
 
-## Command Line Options
+## Command line options
 
 | Option | Description |
 |--------|-------------|
@@ -113,7 +113,7 @@ Enter text to replace (or press Enter to finish):
 | `--verbose`, `-v` | Enable verbose output |
 | `--no-backup` | Skip creating a backup file |
 
-## How It Works
+## How it works
 
 The 3MF Text Editor works by:
 
@@ -128,26 +128,26 @@ The 3MF Text Editor works by:
 4. **Applying replacements** to the metadata
 5. **Recreating the 3MF file** with modified metadata
 
-## Important Notes
+## Important notes
 
-### What Can Be Modified
+### What can be modified
 - ✅ Object names and labels stored in slicer metadata
 - ✅ Embedded text created by CAD software
 - ✅ Text elements added in slicer programs
 - ✅ Volume names and descriptions
 
-### What Cannot Be Modified
+### What cannot be modified
 - ❌ Text that is part of the actual 3D mesh geometry
 - ❌ Text "carved" or "embossed" as 3D shapes
 - ❌ Texture-based text on surfaces
 - ❌ Text in build plate instructions
 
 ### Compatibility
-- **Slicer Software**: PrusaSlicer, Slic3r PE, and compatible slicers
-- **CAD Software**: Any software that stores text as 3MF metadata
-- **File Types**: Standard 3MF files with metadata
+- **Slicer software**: PrusaSlicer, Slic3r PE, and compatible slicers
+- **CAD software**: Any software that stores text as 3MF metadata
+- **File types**: Standard 3MF files with metadata
 
-### Backup and Safety
+### Backup and safety
 - Automatic backup files are created (unless `--no-backup` is used)
 - Original 3D geometry is never modified
 - Changes only affect metadata/display names
@@ -155,26 +155,26 @@ The 3MF Text Editor works by:
 
 ## Examples
 
-### Example 1: Translate Text to Another Language
+### Example 1: Translate text to another language
 
 ```bash
 # List current text
 python text_3mf_editor.py model.3mf --list-text
 
-# Translate from German to English
+# Translate from german to english
 python text_3mf_editor.py model.3mf model_english.3mf "Gehäuse" "Housing"
 python text_3mf_editor.py model_english.3mf model_final.3mf "Deckel" "Cover"
 ```
 
-### Example 2: Customize Product Names
+### Example 2: Customize product names
 
 ```bash
 # Change generic names to specific product names
 python text_3mf_editor.py template.3mf product_v1.3mf --interactive
-# Then interactively replace "Part A" with "Motor Mount", etc.
+# Then interactively replace "Part A" with "Motor mount", etc.
 ```
 
-### Example 3: Batch Processing with Scripts
+### Example 3: Batch processing with scripts
 
 ```bash
 #!/bin/bash
@@ -199,7 +199,7 @@ done
 - Duplicate name warnings are normal and don't affect functionality
 - Always test the output file before using in production
 
-## Technical Details
+## Technical details
 
 - **File Format**: 3MF (3D Manufacturing Format) 
 - **Metadata Location**: ZIP archive metadata files

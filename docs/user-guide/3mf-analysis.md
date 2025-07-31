@@ -1,4 +1,4 @@
-# 3MF Analysis
+# 3MF analysis
 
 Noah123d provides comprehensive analysis tools for 3MF files, allowing you to inspect geometry, metadata, and grid layouts.
 
@@ -6,13 +6,13 @@ Noah123d provides comprehensive analysis tools for 3MF files, allowing you to in
 
 The analysis system provides:
 
-1. **File Structure Analysis**: Internal 3MF archive inspection
-2. **Geometry Analysis**: Object dimensions, triangles, volumes
-3. **Grid Analysis**: Layout verification and spacing calculations
-4. **Metadata Extraction**: Custom properties and conversion statistics
+1. **File structure analysis**: Internal 3MF archive inspection
+2. **Geometry analysis**: Object dimensions, triangles, volumes
+3. **Grid analysis**: Layout verification and spacing calculations
+4. **Metadata extraction**: Custom properties and conversion statistics
 5. **Validation**: File integrity and format compliance
 
-## Core Functions
+## Core functions
 
 ### `analyze_3mf()`
 
@@ -31,7 +31,7 @@ print(f"File Size: {analysis['summary']['file_size_mb']:.1f} MB")
 print(f"Overall Dimensions: {analysis['summary']['overall_dimensions']}")
 ```
 
-### `Analyzer3MF` Class
+### `Analyzer3MF` class
 
 Advanced analysis with detailed control:
 
@@ -53,9 +53,9 @@ if result['success']:
         print(f"  Bounds: {model['bounding_box']}")
 ```
 
-## Analysis Results
+## Analysis results
 
-### Summary Information
+### Summary information
 
 ```python
 analysis = analyze_3mf("grid_3x3.3mf")
@@ -68,7 +68,7 @@ print(f"   File Size: {summary['file_size_mb']:.1f} MB")
 print(f"   Creation Time: {summary.get('creation_time', 'Unknown')}")
 ```
 
-### Individual Model Analysis
+### Individual model analysis
 
 ```python
 # Analyze each model individually
@@ -84,7 +84,7 @@ for i, model in enumerate(analysis['models']):
     print(f"   Dimensions: {bbox['width']:.1f} × {bbox['height']:.1f} × {bbox['depth']:.1f} mm")
 ```
 
-### Metadata Analysis
+### Metadata analysis
 
 ```python
 # Extract metadata
@@ -99,9 +99,9 @@ if metadata:
     print(f"   Original STL: {metadata.get('source_stl', 'Unknown')}")
 ```
 
-## Grid Analysis
+## Grid analysis
 
-### Layout Verification
+### Layout verification
 
 For grid-generated 3MF files, verify the layout:
 
@@ -140,7 +140,7 @@ def analyze_grid_layout(file_path):
 analyze_grid_layout("grid_2x2.3mf")
 ```
 
-### Position Analysis
+### Position analysis
 
 ```python
 def analyze_object_positions(file_path):
@@ -178,9 +178,9 @@ def analyze_object_positions(file_path):
 analyze_object_positions("tight_pack.3mf")
 ```
 
-## Performance Analysis
+## Performance analysis
 
-### Conversion Statistics
+### Conversion statistics
 
 ```python
 def analyze_performance(file_path):
@@ -201,7 +201,7 @@ def analyze_performance(file_path):
 analyze_performance("production_batch.3mf")
 ```
 
-### Memory Usage
+### Memory usage
 
 ```python
 import psutil
@@ -225,7 +225,7 @@ analyze_memory_usage("large_grid.3mf")
 
 ## Validation
 
-### File Integrity
+### File integrity
 
 ```python
 def validate_3mf_file(file_path):
@@ -262,7 +262,7 @@ def validate_3mf_file(file_path):
 validate_3mf_file("grid_2x2.3mf")
 ```
 
-### Grid Validation
+### Grid validation
 
 ```python
 def validate_grid(file_path, expected_count=None, expected_spacing=None):
@@ -303,9 +303,9 @@ def validate_grid(file_path, expected_count=None, expected_spacing=None):
 validate_grid("grid_2x2.3mf", expected_count=4, expected_spacing=55.0)
 ```
 
-## Comparison Tools
+## Comparison tools
 
-### Compare Multiple Files
+### Compare multiple files
 
 ```python
 def compare_3mf_files(file_paths):
@@ -332,9 +332,9 @@ compare_3mf_files([
 ])
 ```
 
-## Export Analysis
+## Export analysis
 
-### Generate Reports
+### Generate reports
 
 ```python
 import json
@@ -369,7 +369,7 @@ def generate_analysis_report(file_path, output_path=None):
 generate_analysis_report("grid_2x2.3mf")
 ```
 
-## Next Steps
+## Next steps
 
 - **[Grid Layouts](grid-layouts.md)** - Create optimized grids
 - **[Batch Processing](batch-processing.md)** - Process multiple files

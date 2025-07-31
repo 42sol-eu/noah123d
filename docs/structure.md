@@ -2,7 +2,7 @@
 
 This directory contains the complete documentation for Noah123d, built with MkDocs and Material theme.
 
-## MkDocs Cheat Sheet  
+## MkDocs cheat sheet  
 
 ```shell
 poetry install --with docs
@@ -49,7 +49,7 @@ docs/
 └── changelog.md          # Release notes and changelog
 ```
 
-## Building Documentation
+## Building documentation
 
 ### Prerequisites
 
@@ -63,7 +63,7 @@ poetry install --with docs
 pip install mkdocs mkdocs-material mkdocstrings[python] mkdocs-autorefs
 ```
 
-### Local Development
+### Local development
 
 Serve documentation locally with auto-reload:
 
@@ -77,7 +77,7 @@ mkdocs serve
 
 The documentation will be available at http://localhost:8000
 
-### Building for Production
+### Building for production
 
 Build static documentation:
 
@@ -91,7 +91,7 @@ mkdocs build
 
 Output will be generated in the `site/` directory.
 
-## Writing Documentation
+## Writing documentation
 
 ### Guidelines
 
@@ -101,7 +101,7 @@ Output will be generated in the `site/` directory.
 4. **Use consistent formatting**
 5. **Link between related sections**
 
-### Markdown Extensions
+### Markdown extensions
 
 The documentation uses several Markdown extensions:
 
@@ -111,7 +111,7 @@ The documentation uses several Markdown extensions:
 - **Mermaid diagrams**: `mermaid` code blocks
 - **Math**: LaTeX-style math expressions
 
-### API Documentation
+### API documentation
 
 API docs are auto-generated from docstrings using mkdocstrings:
 
@@ -142,7 +142,7 @@ success = stl_to_3mf_grid(
 
 Documentation is automatically deployed to GitHub Pages via GitHub Actions when changes are pushed to the main branch.
 
-### Manual Deployment
+### Manual deployment
 
 To deploy manually:
 
@@ -164,14 +164,14 @@ Key configuration sections:
 
 To contribute to the documentation:
 
-1. Follow the [Contributing Guide](development/contributing.md)
+1. Follow the [Contributing guide](development/contributing.md)
 2. Make changes to the relevant `.md` files
 3. Test locally with `mkdocs serve`
 4. Submit a pull request
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 **Build fails with import errors**:
 ```bash
@@ -190,7 +190,7 @@ poetry install --with docs
 - Use `mkdocs serve` to test locally
 - Verify all referenced files exist
 
-### Getting Help
+### Getting help
 
 - Check existing documentation
 - Search issues in the repository

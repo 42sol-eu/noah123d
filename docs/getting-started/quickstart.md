@@ -1,4 +1,4 @@
-# Quick Start
+# Quick start
 
 Get up and running with Noah123d in minutes! This guide will walk you through your first STL to 3MF conversion and grid layout creation.
 
@@ -14,9 +14,9 @@ python3 -m pip install noah123d
 > Instead of `python3` you need to put your python executable.
 > When using a `poetry` managed project use `poetry add noah123d` to add the package to your project.
 
-## Your First Conversion
+## Your first conversion
 
-### 1. Simple STL to 3MF
+### 1. simple STL to 3MF
 
 Let's start with a basic conversion:
 
@@ -35,7 +35,7 @@ else:
     print("❌ Conversion failed")
 ```
 
-### 2. Using the CLI
+### 2. using the CLI
 
 You can also use the command line interface:
 
@@ -50,9 +50,9 @@ noah convert input.stl output.3mf --validate
 noah --help
 ```
 
-## Grid Layouts
+## Grid layouts
 
-### Create Your First Grid
+### Create your first grid
 
 Create a 2×2 grid with 4 copies:
 
@@ -71,7 +71,7 @@ success = stl_to_3mf_grid(
 print(f"Grid created: {success}")
 ```
 
-### Different Grid Patterns
+### Different grid patterns
 
 === "Square Grid (3×3)"
 
@@ -109,9 +109,9 @@ print(f"Grid created: {success}")
     )
     ```
 
-## Analyzing 3MF Files
+## Analyzing 3MF files
 
-### Basic Analysis
+### Basic analysis
 
 Analyze any 3MF file to get detailed information:
 
@@ -132,7 +132,7 @@ for i, model in enumerate(analysis['models']):
     print(f"Object {i+1}: {model['dimensions']}")
 ```
 
-### Rich Console Output
+### Rich console output
 
 For beautiful formatted output:
 
@@ -143,14 +143,14 @@ from noah123d import analyze_3mf_rich
 analyze_3mf_rich("grid_2x2.3mf")
 ```
 
-## Complete Example
+## Complete example
 
 Here's a complete workflow from STL to analysis:
 
 ```python
 from noah123d import stl_to_3mf_grid, analyze_3mf, STLConverter
 
-# 1. Create a grid layout
+# 1. create a grid layout
 print("📐 Creating grid layout...")
 success = stl_to_3mf_grid(
     stl_path="input.stl",
@@ -164,17 +164,17 @@ success = stl_to_3mf_grid(
 if success:
     print("✅ Grid created successfully!")
     
-    # 2. Analyze the result
+    # 2. analyze the result
     print("\n🔍 Analyzing the grid...")
     analysis = analyze_3mf("production_grid.3mf")
     
-    # 3. Print results
+    # 3. print results
     summary = analysis['summary']
     print(f"📊 Created {summary['object_count']} objects")
     print(f"📏 Total dimensions: {summary['overall_dimensions']}")
     print(f"📦 File size: {analysis['file_size']:,} bytes")
     
-    # 4. Get detailed statistics
+    # 4. get detailed statistics
     converter = STLConverter(include_metadata=True)
     stats = converter.get_conversion_stats()
     if stats:
@@ -185,9 +185,9 @@ else:
     print("❌ Grid creation failed")
 ```
 
-## CLI Examples
+## CLI examples
 
-### Basic Commands
+### Basic commands
 
 ```bash
 # Convert single file
@@ -203,7 +203,7 @@ noah analyze model.3mf
 noah batch-convert *.stl --output-dir converted/
 ```
 
-### Advanced CLI Usage
+### Advanced CLI usage
 
 ```bash
 # Grid with custom settings
@@ -221,18 +221,18 @@ noah analyze grid.3mf --rich --export analysis.json
 noah convert model.stl output.3mf --metadata --validate
 ```
 
-## Next Steps
+## Next steps
 
 Now that you've completed your first conversions:
 
-### Learn More
+### Learn more
 
-1. **[Basic Usage](basic-usage.md)** - Understand core concepts
-2. **[Grid Layouts](../user-guide/grid-layouts.md)** - Master grid configuration
-3. **[3MF Analysis](../user-guide/3mf-analysis.md)** - Deep dive into analysis features
-4. **[API Reference](../reference/index.md)** - Complete function documentation
+1. **[Basic usage](basic-usage.md)** - understand core concepts
+2. **[Grid layouts](../user-guide/grid-layouts.md)** - master grid configuration
+3. **[3MF analysis](../user-guide/3mf-analysis.md)** - deep dive into analysis features
+4. **[API reference](../reference/index.md)** - complete function documentation
 
-### Try Examples
+### Try examples
 
 Explore the example files:
 
@@ -244,7 +244,7 @@ python example_grid_layout.py
 python example_advanced_usage.py
 ```
 
-### Join the Community
+### Join the community
 
 - **Issues**: [Report problems](https://github.com/42sol-eu/noah123d/issues)
 - **Discussions**: [Ask questions](https://github.com/42sol-eu/noah123d/discussions)
@@ -252,7 +252,7 @@ python example_advanced_usage.py
 
 ## Troubleshooting
 
-### Common First-Time Issues
+### Common first-time issues
 
 !!! warning "File Not Found"
     Make sure your STL file path is correct:

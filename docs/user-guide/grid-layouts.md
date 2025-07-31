@@ -1,4 +1,4 @@
-# Grid Layouts
+# Grid layouts
 
 Grid layouts are Noah123d's flagship feature, allowing you to create optimized arrangements of multiple copies for 3D printing and manufacturing workflows.
 
@@ -6,13 +6,13 @@ Grid layouts are Noah123d's flagship feature, allowing you to create optimized a
 
 The grid layout system automatically:
 
-1. **Calculates Object Dimensions**: Analyzes STL bounding box
-2. **Determines Grid Layout**: Optimal rows×columns for given count  
-3. **Computes Spacing**: Based on object size and spacing factor
-4. **Positions Objects**: Places copies without overlapping
-5. **Centers Grid**: Optional centering around origin
+1. **Calculates object dimensions**: Analyzes STL bounding box
+2. **Determines grid layout**: Optimal rows×columns for given count  
+3. **Computes spacing**: Based on object size and spacing factor
+4. **Positions objects**: Places copies without overlapping
+5. **Centers grid**: Optional centering around origin
 
-## Core Functions
+## Core functions
 
 ### `stl_to_3mf_grid()`
 
@@ -57,7 +57,7 @@ if success:
 
 ## Parameters
 
-### Core Parameters
+### Core parameters
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -66,7 +66,7 @@ if success:
 | `spacing_factor` | `float` | `1.1` | Spacing multiplier (1.0 = touching) |
 | `center_grid` | `bool` | `True` | Center the grid around origin |
 
-### Spacing Factor Guide
+### Spacing factor guide
 
 | Factor | Spacing | Use Case |
 |--------|---------|----------|
@@ -76,9 +76,9 @@ if success:
 | `1.5` | 50% gap | Wide spacing for large parts |
 | `2.0` | 100% gap | Maximum spacing, double width |
 
-## Grid Layout Logic
+## Grid layout logic
 
-### Automatic Layout Calculation
+### Automatic layout calculation
 
 When `grid_cols` is not specified, Noah123d calculates the optimal layout:
 
@@ -97,7 +97,7 @@ def calculate_optimal_layout(count):
 # 12 objects → 4×3 grid
 ```
 
-### Grid Position Calculation
+### Grid position calculation
 
 Objects are positioned using:
 
@@ -118,7 +118,7 @@ def calculate_position(row, col, spacing_x, spacing_y, center_grid):
 
 ## Examples
 
-### Basic Grid Patterns
+### Basic grid patterns
 
 === "2×2 Grid"
 
@@ -173,9 +173,9 @@ def calculate_position(row, col, spacing_x, spacing_y, center_grid):
     )
     ```
 
-### Advanced Configurations
+### Advanced configurations
 
-#### Production Grid
+#### Production grid
 
 ```python
 from noah123d import STLConverter
@@ -204,7 +204,7 @@ if success:
     print(f"   Time: {stats['conversion_time']:.2f}s")
 ```
 
-#### Tight Packing
+#### Tight packing
 
 ```python
 # Minimal spacing for maximum density
@@ -218,7 +218,7 @@ stl_to_3mf_grid(
 )
 ```
 
-#### Wide Spacing
+#### Wide spacing
 
 ```python
 # Wide spacing for large parts or assembly
@@ -234,7 +234,7 @@ stl_to_3mf_grid(
 
 ## Performance
 
-### Grid Generation Performance
+### Grid generation performance
 
 Noah123d's grid system is highly optimized:
 
@@ -243,7 +243,7 @@ Noah123d's grid system is highly optimized:
 - **Fast Positioning**: Vectorized position calculations
 - **Parallel Processing**: Multi-threaded where possible
 
-### Benchmark Results
+### Benchmark results
 
 Based on `tile_2x2_borde.stl` (33,448 triangles):
 
@@ -254,9 +254,9 @@ Based on `tile_2x2_borde.stl` (33,448 triangles):
 | 4×3 | 12 | 401,376 | 7.8 MB | 3.1s | 129K tri/s |
 | 5×4 | 20 | 668,960 | 13.1 MB | 8.4s | 80K tri/s |
 
-## Output Analysis
+## Output analysis
 
-### Grid Metadata
+### Grid metadata
 
 Generated 3MF files include comprehensive metadata:
 
@@ -272,7 +272,7 @@ print(f"Objects: {analysis['summary']['object_count']}")
 print(f"Total Dimensions: {analysis['summary']['overall_dimensions']}")
 ```
 
-### Position Verification
+### Position verification
 
 Verify object positions are correct:
 
@@ -294,7 +294,7 @@ if len(analysis['models']) >= 2:
 
 ## Applications
 
-### 3D Printing
+### 3D printing
 
 Perfect for 3D printing workflows:
 
@@ -344,7 +344,7 @@ stl_to_3mf_grid(
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 !!! warning "Overlapping Objects"
     If objects overlap, increase `spacing_factor`:
@@ -396,7 +396,7 @@ def validate_grid(file_path, expected_count, expected_spacing):
 validate_grid("grid_2x2.3mf", expected_count=4, expected_spacing=55.0)
 ```
 
-## Next Steps
+## Next steps
 
 - **[3MF Analysis](3mf-analysis.md)** - Analyze your grids
 - **[Batch Processing](batch-processing.md)** - Process multiple files

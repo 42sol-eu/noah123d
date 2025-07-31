@@ -1,4 +1,4 @@
-# Batch Processing
+# Batch processing
 
 Noah123d provides powerful batch processing capabilities for handling multiple STL files and creating large-scale 3D printing production runs.
 
@@ -6,13 +6,13 @@ Noah123d provides powerful batch processing capabilities for handling multiple S
 
 Batch processing features:
 
-1. **Multiple File Processing**: Convert entire directories of STL files
-2. **Production Workflows**: Automated grid generation for manufacturing
-3. **Parallel Processing**: Multi-threaded conversion for speed
-4. **Progress Tracking**: Real-time progress monitoring
-5. **Error Handling**: Robust error recovery and reporting
+1. **Multiple file processing**: Convert entire directories of STL files
+2. **Production workflows**: Automated grid generation for manufacturing
+3. **Parallel processing**: Multi-threaded conversion for speed
+4. **Progress tracking**: Real-time progress monitoring
+5. **Error handling**: Robust error recovery and reporting
 
-## Core Functions
+## Core functions
 
 ### `batch_convert_stl_to_3mf()`
 
@@ -58,9 +58,9 @@ results = batch_create_grids(
 )
 ```
 
-## Directory Processing
+## Directory processing
 
-### Process Entire Directories
+### Process entire directories
 
 ```python
 import os
@@ -111,7 +111,7 @@ results = process_directory(
 )
 ```
 
-### Filtered Processing
+### Filtered processing
 
 ```python
 import fnmatch
@@ -147,9 +147,9 @@ process_filtered_directory(
 )
 ```
 
-## Production Workflows
+## Production workflows
 
-### Manufacturing Batch
+### Manufacturing batch
 
 ```python
 from noah123d import STLConverter
@@ -213,7 +213,7 @@ stl_files = ["part1.stl", "part2.stl", "part3.stl"]
 results = production_batch(stl_files, copies_per_part=16, grid_cols=4)
 ```
 
-### Quality Control Batch
+### Quality control batch
 
 ```python
 def quality_control_batch(stl_files, test_counts=[1, 4, 9]):
@@ -260,9 +260,9 @@ stl_files = ["prototype_v1.stl", "prototype_v2.stl"]
 quality_control_batch(stl_files)
 ```
 
-## Progress Tracking
+## Progress tracking
 
-### Progress Bar Integration
+### Progress bar integration
 
 ```python
 from tqdm import tqdm
@@ -302,7 +302,7 @@ stl_files = ["part1.stl", "part2.stl", "part3.stl"]
 results = batch_with_progress(stl_files)
 ```
 
-### Real-time Statistics
+### Real-time statistics
 
 ```python
 def batch_with_stats(stl_files, **kwargs):
@@ -366,9 +366,9 @@ def batch_with_stats(stl_files, **kwargs):
 batch_with_stats(["model1.stl", "model2.stl", "model3.stl"])
 ```
 
-## Error Handling
+## Error handling
 
-### Robust Batch Processing
+### Robust batch processing
 
 ```python
 import logging
@@ -449,9 +449,9 @@ stl_files = ["good_file.stl", "missing_file.stl", "corrupt_file.stl"]
 results = robust_batch_processing(stl_files)
 ```
 
-## Performance Optimization
+## Performance optimization
 
-### Parallel Processing
+### Parallel processing
 
 ```python
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -526,9 +526,9 @@ stl_files = [f"part_{i}.stl" for i in range(10)]
 results = parallel_batch_processing(stl_files, max_workers=4)
 ```
 
-## Configuration Management
+## Configuration management
 
-### Batch Configuration Files
+### Batch configuration files
 
 ```python
 import json
@@ -622,7 +622,7 @@ processing_settings:
 results = process_from_config("batch_config.yaml")
 ```
 
-## Next Steps
+## Next steps
 
 - **[Grid Layouts](grid-layouts.md)** - Create optimized grid arrangements
 - **[3MF Analysis](3mf-analysis.md)** - Analyze your converted files

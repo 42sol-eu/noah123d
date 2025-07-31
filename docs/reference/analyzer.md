@@ -1,12 +1,12 @@
-# 3MF File Analyzer Documentation
+# 3MF file analyzer documentation
 
 ## Overview
 
 The Noah123d library now includes a comprehensive 3MF file analyzer that can extract detailed information about models including center of mass, dimensions, volume, surface area, and mesh quality metrics. This is perfect for inspecting 3MF files before 3D printing or for analyzing model properties.
 
-## New Analyzer Features
+## New analyzer features
 
-### 🔍 Analysis Capabilities
+### 🔍 analysis capabilities
 
 - **Model Geometry**: Center of mass, dimensions, bounding box
 - **Mesh Properties**: Volume, surface area, vertex/triangle counts
@@ -14,16 +14,16 @@ The Noah123d library now includes a comprehensive 3MF file analyzer that can ext
 - **File Information**: Archive contents, file size, object count
 - **Comparison Tools**: Multi-file comparison and statistics
 
-### 📊 Output Formats
+### 📊 output formats
 
 - **Rich Console**: Beautiful formatted tables and panels
 - **JSON Export**: Structured data for further processing
 - **Summary Statistics**: Overall and per-model metrics
 - **Comparison Reports**: Side-by-side file analysis
 
-## API Reference
+## API reference
 
-### Core Classes
+### Core classes
 
 #### `Analysis3MF`
 Main analyzer class for 3MF files:
@@ -35,7 +35,7 @@ analyzer = Analysis3MF()
 analysis = analyzer.analyze_file(Path("model.3mf"))
 ```
 
-### Convenience Functions
+### Convenience functions
 
 #### `analyze_3mf(file_path)`
 Complete analysis of a 3MF file:
@@ -77,7 +77,7 @@ print(f"Size: {dims[0]:.1f} × {dims[1]:.1f} × {dims[2]:.1f} mm")
 model_dims = get_model_dimensions(Path("model.3mf"), model_id=1)
 ```
 
-## Analysis Results Structure
+## Analysis results structure
 
 The analyzer returns a comprehensive dictionary with the following structure:
 
@@ -111,9 +111,9 @@ The analyzer returns a comprehensive dictionary with the following structure:
 }
 ```
 
-## Usage Examples
+## Usage examples
 
-### Example 1: Basic Analysis
+### Example 1: Basic analysis
 
 ```python
 from noah123d import analyze_3mf
@@ -133,7 +133,7 @@ if 'error' not in analysis:
         print(f"  Volume: {model['volume']:.1f} mm³")
 ```
 
-### Example 2: Convenience Functions
+### Example 2: Convenience functions
 
 ```python
 from noah123d import get_model_center_of_mass, get_model_dimensions
@@ -157,7 +157,7 @@ for model_id in range(1, 5):  # Models 1-4
         print(f"Model {model_id}: center={model_center}, size={model_dims}")
 ```
 
-### Example 3: File Comparison
+### Example 3: File comparison
 
 ```python
 from noah123d import Analysis3MF
@@ -178,7 +178,7 @@ for file_path in files:
         print(f"  Dimensions: {summary['overall_dimensions']}")
 ```
 
-### Example 4: Quality Analysis
+### Example 4: Quality analysis
 
 ```python
 from noah123d import Analysis3MF
@@ -200,9 +200,9 @@ if 'error' not in analysis:
             print(f"  Surface/Volume Ratio: {density:.2f}")
 ```
 
-## Advanced Features
+## Advanced features
 
-### Rich Console Output
+### Rich console output
 
 The analyzer includes beautiful console output using the Rich library:
 
@@ -220,7 +220,7 @@ This creates formatted tables showing:
 - Individual model details table
 - Mesh quality analysis table
 
-### JSON Export
+### JSON export
 
 Export analysis results for further processing:
 
@@ -233,7 +233,7 @@ with open("analysis_report.json", "w") as f:
     json.dump(analysis, f, indent=2)
 ```
 
-### Batch Analysis
+### Batch analysis
 
 Analyze multiple files efficiently:
 
@@ -258,7 +258,7 @@ for filename, data in results.items():
     print(f"{filename}: {data['objects']} objects, {data['volume']:.1f} mm³")
 ```
 
-## Integration with Grid Layouts
+## Integration with grid layouts
 
 The analyzer works seamlessly with grid-generated 3MF files:
 
@@ -297,7 +297,7 @@ Perfect for:
 - **Model Optimization**: Identify oversized or problematic models
 - **Assembly Analysis**: Understand part positioning and relationships
 
-## Examples Available
+## Examples available
 
 Run these examples to see the analyzer in action:
 

@@ -2,6 +2,7 @@
     "cSpell.words": [
         "numpy",
         "Pylance",
-        "pytest"
+        "pytest",
+        "venv"
     ]
 }

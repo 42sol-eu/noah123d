@@ -1,4 +1,4 @@
-# Multi-STL Assembly Guide
+# Multi-STL assembly guide
 
 This guide demonstrates how to create 3MF assemblies from multiple STL files with specified counts for each component using the noah123d library.
 
@@ -6,7 +6,7 @@ This guide demonstrates how to create 3MF assemblies from multiple STL files wit
 
 The `multi_stl_to_3mf()` function allows you to combine multiple different STL files into a single 3MF assembly, specifying how many copies of each part should be included. This is perfect for creating assemblies, kits, or collections of related parts.
 
-## Basic Usage
+## Basic usage
 
 ```python
 from noah123d import multi_stl_to_3mf
@@ -23,7 +23,7 @@ stl_objects = [
 success = multi_stl_to_3mf(stl_objects, 'assembly.3mf')
 ```
 
-## STL Object Specification
+## STL object specification
 
 Each STL object is defined by a dictionary with the following keys:
 
@@ -31,29 +31,29 @@ Each STL object is defined by a dictionary with the following keys:
 - **`count`** (optional): Number of copies to create (default: 1)
 - **`name`** (optional): Custom name for the object (default: filename without extension)
 
-## Layout Modes
+## Layout modes
 
-### Grid Layout (Default)
+### Grid layout (Default)
 Arranges objects in an optimal grid pattern:
 ```python
 multi_stl_to_3mf(stl_objects, 'grid_assembly.3mf', layout_mode='grid')
 ```
 
-### Linear Layout
+### Linear layout
 Arranges all objects in a single horizontal line:
 ```python
 multi_stl_to_3mf(stl_objects, 'linear_assembly.3mf', layout_mode='linear')
 ```
 
-### Stack Layout
+### Stack layout
 Stacks all objects vertically (Z-axis):
 ```python
 multi_stl_to_3mf(stl_objects, 'stack_assembly.3mf', layout_mode='stack')
 ```
 
-## Advanced Options
+## Advanced options
 
-### Spacing Control
+### Spacing control
 Control the spacing between objects:
 ```python
 multi_stl_to_3mf(
@@ -64,7 +64,7 @@ multi_stl_to_3mf(
 )
 ```
 
-### Using STLConverter Class
+### Using stlconverter class
 For more control and access to statistics:
 ```python
 from noah123d import STLConverter
@@ -84,7 +84,7 @@ stats = converter.get_conversion_stats()
 print(f"Total objects: {stats['advanced_assembly.3mf']['total_objects']}")
 ```
 
-## Complete Example
+## Complete example
 
 ```python
 from pathlib import Path
@@ -140,7 +140,7 @@ if __name__ == \"__main__\":
     create_printer_assembly()
 ```
 
-## Error Handling
+## Error handling
 
 The function includes comprehensive error handling:
 
@@ -165,7 +165,7 @@ except Exception as e:
     print(f\"Conversion failed: {e}\")
 ```
 
-## Metadata Generation
+## Metadata generation
 
 When `include_metadata=True` (default), the function generates detailed metadata including:
 
@@ -177,14 +177,14 @@ When `include_metadata=True` (default), the function generates detailed metadata
 
 The metadata is stored in the 3MF file and can be accessed by 3D printing software or other tools.
 
-## Performance Tips
+## Performance tips
 
-1. **File Validation**: Set `validate=False` in STLConverter for faster processing if you're confident your STL files are valid
-2. **Large Assemblies**: For assemblies with many objects, consider using `layout_mode='linear'` for simpler calculations
-3. **Memory Usage**: Very large STL files with high counts may require substantial memory
+1. **File validation**: Set `validate=False` in stlconverter for faster processing if you're confident your STL files are valid
+2. **Large assemblies**: For assemblies with many objects, consider using `layout_mode='linear'` for simpler calculations
+3. **Memory usage**: Very large STL files with high counts may require substantial memory
 4. **Spacing**: Use appropriate `spacing_factor` values to prevent objects from overlapping in the final layout
 
-## Use Cases
+## Use cases
 
 - **Product Assemblies**: Create kits with all required parts
 - **Replacement Parts**: Group different quantities of spare parts
@@ -192,7 +192,7 @@ The metadata is stored in the 3MF file and can be accessed by 3D printing softwa
 - **Prototyping**: Test different part combinations and layouts
 - **Manufacturing**: Prepare parts for batch production
 
-## See Also
+## See also
 
 - `stl_to_3mf_grid()` - For multiple copies of the same STL file
 - `batch_stl_to_3mf()` - For converting multiple STL files to separate 3MF files
