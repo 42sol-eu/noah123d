@@ -7,6 +7,10 @@ from pathlib import Path
 from typing import Optional, Union
 from contextvars import ContextVar
 import contextlib
+from rich import print 
+from rich.console import Console
+
+from .xml_3mf import content_types_header, relationships_header
 
 # Context variable to track the current archive
 current_archive: ContextVar[Optional['Archive3mf']] = ContextVar('current_archive', default=None)
@@ -34,9 +38,8 @@ class Archive3mf:
         # Set this archive as the current archive in context
         self._context_token = current_archive.set(self)
         
-        # Create temporary directory for extraction if needed
-        if self.mode in ('r', 'a'):
-            self._temp_dir = tempfile.TemporaryDirectory()
+        # Create temporary directory for all modes
+        self._temp_dir = tempfile.TemporaryDirectory()
             
         # Open the zip file
         if self.mode == 'w' or not self.file_path.exists():
@@ -67,22 +70,18 @@ class Archive3mf:
         if self._context_token:
             current_archive.reset(self._context_token)
             
+    @classmethod
+    def get_current(cls) -> Optional['Archive3mf']:
+        """Get the current archive from context."""
+        return current_archive.get()
+
     def _create_basic_structure(self):
         """Create the basic 3MF file structure."""
         # Create [Content_Types].xml
-        content_types = '''<?xml version="1.0" encoding="UTF-8"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-    <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-    <Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/>
-</Types>'''
-        self._zipfile.writestr('[Content_Types].xml', content_types)
+        self._zipfile.writestr('[Content_Types].xml', content_types_header)
         
         # Create _rels/.rels
-        rels = '''<?xml version="1.0" encoding="UTF-8"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    <Relationship Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel" Target="/3D/3dmodel.model" Id="rel0"/>
-</Relationships>'''
-        self._zipfile.writestr('_rels/.rels', rels)
+        self._zipfile.writestr('_rels/.rels', relationships_header)
         
     def _repack_from_temp(self):
         """Repack the archive from temporary directory."""
@@ -129,7 +128,3 @@ class Archive3mf:
         """Check if the archive is opened in a writable mode."""
         return self.mode in ('w', 'a')
             
-    @classmethod
-    def get_current(cls) -> Optional['Archive3mf']:
-        """Get the current archive from context."""
-        return current_archive.get()

@@ -5,6 +5,7 @@ __version__ = "2025.0.1"
 from .__main__ import main
 from .archive3mf import Archive3mf
 from .directory import Directory
+from .directories import ThreeD, Metadata, Textures
 from .model import Model
 from .converters import STLConverter, stl_to_3mf, get_stl_info, batch_stl_to_3mf, stl_to_3mf_grid, multi_stl_to_3mf
 from .analyzer import Analysis3MF, analyze_3mf, get_model_center_of_mass, get_model_dimensions
@@ -13,6 +14,9 @@ __all__ = [
     "main", 
     "Archive3mf", 
     "Directory", 
+    "ThreeD",
+    "Metadata", 
+    "Textures",
     "Model",
     "STLConverter",
     "stl_to_3mf",

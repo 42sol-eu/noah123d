@@ -49,6 +49,16 @@ class Directory:
         if self._context_token:
             current_directory.reset(self._context_token)
             
+    @classmethod
+    def get_current(cls) -> Optional['Directory']:
+        """Get the current directory from context."""
+        return current_directory.get()
+        
+    @classmethod
+    def get_parent_archive(cls) -> Optional[Archive3mf]:
+        """Get the parent archive from context."""
+        return current_archive.get()
+
     def _ensure_directory_exists(self):
         """Ensure the directory exists in the archive's temporary location."""
         if not self._parent_archive:
@@ -58,7 +68,16 @@ class Directory:
         if temp_path:
             full_path = temp_path / self.path
             full_path.mkdir(parents=True, exist_ok=True)
-            
+                    
+    def get_archive_path(self) -> str:
+        """Get the path as it appears in the archive."""
+        return str(self.path).replace('\\', '/')
+        
+    def exists(self) -> bool:
+        """Check if this directory exists."""
+        full_path = self.get_full_path()
+        return full_path.exists() if full_path else False
+
     def get_full_path(self) -> Optional[Path]:
         """Get the full filesystem path to this directory."""
         if not self._parent_archive:
@@ -69,12 +88,10 @@ class Directory:
             return temp_path / self.path
         return None
         
-    def list_files(self) -> List[str]:
-        """List files in this directory."""
-        full_path = self.get_full_path()
-        if full_path and full_path.exists():
-            return [f.name for f in full_path.iterdir() if f.is_file()]
-        return []
+    def create_subdirectory(self, name: str) -> 'Directory':
+        """Create a subdirectory and return a Directory instance for it."""
+        subdir_path = self.path / name
+        return Directory(subdir_path, create=True)
         
     def list_subdirectories(self) -> List[str]:
         """List subdirectories in this directory."""
@@ -82,11 +99,20 @@ class Directory:
         if full_path and full_path.exists():
             return [d.name for d in full_path.iterdir() if d.is_dir()]
         return []
+
+    def list_files(self) -> List[str]:
+        """List files in this directory."""
+        full_path = self.get_full_path()
+        if full_path and full_path.exists():
+            return [f.name for f in full_path.iterdir() if f.is_file()]
+        return []
         
     def create_file(self, filename: str, content: Union[str, bytes]):
         """Create a file in this directory."""
         full_path = self.get_full_path()
         if full_path:
+            # Ensure the directory exists before creating the file
+            full_path.mkdir(parents=True, exist_ok=True)
             file_path = full_path / filename
             if isinstance(content, str):
                 file_path.write_text(content, encoding='utf-8')
@@ -112,26 +138,4 @@ class Directory:
                 return True
         return False
         
-    def create_subdirectory(self, name: str) -> 'Directory':
-        """Create a subdirectory and return a Directory instance for it."""
-        subdir_path = self.path / name
-        return Directory(subdir_path, create=True)
         
-    def get_archive_path(self) -> str:
-        """Get the path as it appears in the archive."""
-        return str(self.path).replace('\\', '/')
-        
-    def exists(self) -> bool:
-        """Check if this directory exists."""
-        full_path = self.get_full_path()
-        return full_path.exists() if full_path else False
-        
-    @classmethod
-    def get_current(cls) -> Optional['Directory']:
-        """Get the current directory from context."""
-        return current_directory.get()
-        
-    @classmethod
-    def get_parent_archive(cls) -> Optional[Archive3mf]:
-        """Get the parent archive from context."""
-        return current_archive.get()
