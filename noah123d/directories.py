@@ -184,6 +184,332 @@ class Textures(Directory):
 
 
 # Backward compatibility - re-export Directory for existing code
-from .directory import Directory
+from .directory import Directory, current_directory
 
-__all__ = ['Directory', 'ThreeD', 'Metadata', 'Textures']
+
+# Module-level convenience functions that work with the current directory context
+def add_thumbnail(filename: str, image_data: bytes) -> None:
+    """Add a thumbnail image to the current 3D directory.
+    
+    Must be called within a ThreeD context manager.
+    
+    Args:
+        filename: Name of the thumbnail file (should be .png or .jpg)
+        image_data: Binary image data
+        
+    Raises:
+        RuntimeError: If not called within a ThreeD context
+        TypeError: If current directory is not a ThreeD instance
+        ValueError: If thumbnail format is invalid
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("add_thumbnail() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, ThreeD):
+        raise TypeError("add_thumbnail() can only be used within a ThreeD context")
+    
+    current_dir.add_thumbnail(filename, image_data)
+
+
+def create_model_file(filename: str = "3dmodel.model", content: str = "") -> None:
+    """Create a 3D model file in the current 3D directory.
+    
+    Must be called within a ThreeD context manager.
+    
+    Args:
+        filename: Name of the model file (should end with .model)
+        content: XML content of the model file
+        
+    Raises:
+        RuntimeError: If not called within a ThreeD context
+        TypeError: If current directory is not a ThreeD instance
+        ValueError: If filename doesn't end with .model
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("create_model_file() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, ThreeD):
+        raise TypeError("create_model_file() can only be used within a ThreeD context")
+    
+    current_dir.create_model_file(filename, content)
+
+
+def list_model_files() -> List[str]:
+    """List all .model files in the current 3D directory.
+    
+    Must be called within a ThreeD context manager.
+    
+    Returns:
+        List of model filenames
+        
+    Raises:
+        RuntimeError: If not called within a ThreeD context
+        TypeError: If current directory is not a ThreeD instance
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("list_model_files() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, ThreeD):
+        raise TypeError("list_model_files() can only be used within a ThreeD context")
+    
+    return current_dir.list_model_files()
+
+
+def add_conversion_info(source_file: str, converter: str = "noah123d", 
+                        objects_count: int = 0, additional_info: Dict[str, Any] = None) -> None:
+    """Add conversion information metadata to the current Metadata directory.
+    
+    Must be called within a Metadata context manager.
+    
+    Args:
+        source_file: Name of the original source file
+        converter: Name of the converter used
+        objects_count: Number of objects in the converted file
+        additional_info: Additional conversion information
+        
+    Raises:
+        RuntimeError: If not called within a Metadata context
+        TypeError: If current directory is not a Metadata instance
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("add_conversion_info() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, Metadata):
+        raise TypeError("add_conversion_info() can only be used within a Metadata context")
+    
+    current_dir.add_conversion_info(source_file, converter, objects_count, additional_info)
+
+
+def add_properties(properties: Dict[str, Any], filename: str = "properties.xml") -> None:
+    """Add properties as XML metadata to the current Metadata directory.
+    
+    Must be called within a Metadata context manager.
+    
+    Args:
+        properties: Dictionary of properties to add
+        filename: Name of the properties file
+        
+    Raises:
+        RuntimeError: If not called within a Metadata context
+        TypeError: If current directory is not a Metadata instance
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("add_properties() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, Metadata):
+        raise TypeError("add_properties() can only be used within a Metadata context")
+    
+    current_dir.add_properties(properties, filename)
+
+
+def add_custom_metadata(filename: str, content: Union[str, bytes], 
+                        description: str = "") -> None:
+    """Add custom metadata file to the current Metadata directory.
+    
+    Must be called within a Metadata context manager.
+    
+    Args:
+        filename: Name of the metadata file
+        content: Content of the metadata file
+        description: Optional description of the metadata
+        
+    Raises:
+        RuntimeError: If not called within a Metadata context
+        TypeError: If current directory is not a Metadata instance
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("add_custom_metadata() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, Metadata):
+        raise TypeError("add_custom_metadata() can only be used within a Metadata context")
+    
+    current_dir.add_custom_metadata(filename, content, description)
+
+
+def add_texture(filename: str, image_data: bytes, texture_type: str = "color") -> None:
+    """Add a texture image to the current Textures directory.
+    
+    Must be called within a Textures context manager.
+    
+    Args:
+        filename: Name of the texture file
+        image_data: Binary image data
+        texture_type: Type of texture (color, normal, roughness, etc.)
+        
+    Raises:
+        RuntimeError: If not called within a Textures context
+        TypeError: If current directory is not a Textures instance
+        ValueError: If texture format is invalid
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("add_texture() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, Textures):
+        raise TypeError("add_texture() can only be used within a Textures context")
+    
+    current_dir.add_texture(filename, image_data, texture_type)
+
+
+def list_texture_files() -> List[str]:
+    """List all texture image files in the current Textures directory.
+    
+    Must be called within a Textures context manager.
+    
+    Returns:
+        List of texture filenames
+        
+    Raises:
+        RuntimeError: If not called within a Textures context
+        TypeError: If current directory is not a Textures instance
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("list_texture_files() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, Textures):
+        raise TypeError("list_texture_files() can only be used within a Textures context")
+    
+    return current_dir.list_texture_files()
+
+
+def get_texture_metadata(texture_filename: str) -> Optional[str]:
+    """Get metadata for a specific texture file in the current Textures directory.
+    
+    Must be called within a Textures context manager.
+    
+    Args:
+        texture_filename: Name of the texture file
+        
+    Returns:
+        Metadata content as string, or None if not found
+        
+    Raises:
+        RuntimeError: If not called within a Textures context
+        TypeError: If current directory is not a Textures instance
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("get_texture_metadata() must be called within a directory context manager")
+    
+    if not isinstance(current_dir, Textures):
+        raise TypeError("get_texture_metadata() can only be used within a Textures context")
+    
+    return current_dir.get_texture_metadata(texture_filename)
+
+
+# Generic directory functions that work with any directory type
+def create_file(filename: str, content: Union[str, bytes]) -> None:
+    """Create a file in the current directory.
+    
+    Must be called within a directory context manager.
+    
+    Args:
+        filename: Name of the file to create
+        content: Content of the file (string or bytes)
+        
+    Raises:
+        RuntimeError: If not called within a directory context
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("create_file() must be called within a directory context manager")
+    
+    current_dir.create_file(filename, content)
+
+
+def read_file(filename: str) -> Optional[bytes]:
+    """Read a file from the current directory.
+    
+    Must be called within a directory context manager.
+    
+    Args:
+        filename: Name of the file to read
+        
+    Returns:
+        File content as bytes, or None if not found
+        
+    Raises:
+        RuntimeError: If not called within a directory context
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("read_file() must be called within a directory context manager")
+    
+    return current_dir.read_file(filename)
+
+
+def delete_file(filename: str) -> bool:
+    """Delete a file from the current directory.
+    
+    Must be called within a directory context manager.
+    
+    Args:
+        filename: Name of the file to delete
+        
+    Returns:
+        True if file was deleted, False if not found
+        
+    Raises:
+        RuntimeError: If not called within a directory context
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("delete_file() must be called within a directory context manager")
+    
+    return current_dir.delete_file(filename)
+
+
+def list_files() -> List[str]:
+    """List files in the current directory.
+    
+    Must be called within a directory context manager.
+    
+    Returns:
+        List of filenames
+        
+    Raises:
+        RuntimeError: If not called within a directory context
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("list_files() must be called within a directory context manager")
+    
+    return current_dir.list_files()
+
+
+def list_subdirectories() -> List[str]:
+    """List subdirectories in the current directory.
+    
+    Must be called within a directory context manager.
+    
+    Returns:
+        List of subdirectory names
+        
+    Raises:
+        RuntimeError: If not called within a directory context
+    """
+    current_dir = current_directory.get()
+    if not current_dir:
+        raise RuntimeError("list_subdirectories() must be called within a directory context manager")
+    
+    return current_dir.list_subdirectories()
+
+
+__all__ = [
+    'Directory', 'ThreeD', 'Metadata', 'Textures',
+    # ThreeD functions
+    'add_thumbnail', 'create_model_file', 'list_model_files',
+    # Metadata functions  
+    'add_conversion_info', 'add_properties', 'add_custom_metadata',
+    # Textures functions
+    'add_texture', 'list_texture_files', 'get_texture_metadata',
+    # Generic directory functions
+    'create_file', 'read_file', 'delete_file', 'list_files', 'list_subdirectories'
+]

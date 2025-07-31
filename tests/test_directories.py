@@ -5,7 +5,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from noah123d.directories import ThreeD, Metadata, Textures
+from noah123d.directories import ThreeD, Metadata, Textures, add_thumbnail, create_model_file
 from noah123d import Archive3mf
 
 
@@ -41,7 +41,7 @@ def test_threed_add_thumbnail():
         
         with Archive3mf(archive_path, 'w') as archive:
             with ThreeD() as threed:
-                # Test valid thumbnail formats
+                # Test valid thumbnail formats using context object
                 threed.add_thumbnail("thumb.png", b"fake_png_data")
                 threed.add_thumbnail("thumb.jpg", b"fake_jpg_data")
                 threed.add_thumbnail("thumb.JPEG", b"fake_jpeg_data")
@@ -49,6 +49,61 @@ def test_threed_add_thumbnail():
                 # Test invalid format should raise error
                 with pytest.raises(ValueError, match="Thumbnail must be one of"):
                     threed.add_thumbnail("thumb.txt", b"fake_data")
+
+
+def test_threed_add_thumbnail_context_functions():
+    """Test adding thumbnails using context-aware module functions."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        archive_path = Path(temp_dir) / "test.3mf"
+        
+        with Archive3mf(archive_path, 'w') as archive:
+            with ThreeD() as threed:
+                # Test valid thumbnail formats using module functions (no context object needed)
+                add_thumbnail("thumb.png", b"fake_png_data")
+                add_thumbnail("thumb.jpg", b"fake_jpg_data") 
+                add_thumbnail("thumb.JPEG", b"fake_jpeg_data")
+                
+                # Test invalid format should raise error
+                with pytest.raises(ValueError, match="Thumbnail must be one of"):
+                    add_thumbnail("thumb.txt", b"fake_data")
+
+
+def test_threed_create_model_file_context_functions():
+    """Test creating model files using context-aware module functions."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        archive_path = Path(temp_dir) / "test.3mf"
+        
+        with Archive3mf(archive_path, 'w') as archive:
+            with ThreeD() as threed:
+                # Test valid model file creation using module function
+                create_model_file("test.model", "<model>content</model>")
+                
+                # Test invalid extension should raise error
+                with pytest.raises(ValueError, match="Model files should have a .model extension"):
+                    create_model_file("test.txt", "content")
+
+
+def test_context_functions_outside_context():
+    """Test that context functions raise appropriate errors when used outside context."""
+    # Test outside any context
+    with pytest.raises(RuntimeError, match="must be called within a directory context manager"):
+        add_thumbnail("thumb.png", b"fake_data")
+    
+    with pytest.raises(RuntimeError, match="must be called within a directory context manager"):
+        create_model_file("test.model", "content")
+    
+    # Test in wrong context type
+    with tempfile.TemporaryDirectory() as temp_dir:
+        archive_path = Path(temp_dir) / "test.3mf"
+        
+        with Archive3mf(archive_path, 'w') as archive:
+            with Metadata() as metadata:
+                # ThreeD functions should not work in Metadata context
+                with pytest.raises(TypeError, match="can only be used within a ThreeD context"):
+                    add_thumbnail("thumb.png", b"fake_data")
+                
+                with pytest.raises(TypeError, match="can only be used within a ThreeD context"):
+                    create_model_file("test.model", "content")
 
 
 def test_metadata_initialization():

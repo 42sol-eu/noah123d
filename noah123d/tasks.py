@@ -2,7 +2,7 @@ from rich import print
 from rich.console import Console
 from pathlib import Path 
 
-from . import Archive, Directory, Model
+from . import Archive3mf, Directory, ThreeD(), Model
 
 def create_empty_3mf(cls, output_path: Path) -> Optional[Path]:
     """
@@ -24,7 +24,7 @@ def create_empty_3mf(cls, output_path: Path) -> Optional[Path]:
             console.print(f"✓ Created 3MF archive: {archive.file_path}")
             
             # Create the 3D directory using the context system
-            with Directory('3D') as models_dir:
+            with ThreeD() as models_dir:
                 console.print(f"✓ Created 3D models directory")
                 
                 # Create an empty model within the directory context
