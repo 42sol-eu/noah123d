@@ -30,11 +30,14 @@ with Archive3mf("output.3mf", 'w') as archive:
 ### After (Context-Aware Functions)
 
 ```python
-from noah123d import Archive3mf
+from noah123d.archive3mf import Archive3mf, add_file, list_contents, is_writable
 from noah123d.directories import ThreeD, add_thumbnail, create_model_file
 from noah123d.model import Model, add_object, get_object_count
 
 with Archive3mf("output.3mf", 'w') as archive:
+    # No need for context object name!
+    add_file("readme.txt", "Archive created with noah123d")
+    
     with ThreeD() as threed:
         # No need for context object name!
         add_thumbnail("thumb.png", b"fake_png_data")
@@ -46,9 +49,36 @@ with Archive3mf("output.3mf", 'w') as archive:
             triangles = [[0, 1, 2]]
             obj_id = add_object(vertices, triangles)
             count = get_object_count()
+            
+    # Check results without context object name!
+    files = list_contents()
+    writable = is_writable()
 ```
 
 ## Available Context-Aware Functions
+
+### Archive Functions (Archive3mf)
+
+```python
+from noah123d.archive3mf import (
+    add_file,                # Add file to archive
+    extract_file,            # Extract file from archive
+    list_contents,           # List all files in archive
+    get_temp_path,           # Get temporary directory path
+    is_writable,             # Check if archive is writable
+)
+
+with Archive3mf("example.3mf", 'w') as archive:
+    add_file("data.txt", "some content")
+    add_file("binary.bin", b"binary data")
+    
+    contents = list_contents()
+    writable = is_writable()
+    temp_path = get_temp_path()
+    
+    # Extract files (works in write mode too)
+    content = extract_file("data.txt")
+```
 
 ### Directory Functions (ThreeD)
 
@@ -157,8 +187,14 @@ Context-aware functions provide helpful error messages when used incorrectly:
 
 ```python
 # Using outside any context
+add_file("test.txt", "content")
+# RuntimeError: add_file() must be called within an Archive3mf context manager
+
 add_thumbnail("thumb.png", b"data")
 # RuntimeError: add_thumbnail() must be called within a directory context manager
+
+add_object([[0,0,0]], [[0]])
+# RuntimeError: add_object() must be called within a Model context manager
 
 # Using in wrong context type
 with Metadata() as metadata:
@@ -176,16 +212,31 @@ with ThreeD() as threed:
 You can mix context-aware functions with traditional instance methods:
 
 ```python
-with ThreeD() as threed:
-    with Model("mixed.model") as model:
-        # Context function
-        obj1 = add_object(vertices, triangles)
-        
-        # Instance method  
-        obj2 = model.add_object(vertices, triangles)
-        
-        # Both work on the same model
-        assert get_object_count() == model.get_object_count() == 2
+with Archive3mf("mixed.3mf", 'w') as archive:
+    with ThreeD() as threed:
+        with Model("mixed.model") as model:
+            # Archive: Context function
+            add_file("info.txt", "Mixed usage example")
+            
+            # Archive: Instance method
+            archive.add_file("info2.txt", "Another file")
+            
+            # Directory: Context function
+            add_thumbnail("thumb.png", b"thumbnail")
+            
+            # Directory: Instance method
+            threed.create_model_file("backup.model", "<model/>")
+            
+            # Model: Context function
+            obj1 = add_object(vertices, triangles)
+            
+            # Model: Instance method  
+            obj2 = model.add_object(vertices, triangles)
+            
+            # All methods work on the same contexts
+            assert list_contents() == archive.list_contents()
+            assert get_object_count() == model.get_object_count() == 2
+            assert is_writable() == archive.is_writable()
 ```
 
 ## Benefits
@@ -200,10 +251,12 @@ with ThreeD() as threed:
 
 ```python
 # Import specific functions you need
+from noah123d.archive3mf import add_file, list_contents, is_writable
 from noah123d.directories import add_thumbnail, create_model_file
 from noah123d.model import add_object, get_object_count
 
 # Or import everything if you prefer
+from noah123d.archive3mf import *
 from noah123d.directories import *
 from noah123d.model import *
 ```
@@ -212,12 +265,16 @@ from noah123d.model import *
 
 ```python
 from pathlib import Path
-from noah123d import Archive3mf
+from noah123d.archive3mf import Archive3mf, add_file, list_contents, is_writable
 from noah123d.directories import ThreeD, add_thumbnail
 from noah123d.model import Model, add_object, get_object_count, analyze_model_content
 
 def create_sample_3mf():
     with Archive3mf("sample.3mf", 'w') as archive:
+        # Add files without context object name
+        add_file("readme.txt", "Created with context functions")
+        add_file("metadata.json", '{"version": "1.0"}')
+        
         with ThreeD() as threed:
             # Add thumbnail without context object name
             add_thumbnail("preview.png", b"fake_png_data")
@@ -234,6 +291,11 @@ def create_sample_3mf():
                 
                 # Analyze without context object name
                 analyze_model_content()
+        
+        # Check archive without context object name
+        files = list_contents()
+        writable = is_writable()
+        print(f"Archive has {len(files)} files, writable: {writable}")
 
 if __name__ == "__main__":
     create_sample_3mf()

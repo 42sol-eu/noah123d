@@ -86,10 +86,10 @@ def test_threed_create_model_file_context_functions():
 def test_context_functions_outside_context():
     """Test that context functions raise appropriate errors when used outside context."""
     # Test outside any context
-    with pytest.raises(RuntimeError, match="must be called within a directory context manager"):
+    with pytest.raises(RuntimeError, match="must be called within a ThreeD context manager"):
         add_thumbnail("thumb.png", b"fake_data")
     
-    with pytest.raises(RuntimeError, match="must be called within a directory context manager"):
+    with pytest.raises(RuntimeError, match="must be called within a ThreeD context manager"):
         create_model_file("test.model", "content")
     
     # Test in wrong context type

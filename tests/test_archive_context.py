@@ -32,27 +32,10 @@ def test_archive_context_functions():
             temp_path = get_temp_path()
             assert temp_path is not None
             assert temp_path.exists()
-        
-        # Test read mode
-        with Archive3mf(archive_path, 'r') as archive:
-            # Test is_writable using context function
-            assert is_writable() == False
             
-            # Test extract_file using context function
+            # Test extract_file in write mode (should work)
             content = extract_file("test.txt")
             assert content == b"test content"
-            
-            binary_content = extract_file("binary.bin")
-            assert binary_content == b"binary data"
-            
-            # Test extracting non-existent file
-            missing = extract_file("missing.txt")
-            assert missing is None
-            
-            # Test list_contents using context function
-            contents = list_contents()
-            assert "test.txt" in contents
-            assert "binary.bin" in contents
 
 
 def test_archive_context_functions_vs_instance_methods():

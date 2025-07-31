@@ -570,194 +570,96 @@ Objects: {object_count}
         return converted_files
 
 
-# Module-level convenience functions that work with the current model context
+# Import decorator utilities
+from .context_decorators import simple_context
+
+# Module-level convenience functions using decorators
+@simple_context(current_model)
 def add_object_from_stl(stl_path: Union[str, Path]) -> int:
     """Add an object from an STL file to the current model.
     
     Must be called within a Model context manager.
-    
-    Args:
-        stl_path: Path to the STL file
-        
-    Returns:
-        Object ID of the added object
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("add_object_from_stl() must be called within a Model context manager")
-    
-    return current_model_instance.add_object_from_stl(stl_path)
+    pass  # Implementation handled by decorator
 
 
-def add_object (vertices: List[List[float]], triangles: List[List[int]], 
-                obj_type: str = "model") -> int:
+@simple_context(current_model)
+def add_object(vertices: List[List[float]], triangles: List[List[int]], 
+               obj_type: str = "model") -> int:
     """Add a 3D object to the current model.
     
     Must be called within a Model context manager.
-    
-    Args:
-        vertices: List of vertex coordinates [x, y, z]
-        triangles: List of triangle vertex indices [v1, v2, v3]
-        obj_type: Type of object (default: "model")
-        
-    Returns:
-        Object ID of the added object
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("add_object() must be called within a Model context manager")
-    
-    return current_model_instance.add_object(vertices, triangles, obj_type)
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def remove_object(obj_id: int) -> bool:
     """Remove an object from the current model.
     
     Must be called within a Model context manager.
-    
-    Args:
-        obj_id: ID of the object to remove
-        
-    Returns:
-        True if object was removed, False if not found
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("remove_object() must be called within a Model context manager")
-    
-    return current_model_instance.remove_object(obj_id)
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def get_object(obj_id: int) -> Optional[Dict[str, Any]]:
     """Get an object by ID from the current model.
     
     Must be called within a Model context manager.
-    
-    Args:
-        obj_id: ID of the object to get
-        
-    Returns:
-        Object data dictionary or None if not found
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("get_object() must be called within a Model context manager")
-    
-    return current_model_instance.get_object(obj_id)
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def list_objects() -> List[int]:
     """List all object IDs in the current model.
     
     Must be called within a Model context manager.
-    
-    Returns:
-        List of object IDs
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("list_objects() must be called within a Model context manager")
-    
-    return current_model_instance.list_objects()
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def get_object_count() -> int:
     """Get the number of objects in the current model.
     
     Must be called within a Model context manager.
-    
-    Returns:
-        Number of objects
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("get_object_count() must be called within a Model context manager")
-    
-    return current_model_instance.get_object_count()
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def clear_objects() -> None:
     """Remove all objects from the current model.
     
     Must be called within a Model context manager.
-    
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("clear_objects() must be called within a Model context manager")
-    
-    current_model_instance.clear_objects()
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def load_stl_with_info(stl_path: Path) -> Optional[int]:
     """Load an STL file into the current model with console output.
     
     Must be called within a Model context manager.
-    
-    Args:
-        stl_path: Path to the STL file
-        
-    Returns:
-        Object ID of the loaded STL or None if failed
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("load_stl_with_info() must be called within a Model context manager")
-    
-    return current_model_instance.load_stl_with_info(stl_path)
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def analyze_model_content() -> None:
     """Analyze and display detailed information about the current model.
     
     Must be called within a Model context manager.
-    
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("analyze_model_content() must be called within a Model context manager")
-    
-    current_model_instance.analyze_model_content()
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_model)
 def add_conversion_metadata(stl_path: Path) -> None:
     """Add conversion metadata to the current archive context.
     
     Must be called within a Model context manager.
-    
-    Args:
-        stl_path: Path to the original STL file
-        
-    Raises:
-        RuntimeError: If not called within a Model context
     """
-    current_model_instance = current_model.get()
-    if not current_model_instance:
-        raise RuntimeError("add_conversion_metadata() must be called within a Model context manager")
-    
-    current_model_instance.add_conversion_metadata(stl_path)
+    pass  # Implementation handled by decorator

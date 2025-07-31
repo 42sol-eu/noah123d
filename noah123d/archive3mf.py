@@ -129,96 +129,50 @@ class Archive3mf:
         return self.mode in ('w', 'a')
 
 
-# Module-level convenience functions that work with the current archive context
+# Import decorator utilities
+from .context_decorators import simple_context
+
+# Module-level convenience functions using decorators
+@simple_context(current_archive)
 def list_contents() -> list[str]:
     """List all files in the current archive.
     
     Must be called within an Archive3mf context manager.
-    
-    Returns:
-        List of filenames in the archive
-        
-    Raises:
-        RuntimeError: If not called within an Archive3mf context
     """
-    current_archive_instance = current_archive.get()
-    if not current_archive_instance:
-        raise RuntimeError("list_contents() must be called within an Archive3mf context manager")
-    
-    return current_archive_instance.list_contents()
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_archive)
 def extract_file(filename: str) -> Optional[bytes]:
     """Extract a specific file from the current archive.
     
     Must be called within an Archive3mf context manager.
-    
-    Args:
-        filename: Name of the file to extract
-        
-    Returns:
-        File content as bytes, or None if not found
-        
-    Raises:
-        RuntimeError: If not called within an Archive3mf context
     """
-    current_archive_instance = current_archive.get()
-    if not current_archive_instance:
-        raise RuntimeError("extract_file() must be called within an Archive3mf context manager")
-    
-    return current_archive_instance.extract_file(filename)
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_archive)
 def add_file(filename: str, data: Union[str, bytes]) -> None:
     """Add a file to the current archive.
     
     Must be called within an Archive3mf context manager.
-    
-    Args:
-        filename: Name of the file to add
-        data: File content (string or bytes)
-        
-    Raises:
-        RuntimeError: If not called within an Archive3mf context
     """
-    current_archive_instance = current_archive.get()
-    if not current_archive_instance:
-        raise RuntimeError("add_file() must be called within an Archive3mf context manager")
-    
-    current_archive_instance.add_file(filename, data)
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_archive)
 def get_temp_path() -> Optional[Path]:
     """Get the temporary directory path for file operations from the current archive.
     
     Must be called within an Archive3mf context manager.
-    
-    Returns:
-        Path to temporary directory, or None if not available
-        
-    Raises:
-        RuntimeError: If not called within an Archive3mf context
     """
-    current_archive_instance = current_archive.get()
-    if not current_archive_instance:
-        raise RuntimeError("get_temp_path() must be called within an Archive3mf context manager")
-    
-    return current_archive_instance.get_temp_path()
+    pass  # Implementation handled by decorator
 
 
+@simple_context(current_archive)
 def is_writable() -> bool:
     """Check if the current archive is opened in a writable mode.
     
     Must be called within an Archive3mf context manager.
-    
-    Returns:
-        True if archive is writable, False otherwise
-        
-    Raises:
-        RuntimeError: If not called within an Archive3mf context
     """
-    current_archive_instance = current_archive.get()
-    if not current_archive_instance:
-        raise RuntimeError("is_writable() must be called within an Archive3mf context manager")
-    
-    return current_archive_instance.is_writable()
+    pass  # Implementation handled by decorator

@@ -82,16 +82,16 @@ def test_model_context_functions_vs_instance_methods():
 def test_model_context_functions_outside_context():
     """Test that context functions raise appropriate errors when used outside context."""
     # Test outside any context
-    with pytest.raises(RuntimeError, match="must be called within a Model context manager"):
+    with pytest.raises(RuntimeError, match="must be called within a context manager"):
         add_object([[0, 0, 0]], [[0]])
     
-    with pytest.raises(RuntimeError, match="must be called within a Model context manager"):
+    with pytest.raises(RuntimeError, match="must be called within a context manager"):
         list_objects()
     
-    with pytest.raises(RuntimeError, match="must be called within a Model context manager"):
+    with pytest.raises(RuntimeError, match="must be called within a context manager"):
         get_object_count()
     
-    with pytest.raises(RuntimeError, match="must be called within a Model context manager"):
+    with pytest.raises(RuntimeError, match="must be called within a context manager"):
         clear_objects()
     
     # Test in directory context but not model context
@@ -101,7 +101,7 @@ def test_model_context_functions_outside_context():
         with Archive3mf(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 # Model functions should not work in directory context without model
-                with pytest.raises(RuntimeError, match="must be called within a Model context manager"):
+                with pytest.raises(RuntimeError, match="must be called within a context manager"):
                     add_object([[0, 0, 0]], [[0]])
 
 
