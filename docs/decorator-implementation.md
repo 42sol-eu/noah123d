@@ -37,12 +37,12 @@ def create_model_file(filename: str = "3dmodel.model", content: str = "") -> Non
 **After decorators**, each function requires just ~5 lines:
 
 ```python
-@context_function(current_directory, ThreeD, "ThreeD")
+@context_function_with_check(current_directory, ThreeD, "ThreeD")
 def add_thumbnail(filename: str, image_data: bytes) -> None:
     """Add a thumbnail image to the current 3D directory."""
     pass  # Implementation handled by decorator
 
-@context_function(current_directory, ThreeD, "ThreeD")  
+@context_function_with_check(current_directory, ThreeD, "ThreeD")  
 def create_model_file(filename: str = "3dmodel.model", content: str = "") -> None:
     """Create a 3D model file in the current 3D directory."""
     pass  # Implementation handled by decorator
@@ -55,7 +55,7 @@ def create_model_file(filename: str = "3dmodel.model", content: str = "") -> Non
 ### Core Decorator (`context_decorators.py`)
 
 ```python
-def context_function(context_var: ContextVar[Optional[T]], 
+def context_function_with_check(context_var: ContextVar[Optional[T]], 
                      expected_type: Type[T] = None,
                      context_name: str = None) -> Callable:
     """Decorator to create context-aware functions that delegate to instance methods."""
@@ -86,7 +86,7 @@ def context_function(context_var: ContextVar[Optional[T]],
 ### Simple Decorator for Single-Type Contexts
 
 ```python
-def simple_context(context_var: ContextVar) -> Callable:
+def context_function(context_var: ContextVar) -> Callable:
     """Simple decorator for context functions - no type checking."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
@@ -108,15 +108,15 @@ def simple_context(context_var: ContextVar) -> Callable:
 
 ```python
 # With type checking for specific directory types
-@context_function(current_directory, ThreeD, "ThreeD")
+@context_function_with_check(current_directory, ThreeD, "ThreeD")
 def add_thumbnail(filename: str, image_data: bytes) -> None:
     pass
 
-@context_function(current_directory, Metadata, "Metadata")
+@context_function_with_check(current_directory, Metadata, "Metadata")
 def add_conversion_info(source_file: str, converter: str = "noah123d") -> None:
     pass
 
-@context_function(current_directory, Textures, "Textures") 
+@context_function_with_check(current_directory, Textures, "Textures") 
 def add_texture(filename: str, image_data: bytes, texture_type: str = "color") -> None:
     pass
 ```
@@ -125,11 +125,11 @@ def add_texture(filename: str, image_data: bytes, texture_type: str = "color") -
 
 ```python
 # Without type checking for single-type contexts
-@simple_context(current_archive)
+@context_function(current_archive)
 def add_file(filename: str, data: Union[str, bytes]) -> None:
     pass
 
-@simple_context(current_model)
+@context_function(current_model)
 def add_object(vertices: List[List[float]], triangles: List[List[int]]) -> int:
     pass
 ```
@@ -185,7 +185,7 @@ Adding a new context function is now trivial:
 
 ```python
 # Just add the decorator and signature
-@context_function(current_directory, ThreeD, "ThreeD")
+@context_function_with_check(current_directory, ThreeD, "ThreeD")
 def new_threed_function(param1: str, param2: int) -> bool:
     """New function for ThreeD directories."""
     pass  # Decorator handles everything

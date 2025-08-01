@@ -8,7 +8,7 @@ from noah123d.directories import ThreeD, add_thumbnail, create_model_file
 from noah123d.model import Model, add_object, get_object_count, list_objects
 
 
-def example_context_functions():
+def example_context_function_with_checks():
     """Example showing how to use context functions without object names."""
     
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     print("Context Functions Example")
     print("=" * 60)
     
-    example_archive1 = example_context_functions()
+    example_archive1 = example_context_function_with_checks()
     example_archive2 = example_mixed_usage()
     
     print(f"\n✅ Examples completed!")

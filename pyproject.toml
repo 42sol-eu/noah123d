@@ -19,6 +19,9 @@ noah = "noah123d.__main__:main"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 ruff = "^0.12.7"
+behave = "^1.2.6"
+pytest-bdd = "^8.1.0"
+allure-behave = "^2.15.0"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.0"

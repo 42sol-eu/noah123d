@@ -49,24 +49,24 @@ def add_object_manual(vertices, triangles, obj_type="model"):
 # AFTER: Decorator-based implementation (what we have now)
 # ============================================================================
 
-from noah123d.context_decorators import context_function, simple_context
+from noah123d.context_decorators import context_function_with_check, context_function
 from noah123d.directories import ThreeD
 from noah123d.directory import current_directory
 from noah123d.model import current_model
 
-@context_function(current_directory, ThreeD, "ThreeD")
+@context_function_with_check(current_directory, ThreeD, "ThreeD")
 def add_thumbnail(filename: str, image_data: bytes) -> None:
     """Decorator implementation - clean and simple."""
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, ThreeD, "ThreeD")  
+@context_function_with_check(current_directory, ThreeD, "ThreeD")  
 def create_model_file(filename: str = "3dmodel.model", content: str = "") -> None:
     """Decorator implementation - clean and simple."""
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def add_object(vertices, triangles, obj_type="model"):
     """Decorator implementation - clean and simple."""
     pass  # Implementation handled by decorator
@@ -109,15 +109,15 @@ def demonstrate_code_reduction():
     
     decorator_lines = [
         # add_thumbnail
-        "@context_function(current_directory, ThreeD, \"ThreeD\")",
+        "@context_function_with_check(current_directory, ThreeD, \"ThreeD\")",
         "pass",
         
         # create_model_file
-        "@context_function(current_directory, ThreeD, \"ThreeD\")",
+        "@context_function_with_check(current_directory, ThreeD, \"ThreeD\")",
         "pass",
         
         # add_object
-        "@simple_context(current_model)",
+        "@context_function(current_model)",
         "pass",
     ]
     

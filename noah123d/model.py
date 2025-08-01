@@ -571,10 +571,10 @@ Objects: {object_count}
 
 
 # Import decorator utilities
-from .context_decorators import simple_context
+from .context_decorators import context_function
 
 # Module-level convenience functions using decorators
-@simple_context(current_model)
+@context_function(current_model)
 def add_object_from_stl(stl_path: Union[str, Path]) -> int:
     """Add an object from an STL file to the current model.
     
@@ -583,7 +583,7 @@ def add_object_from_stl(stl_path: Union[str, Path]) -> int:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def add_object(vertices: List[List[float]], triangles: List[List[int]], 
                obj_type: str = "model") -> int:
     """Add a 3D object to the current model.
@@ -593,7 +593,7 @@ def add_object(vertices: List[List[float]], triangles: List[List[int]],
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def remove_object(obj_id: int) -> bool:
     """Remove an object from the current model.
     
@@ -602,7 +602,7 @@ def remove_object(obj_id: int) -> bool:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def get_object(obj_id: int) -> Optional[Dict[str, Any]]:
     """Get an object by ID from the current model.
     
@@ -611,7 +611,7 @@ def get_object(obj_id: int) -> Optional[Dict[str, Any]]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def list_objects() -> List[int]:
     """List all object IDs in the current model.
     
@@ -620,7 +620,7 @@ def list_objects() -> List[int]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def get_object_count() -> int:
     """Get the number of objects in the current model.
     
@@ -629,7 +629,7 @@ def get_object_count() -> int:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def clear_objects() -> None:
     """Remove all objects from the current model.
     
@@ -638,7 +638,7 @@ def clear_objects() -> None:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def load_stl_with_info(stl_path: Path) -> Optional[int]:
     """Load an STL file into the current model with console output.
     
@@ -647,7 +647,7 @@ def load_stl_with_info(stl_path: Path) -> Optional[int]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def analyze_model_content() -> None:
     """Analyze and display detailed information about the current model.
     
@@ -656,7 +656,7 @@ def analyze_model_content() -> None:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_model)
+@context_function(current_model)
 def add_conversion_metadata(stl_path: Path) -> None:
     """Add conversion metadata to the current archive context.
     

@@ -130,10 +130,10 @@ class Archive3mf:
 
 
 # Import decorator utilities
-from .context_decorators import simple_context
+from .context_decorators import context_function
 
 # Module-level convenience functions using decorators
-@simple_context(current_archive)
+@context_function(current_archive)
 def list_contents() -> list[str]:
     """List all files in the current archive.
     
@@ -142,7 +142,7 @@ def list_contents() -> list[str]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_archive)
+@context_function(current_archive)
 def extract_file(filename: str) -> Optional[bytes]:
     """Extract a specific file from the current archive.
     
@@ -151,7 +151,7 @@ def extract_file(filename: str) -> Optional[bytes]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_archive)
+@context_function(current_archive)
 def add_file(filename: str, data: Union[str, bytes]) -> None:
     """Add a file to the current archive.
     
@@ -160,7 +160,7 @@ def add_file(filename: str, data: Union[str, bytes]) -> None:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_archive)
+@context_function(current_archive)
 def get_temp_path() -> Optional[Path]:
     """Get the temporary directory path for file operations from the current archive.
     
@@ -169,7 +169,7 @@ def get_temp_path() -> Optional[Path]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_archive)
+@context_function(current_archive)
 def is_writable() -> bool:
     """Check if the current archive is opened in a writable mode.
     

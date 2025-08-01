@@ -10,7 +10,7 @@ from noah123d.directories import ThreeD
 from noah123d import Archive3mf
 
 
-def test_model_context_functions():
+def test_model_context_function_with_checks():
     """Test that model functions work without context object names."""
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
@@ -47,7 +47,7 @@ def test_model_context_functions():
                     assert count == 0
 
 
-def test_model_context_functions_vs_instance_methods():
+def test_model_context_function_with_checks_vs_instance_methods():
     """Test that context functions produce same results as instance methods."""
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
@@ -79,7 +79,7 @@ def test_model_context_functions_vs_instance_methods():
                     assert instance_count == context_count == 2
 
 
-def test_model_context_functions_outside_context():
+def test_model_context_function_with_checks_outside_context():
     """Test that context functions raise appropriate errors when used outside context."""
     # Test outside any context
     with pytest.raises(RuntimeError, match="must be called within a context manager"):
@@ -106,7 +106,7 @@ def test_model_context_functions_outside_context():
 
 
 @patch('stl.mesh.Mesh.from_file')
-def test_add_object_from_stl_context_function(mock_stl_from_file):
+def test_add_object_from_stl_context_function_with_check(mock_stl_from_file):
     """Test adding STL objects using context function."""
     # Mock STL mesh data
     mock_mesh = MagicMock()
@@ -135,7 +135,7 @@ def test_add_object_from_stl_context_function(mock_stl_from_file):
                     assert objects == [1]
 
 
-def test_complex_model_workflow_with_context_functions():
+def test_complex_model_workflow_with_context_function_with_checks():
     """Test a complex workflow using only context functions."""
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"

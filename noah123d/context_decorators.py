@@ -7,7 +7,7 @@ from contextvars import ContextVar
 T = TypeVar('T')
 
 
-def context_function(context_var: ContextVar[Optional[T]], 
+def context_function_with_check(context_var: ContextVar[Optional[T]], 
                     expected_type: Type[T] = None,
                     context_name: str = None) -> Callable:
     """Decorator to create context-aware functions that delegate to instance methods.
@@ -52,7 +52,7 @@ def context_function(context_var: ContextVar[Optional[T]],
     return decorator
 
 
-def auto_context_functions (context_var: ContextVar[Optional[T]], 
+def auto_context_function_with_checks (context_var: ContextVar[Optional[T]], 
                             expected_type: Type[T] = None,
                             context_name: str = None,
                             methods: list[str] = None) -> dict[str, Callable]:
@@ -65,7 +65,7 @@ def auto_context_functions (context_var: ContextVar[Optional[T]],
         methods: List of method names to create context functions for
     
     Returns:
-        Dictionary of function_name -> context_function
+        Dictionary of function_name -> context_function_with_check
     """
     functions = {}
     
@@ -79,7 +79,7 @@ def auto_context_functions (context_var: ContextVar[Optional[T]],
             return context_func
         
         # Apply the decorator
-        context_func = context_function(context_var, expected_type, context_name)(
+        context_func = context_function_with_check(context_var, expected_type, context_name)(
             make_context_func(method_name)
         )
         
@@ -89,7 +89,7 @@ def auto_context_functions (context_var: ContextVar[Optional[T]],
 
 
 # Alternative simpler decorator for single-type contexts
-def simple_context(context_var: ContextVar) -> Callable:
+def context_function(context_var: ContextVar) -> Callable:
     """Simple decorator for context functions - no type checking.
     
     Args:

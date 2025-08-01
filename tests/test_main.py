@@ -10,7 +10,7 @@ def test_main_no_args():
     runner = CliRunner()
     result = runner.invoke(main, [])
     assert result.exit_code == 0
-    assert "No STL file specified" in result.output
+    assert "No models loaded. Use --model" in result.output
 
 
 def test_main_help():
@@ -18,4 +18,4 @@ def test_main_help():
     runner = CliRunner()
     result = runner.invoke(main, ['--help'])
     assert result.exit_code == 0
-    assert "Noah123d - Building assemblies from STL models" in result.output
+    assert "Noah123d - CLI for building assemblies from STL models" in result.output

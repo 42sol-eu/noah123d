@@ -51,7 +51,7 @@ def test_threed_add_thumbnail():
                     threed.add_thumbnail("thumb.txt", b"fake_data")
 
 
-def test_threed_add_thumbnail_context_functions():
+def test_threed_add_thumbnail_context_function_with_checks():
     """Test adding thumbnails using context-aware module functions."""
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
@@ -68,7 +68,7 @@ def test_threed_add_thumbnail_context_functions():
                     add_thumbnail("thumb.txt", b"fake_data")
 
 
-def test_threed_create_model_file_context_functions():
+def test_threed_create_model_file_context_function_with_checks():
     """Test creating model files using context-aware module functions."""
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
@@ -83,7 +83,7 @@ def test_threed_create_model_file_context_functions():
                     create_model_file("test.txt", "content")
 
 
-def test_context_functions_outside_context():
+def test_context_function_with_checks_outside_context():
     """Test that context functions raise appropriate errors when used outside context."""
     # Test outside any context
     with pytest.raises(RuntimeError, match="must be called within a ThreeD context manager"):

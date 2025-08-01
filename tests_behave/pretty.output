@@ -1,0 +1,23 @@
+Feature: CLI Basic Functionality # features/cli_basic.feature:1
+  As a user of noah123d
+  I want to interact with the command-line interface
+  So that I can process 3D models effectively
+  Background:   # features/cli_basic.feature:6
+
+  Scenario: Display help information                                                          # features/cli_basic.feature:9
+    Given the noah123d CLI is available                                                       # features/steps/cli_basic_steps.py:11
+    When I run the command with "--help" option                                               # features/steps/cli_basic_steps.py:18
+    Then I should see the help text                                                           # features/steps/cli_basic_steps.py:45
+    And the help text should contain "Noah123d - CLI for building assemblies from STL models" # features/steps/cli_basic_steps.py:52
+    And the exit code should be 0                                                             # features/steps/cli_basic_steps.py:94
+
+Feature: Error Handling # features/error_handling.feature:1
+  As a user of noah123d
+  I want the application to handle errors gracefully
+  So that I get meaningful feedback when things go wrong
+Feature: Model Processing # features/model_processing.feature:1
+  As a user of noah123d
+  I want to process STL model files
+  So that I can build assemblies from 3D models
+  Background:   # features/model_processing.feature:6
+

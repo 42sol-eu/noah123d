@@ -59,7 +59,7 @@ def test_model_context_manager():
     try:
         with Archive3mf(tmp_path, 'w') as archive:
             with Directory('3D') as directory:
-                with Model() as model:
+                with Model("3dmodel.model") as model:
                     assert model is not None
                     assert Model.get_current() == model
                     assert Model.get_parent_archive() == archive
@@ -106,7 +106,7 @@ def test_nested_contexts():
             # Create main 3D directory
             with Directory('3D') as main_dir:
                 # Create a model
-                with Model() as model:
+                with Model("3dmodel.model") as model:
                     # Add a simple triangle
                     vertices = [[0, 0, 0], [1, 0, 0], [0.5, 1, 0]]
                     triangles = [[0, 1, 2]]

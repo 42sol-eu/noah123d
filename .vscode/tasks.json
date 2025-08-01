@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run BDD Tests",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"tests_behave/run_bdd_tests.py"
+			],
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

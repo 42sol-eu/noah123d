@@ -185,12 +185,12 @@ class Textures(Directory):
 
 # Backward compatibility - re-export Directory for existing code
 from .directory import Directory, current_directory
-from .context_decorators import context_function, simple_context
+from .context_decorators import context_function_with_check, context_function
 
 # Module-level convenience functions using decorators
 
 # ThreeD specific functions
-@context_function(current_directory, ThreeD, "ThreeD")
+@context_function_with_check(current_directory, ThreeD, "ThreeD")
 def add_thumbnail(filename: str, image_data: bytes) -> None:
     """Add a thumbnail image to the current 3D directory.
     
@@ -199,7 +199,7 @@ def add_thumbnail(filename: str, image_data: bytes) -> None:
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, ThreeD, "ThreeD")  
+@context_function_with_check(current_directory, ThreeD, "ThreeD")  
 def create_model_file(filename: str = "3dmodel.model", content: str = "") -> None:
     """Create a 3D model file in the current 3D directory.
     
@@ -208,7 +208,7 @@ def create_model_file(filename: str = "3dmodel.model", content: str = "") -> Non
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, ThreeD, "ThreeD")
+@context_function_with_check(current_directory, ThreeD, "ThreeD")
 def list_model_files() -> List[str]:
     """List all .model files in the current 3D directory.
     
@@ -218,7 +218,7 @@ def list_model_files() -> List[str]:
 
 
 # Metadata specific functions
-@context_function(current_directory, Metadata, "Metadata")
+@context_function_with_check(current_directory, Metadata, "Metadata")
 def add_conversion_info(source_file: str, converter: str = "noah123d", 
                        objects_count: int = 0, additional_info: Dict[str, Any] = None) -> None:
     """Add conversion information metadata to the current Metadata directory.
@@ -228,7 +228,7 @@ def add_conversion_info(source_file: str, converter: str = "noah123d",
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, Metadata, "Metadata")
+@context_function_with_check(current_directory, Metadata, "Metadata")
 def add_properties(properties: Dict[str, Any], filename: str = "properties.xml") -> None:
     """Add properties as XML metadata to the current Metadata directory.
     
@@ -237,7 +237,7 @@ def add_properties(properties: Dict[str, Any], filename: str = "properties.xml")
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, Metadata, "Metadata")
+@context_function_with_check(current_directory, Metadata, "Metadata")
 def add_custom_metadata(filename: str, content: Union[str, bytes], 
                        description: str = "") -> None:
     """Add custom metadata file to the current Metadata directory.
@@ -248,7 +248,7 @@ def add_custom_metadata(filename: str, content: Union[str, bytes],
 
 
 # Textures specific functions
-@context_function(current_directory, Textures, "Textures")
+@context_function_with_check(current_directory, Textures, "Textures")
 def add_texture(filename: str, image_data: bytes, texture_type: str = "color") -> None:
     """Add a texture image to the current Textures directory.
     
@@ -257,7 +257,7 @@ def add_texture(filename: str, image_data: bytes, texture_type: str = "color") -
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, Textures, "Textures")
+@context_function_with_check(current_directory, Textures, "Textures")
 def list_texture_files() -> List[str]:
     """List all texture image files in the current Textures directory.
     
@@ -266,7 +266,7 @@ def list_texture_files() -> List[str]:
     pass  # Implementation handled by decorator
 
 
-@context_function(current_directory, Textures, "Textures")
+@context_function_with_check(current_directory, Textures, "Textures")
 def get_texture_metadata(texture_filename: str) -> Optional[str]:
     """Get metadata for a specific texture file in the current Textures directory.
     
@@ -276,7 +276,7 @@ def get_texture_metadata(texture_filename: str) -> Optional[str]:
 
 
 # Generic directory functions (work with any directory type)
-@simple_context(current_directory)
+@context_function(current_directory)
 def create_file(filename: str, content: Union[str, bytes]) -> None:
     """Create a file in the current directory.
     
@@ -285,7 +285,7 @@ def create_file(filename: str, content: Union[str, bytes]) -> None:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_directory)
+@context_function(current_directory)
 def read_file(filename: str) -> Optional[bytes]:
     """Read a file from the current directory.
     
@@ -294,7 +294,7 @@ def read_file(filename: str) -> Optional[bytes]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_directory)
+@context_function(current_directory)
 def delete_file(filename: str) -> bool:
     """Delete a file from the current directory.
     
@@ -303,7 +303,7 @@ def delete_file(filename: str) -> bool:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_directory)
+@context_function(current_directory)
 def list_files() -> List[str]:
     """List files in the current directory.
     
@@ -312,7 +312,7 @@ def list_files() -> List[str]:
     pass  # Implementation handled by decorator
 
 
-@simple_context(current_directory)
+@context_function(current_directory)
 def list_subdirectories() -> List[str]:
     """List subdirectories in the current directory.
     
