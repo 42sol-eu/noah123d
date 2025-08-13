@@ -22,7 +22,7 @@ nav:
   - API Reference:
     - Overview: "reference/index.md"
     - STLConverter: "reference/converters.md"
-    - Archive3mf: "reference/archive3mf.md"
+    - Archive: "reference/Archive.md"
     - Directory: "reference/directory.md"
     - Model: "reference/model.md"
     - Grid Layout: "reference/grid-layouts.md"

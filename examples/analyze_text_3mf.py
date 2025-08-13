@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Analyze text.3mf file to check for modifiable text content."""
 
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 import json
 
 def analyze_text_3mf():
     """Analyze the text.3mf file structure and content."""
     try:
         # Analyze text.3mf file
-        with Archive3mf('text.3mf', 'r') as archive:
+        with Archive('text.3mf', 'r') as archive:
             print('Archive contents:')
             contents = archive.list_contents()
             for content in contents:

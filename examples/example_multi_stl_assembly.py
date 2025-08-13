@@ -193,7 +193,7 @@ def demonstrate_advanced_converter():
 
 def analyze_assembly(file_path: str, console: Console):
     """Analyze the created 3MF assembly file."""
-    from noah123d import Archive3mf, Directory, Model
+    from noah123d import Archive, Directory, Model
     
     assembly_path = Path(file_path)
     if not assembly_path.exists():
@@ -202,7 +202,7 @@ def analyze_assembly(file_path: str, console: Console):
     console.print(f"\n🔍 Analyzing assembly: {file_path}")
     
     try:
-        with Archive3mf(assembly_path, 'r') as archive:
+        with Archive(assembly_path, 'r') as archive:
             contents = archive.list_contents()
             console.print(f"  Archive contains {len(contents)} files")
             

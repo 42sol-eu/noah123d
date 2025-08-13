@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of Noah123d
 - STL to 3MF conversion functionality
-- Core Archive3mf, Directory, and Model classes
+- Core Archive, Directory, and Model classes
 - Basic grid layout support
 - STL file analysis and validation
 - Performance optimizations for large files

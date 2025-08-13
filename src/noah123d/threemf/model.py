@@ -1,4 +1,7 @@
-"""Model class for managing 3D objects within a 3MF archive."""
+
+"""Model class for managing 3D objects within a 3MF archive.]
+
+"""
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -7,11 +10,12 @@ from contextvars import ContextVar
 import numpy as np
 from stl import mesh
 from rich import print
-from rich.console import Console
-from rich.table import Table
+from noah123d.visual.console import Console as NoahConsole
 
-from .archive3mf import Archive3mf, current_archive
-from .directory import Directory, current_directory
+from ..core.context_decorators import context_function
+
+from .archive import Archive, current_archive
+from .directory import Directory, current_directory, current_directory
 
 # Context variable to track the current model
 current_model: ContextVar[Optional['Model']] = ContextVar('current_model', default=None)
@@ -20,21 +24,20 @@ current_model: ContextVar[Optional['Model']] = ContextVar('current_model', defau
 class Model:
     """Manages 3D objects within a 3MF archive."""
     
-    def __init__(self, name: str):
+    def __init__(self, name: str = "3dmodel.model"):
         """
         Initialize the Model.
         
         Args:
             name: Name of the model file (default: "3dmodel.model")
-            model_dir: Directory containing the model (default: "3D")
         """
         self.name = name
         self._context_token = None
-        self._parent_archive: Optional[Archive3mf] = None
+        self._parent_archive: Optional[Archive] = None
         self._parent_directory: Optional[Directory] = None
-        self.model_dir = self._parent_directory.name if self._parent_directory else "3D"
         self._objects: List[Dict[str, Any]] = []
         self._next_object_id = 1
+        self.console = NoahConsole()
         
     def __enter__(self) -> 'Model':
         """Enter the context manager."""
@@ -46,7 +49,7 @@ class Model:
         self._parent_directory = current_directory.get()
         
         if not self._parent_archive:
-            raise RuntimeError("Model must be used within an Archive3mf context")
+            raise RuntimeError("Model must be used within an Archive context")
             
         # Load existing model if it exists
         self._load_existing_model()
@@ -67,8 +70,10 @@ class Model:
         """Load existing model from the archive."""
         if not self._parent_archive:
             return
-            
-        model_path = f"{self.model_dir}/{self.name}"
+        
+        # Get the model directory name from parent directory context
+        model_dir = self._parent_directory.path.name if self._parent_directory else "3D"
+        model_path = f"{model_dir}/{self.name}"
         model_data = self._parent_archive.extract_file(model_path)
         
         if model_data:
@@ -127,8 +132,9 @@ class Model:
         # Create XML structure
         model_xml = self._create_model_xml()
         
-        # Save to archive
-        model_path = f"{self.model_dir}/{self.name}"
+        # Get the model directory name from parent directory context
+        model_dir = self._parent_directory.path.name if self._parent_directory else "3D"
+        model_path = f"{model_dir}/{self.name}"
         self._parent_archive.add_file(model_path, model_xml)
         
     def _create_model_xml(self) -> str:
@@ -286,7 +292,7 @@ class Model:
         return current_model.get()
         
     @classmethod
-    def get_parent_archive(cls) -> Optional[Archive3mf]:
+    def get_parent_archive(cls) -> Optional[Archive]:
         """Get the parent archive from context."""
         return current_archive.get()
 
@@ -330,26 +336,19 @@ class Model:
         Returns:
             Object ID of the loaded STL or None if failed
         """
-        console = Console()
-        
         if not stl_path.exists():
-            console.print(f"[red]Error: STL file not found: {stl_path}[/red]")
+            self.console.print_error(f"Error: STL file not found: {stl_path}")
             return None
-            
-        console.print(f"📁 Loading STL file: {stl_path.name}")
         
         # Add the STL object to the model
         obj_id = self.add_object_from_stl(stl_path)
-        console.print(f"✓ Added STL as object ID: {obj_id}")
         
         # Get object info
         obj = self.get_object(obj_id)
         if obj:
             vertex_count = len(obj['vertices'])
             triangle_count = len(obj['triangles'])
-            console.print(f"📊 Object details:")
-            console.print(f"   - Vertices: {vertex_count:,}")
-            console.print(f"   - Triangles: {triangle_count:,}")
+            self.console.print_stl_loading_info(stl_path, obj_id, vertex_count, triangle_count)
             
         return obj_id
     
@@ -357,69 +356,23 @@ class Model:
         """
         Analyze and display detailed information about this model.
         """
-        console = Console()
+        objects = [self.get_object(obj_id) for obj_id in self.list_objects()]
+        objects = [obj for obj in objects if obj is not None]  # Filter out None objects
         
-        object_count = self.get_object_count()
-        console.print(f"\n🎯 Model Analysis:")
-        console.print(f"   Total Objects: {object_count}")
-        
-        if object_count > 0:
-            # Create a table for object details
-            table = Table(title="3D Objects Details")
-            table.add_column("Object ID", style="cyan")
-            table.add_column("Type", style="magenta")
-            table.add_column("Vertices", style="green")
-            table.add_column("Triangles", style="yellow")
-            table.add_column("Volume Info", style="blue")
-            
-            total_vertices = 0
-            total_triangles = 0
-            
-            for obj_id in self.list_objects():
-                obj = self.get_object(obj_id)
-                if obj:
-                    vertices = len(obj['vertices'])
-                    triangles = len(obj['triangles'])
-                    total_vertices += vertices
-                    total_triangles += triangles
-                    
-                    # Calculate basic volume info
-                    volume_info = "3D Model"
-                    if triangles > 0:
-                        if triangles < 100:
-                            volume_info = "Low-poly"
-                        elif triangles < 1000:
-                            volume_info = "Medium-poly"
-                        else:
-                            volume_info = "High-poly"
-                    
-                    table.add_row(
-                        str(obj_id),
-                        obj.get('type', 'model'),
-                        f"{vertices:,}",
-                        f"{triangles:,}",
-                        volume_info
-                    )
-            
-            console.print(table)
-            console.print(f"\n📊 Total Statistics:")
-            console.print(f"   Combined Vertices: {total_vertices:,}")
-            console.print(f"   Combined Triangles: {total_triangles:,}")
+        self.console.print_model_content_analysis(objects, self.get_object_count())
     
     def add_conversion_metadata(self, stl_path: Path) -> None:
         """
         Add conversion metadata to the current archive context.
-        This method works within an existing Archive3mf and Directory context.
+        This method works within an existing Archive and Directory context.
         
         Args:
             stl_path: Path to the original STL file
         """
-        console = Console()
-        
         # Get the parent archive and directory from context
         archive = self.get_parent_archive()
         if not archive:
-            console.print("[red]Error: No archive context available[/red]")
+            self.console.print_error("Error: No archive context available")
             return
             
         # Create metadata directory with conversion info
@@ -431,7 +384,7 @@ Objects: {self.get_object_count()}
 Conversion Date: {Path.cwd()}
 """
             metadata_dir.create_file('conversion_info.txt', metadata_content)
-            console.print(f"✓ Added conversion metadata")
+            self.console.print_metadata_added()
     
 
     
@@ -447,23 +400,24 @@ Conversion Date: {Path.cwd()}
         Returns:
             Path to the created 3MF file or None if conversion failed
         """
-        console = Console()
+        console = NoahConsole()
         
         if not stl_path.exists():
-            console.print(f"[red]Error: STL file not found: {stl_path}[/red]")
+            console.print_error(f"Error: STL file not found: {stl_path}")
             return None
-            
-        console.print(f"[green]Converting STL to 3MF...[/green]")
-        console.print(f"Input:  {stl_path}")
-        console.print(f"Output: {output_path}")
-        
+
+        console.print_start('conversion', 
+                            {'summary': 'STL to 3MF', 
+                                '- input': stl_path, 
+                                '- output': output_path})
+
         # Create the 3MF archive using the context system
-        with Archive3mf(output_path, 'w') as archive:
-            console.print(f"✓ Created 3MF archive: {archive.file_path}")
+        with Archive(output_path, 'w') as archive:
+            console.print_archive_created(archive.file_path)
             
             # Create the 3D directory using the context system
             with Directory('3D') as models_dir:
-                console.print(f"✓ Created 3D models directory")
+                console.print_directory_created("3D models")
                 
                 # Create a model within the directory context
                 with cls("3dmodel.model") as model:
@@ -482,9 +436,9 @@ Converted by: Noah123d STL Converter
 Objects: {object_count}
 """
                 metadata_dir.create_file('conversion_info.txt', metadata_content)
-                console.print(f"✓ Added conversion metadata")
+                console.print_metadata_added()
                 
-        console.print(f"[bold green]✅ Conversion completed successfully![/bold green]")
+        console.print_success("conversion")
         return output_path
     
     @classmethod
@@ -495,21 +449,19 @@ Objects: {object_count}
         Args:
             file_path: Path to the 3MF file to analyze
         """
-        console = Console()
+        console = NoahConsole()
         
         if not file_path.exists():
-            console.print(f"[red]Error: 3MF file not found: {file_path}[/red]")
+            console.print_error(f"Error: 3MF file not found: {file_path}")
             return
             
-        console.print(f"\n[blue]📋 Analyzing 3MF file: {file_path.name}[/blue]")
+        console.print_analyzing_file(file_path)
         
         # Open archive using the context system
-        with Archive3mf(file_path, 'r') as archive:
+        with Archive(file_path, 'r') as archive:
             # Show archive contents
             contents = archive.list_contents()
-            console.print(f"\n📦 Archive Contents ({len(contents)} files):")
-            for content in sorted(contents):
-                console.print(f"   📄 {content}")
+            console.print_archive_contents(contents)
                 
             # Access the 3D directory using the context system
             with Directory('3D') as models_dir:
@@ -530,20 +482,20 @@ Objects: {object_count}
         Returns:
             List of successfully converted 3MF files
         """
-        console = Console()
+        console = NoahConsole()
         
         if not input_dir.exists():
-            console.print(f"[red]Error: Input directory not found: {input_dir}[/red]")
+            console.print_error(f"Error: Input directory not found: {input_dir}")
             return []
             
         # Find all STL files
         stl_files = list(input_dir.glob("**/*.stl"))
         
         if not stl_files:
-            console.print(f"[yellow]No STL files found in: {input_dir}[/yellow]")
+            console.print_no_stl_files_found(input_dir)
             return []
             
-        console.print(f"[blue]🔄 Batch converting {len(stl_files)} STL files...[/blue]")
+        console.print_batch_conversion_start(len(stl_files))
         
         # Create output directory if it doesn't exist
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -554,24 +506,20 @@ Objects: {object_count}
             # Create output filename
             output_file = output_dir / f"{stl_file.stem}.3mf"
             
-            console.print(f"\n📂 Processing: {stl_file.name}")
+            console.print_processing_file(stl_file.name)
             
             try:
                 result = cls.convert_stl_to_3mf(stl_file, output_file)
                 if result:
                     converted_files.append(result)
-                    console.print(f"✅ Converted: {output_file.name}")
+                    console.print_converted_file(output_file.name)
             except Exception as e:
-                console.print(f"[red]❌ Failed to convert {stl_file.name}: {e}[/red]")
+                console.print_conversion_failed(stl_file.name, e)
         
-        console.print(f"\n[bold green]🎉 Batch conversion completed![/bold green]")
-        console.print(f"Successfully converted {len(converted_files)} files to {output_dir}")
+        console.print_batch_conversion_complete(len(converted_files), output_dir)
         
         return converted_files
 
-
-# Import decorator utilities
-from .context_decorators import context_function
 
 # Module-level convenience functions using decorators
 @context_function(current_model)

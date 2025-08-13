@@ -36,7 +36,7 @@ def create_model_file_manual(filename: str = "3dmodel.model", content: str = "")
 
 def add_object_manual(vertices, triangles, obj_type="model"):
     """Manual implementation - even more boilerplate."""
-    from noah123d.model import current_model
+    from noah123d import current_model
     
     current_model_instance = current_model.get()
     if not current_model_instance:
@@ -49,10 +49,10 @@ def add_object_manual(vertices, triangles, obj_type="model"):
 # AFTER: Decorator-based implementation (what we have now)
 # ============================================================================
 
-from noah123d.context_decorators import context_function_with_check, context_function
-from noah123d.directories import ThreeD
-from noah123d.directory import current_directory
-from noah123d.model import current_model
+from noah123d import context_function_with_check, context_function
+from noah123d import ThreeD
+from noah123d import current_directory
+from noah123d import current_model
 
 @context_function_with_check(current_directory, ThreeD, "ThreeD")
 def add_thumbnail(filename: str, image_data: bytes) -> None:
@@ -138,14 +138,14 @@ def demonstrate_functionality():
     """Show that both approaches work identically."""
     import tempfile
     from pathlib import Path
-    from noah123d import Archive3mf
-    from noah123d.directories import ThreeD
-    from noah123d.model import Model
+    from noah123d import Archive
+    from noah123d import ThreeD
+    from noah123d import Model
     
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 # Both decorators and manual implementations work the same
                 print("✓ Decorator-based context functions work perfectly")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Demonstrate how to modify text in 3MF files and export them to a configured directory."""
 
-from noah123d import Archive3mf
+from noah123d import Archive
 import os
 import shutil
 import toml
@@ -70,7 +70,7 @@ def modify_text_in_3mf(input_file: str, output_dir: str, text_replacements: dict
             else:
                 print(f"📁 Backup already exists: {backup_file}")
         
-        with Archive3mf(input_file, 'r') as source_archive:
+        with Archive(input_file, 'r') as source_archive:
             config_content = source_archive.extract_file('Metadata/Slic3r_PE_model.config')
             if not config_content:
                 print("❌ Could not find Metadata/Slic3r_PE_model.config")
@@ -94,7 +94,7 @@ def modify_text_in_3mf(input_file: str, output_dir: str, text_replacements: dict
                 print("⚠️  No text replacements were found")
                 return False
             
-            with Archive3mf(output_file, 'w') as dest_archive:
+            with Archive(output_file, 'w') as dest_archive:
                 for filename in source_archive.list_contents():
                     if filename != 'Metadata/Slic3r_PE_model.config':
                         file_content = source_archive.extract_file(filename)

@@ -3,9 +3,7 @@
 from pathlib import Path
 from typing import Optional, Union, List, Dict, Any
 import glob
-from .archive3mf import Archive3mf
-from .directory import Directory
-from .model import Model
+from .threemf import Archive, Directory, Model
 
 
 class STLConverter:
@@ -873,5 +871,5 @@ def multi_stl_to_3mf(stl_objects: List[Dict[str, Union[str, Path, int]]],
         >>> success = multi_stl_to_3mf(stl_objects, 'assembly.3mf', layout_mode='grid')
     """
     converter = STLConverter(include_metadata=include_metadata)
-    return converter.convert_multiple_stl_with_counts(stl_objects, output_path,
-                                                    layout_mode, spacing_factor, center_layout)
+    return converter.convert_multiple_stl_with_counts(  stl_objects, output_path,
+                                                        layout_mode, spacing_factor, center_layout)

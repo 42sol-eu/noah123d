@@ -1,8 +1,8 @@
 from rich import print
 from rich.console import Console
 from pathlib import Path 
-
-from . import Archive3mf, Directory, ThreeD(), Model
+from typing import Optional
+from .threemf import Archive, Directory, ThreeD, Model
 
 def create_empty_3mf(cls, output_path: Path) -> Optional[Path]:
     """

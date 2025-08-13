@@ -9,11 +9,11 @@ Noah123d now supports context-aware functions that eliminate the need to use con
 ### Before (Traditional Instance Methods)
 
 ```python
-from noah123d import Archive3mf
-from noah123d.directories import ThreeD
-from noah123d.model import Model
+from noah123d import Archive
+from noah123d import ThreeD
+from noah123d import Model
 
-with Archive3mf("output.3mf", 'w') as archive:
+with Archive("output.3mf", 'w') as archive:
     with ThreeD() as threed:
         # Need to use context object name
         threed.add_thumbnail("thumb.png", b"fake_png_data")
@@ -30,11 +30,11 @@ with Archive3mf("output.3mf", 'w') as archive:
 ### After (Context-Aware Functions)
 
 ```python
-from noah123d.archive3mf import Archive3mf, add_file, list_contents, is_writable
+from noah123d.archive import Archive, add_file, list_contents, is_writable
 from noah123d.directories import ThreeD, add_thumbnail, create_model_file
-from noah123d.model import Model, add_object, get_object_count
+from noah123d import Model, add_object, get_object_count
 
-with Archive3mf("output.3mf", 'w') as archive:
+with Archive("output.3mf", 'w') as archive:
     # No need for context object name!
     add_file("readme.txt", "Archive created with noah123d")
     
@@ -57,10 +57,10 @@ with Archive3mf("output.3mf", 'w') as archive:
 
 ## Available Context-Aware Functions
 
-### Archive Functions (Archive3mf)
+### Archive Functions (Archive)
 
 ```python
-from noah123d.archive3mf import (
+from noah123d.archive import (
     add_file,                # Add file to archive
     extract_file,            # Extract file from archive
     list_contents,           # List all files in archive
@@ -68,7 +68,7 @@ from noah123d.archive3mf import (
     is_writable,             # Check if archive is writable
 )
 
-with Archive3mf("example.3mf", 'w') as archive:
+with Archive("example.3mf", 'w') as archive:
     add_file("data.txt", "some content")
     add_file("binary.bin", b"binary data")
     
@@ -150,7 +150,7 @@ with ThreeD() as threed:
 ### Model Functions
 
 ```python
-from noah123d.model import (
+from noah123d import (
     add_object,              # Add 3D object
     add_object_from_stl,     # Add object from STL
     remove_object,           # Remove object by ID
@@ -188,7 +188,7 @@ Context-aware functions provide helpful error messages when used incorrectly:
 ```python
 # Using outside any context
 add_file("test.txt", "content")
-# RuntimeError: add_file() must be called within an Archive3mf context manager
+# RuntimeError: add_file() must be called within an Archive context manager
 
 add_thumbnail("thumb.png", b"data")
 # RuntimeError: add_thumbnail() must be called within a directory context manager
@@ -212,7 +212,7 @@ with ThreeD() as threed:
 You can mix context-aware functions with traditional instance methods:
 
 ```python
-with Archive3mf("mixed.3mf", 'w') as archive:
+with Archive("mixed.3mf", 'w') as archive:
     with ThreeD() as threed:
         with Model("mixed.model") as model:
             # Archive: Context function
@@ -251,26 +251,26 @@ with Archive3mf("mixed.3mf", 'w') as archive:
 
 ```python
 # Import specific functions you need
-from noah123d.archive3mf import add_file, list_contents, is_writable
-from noah123d.directories import add_thumbnail, create_model_file
-from noah123d.model import add_object, get_object_count
+from noah123d import add_file, list_contents, is_writable
+from noah123d import add_thumbnail, create_model_file
+from noah123d import add_object, get_object_count
 
 # Or import everything if you prefer
-from noah123d.archive3mf import *
+from noah123d.archive import *
 from noah123d.directories import *
-from noah123d.model import *
+from noah123d import *
 ```
 
 ## Complete Example
 
 ```python
 from pathlib import Path
-from noah123d.archive3mf import Archive3mf, add_file, list_contents, is_writable
+from noah123d.archive import Archive, add_file, list_contents, is_writable
 from noah123d.directories import ThreeD, add_thumbnail
-from noah123d.model import Model, add_object, get_object_count, analyze_model_content
+from noah123d import Model, add_object, get_object_count, analyze_model_content
 
 def create_sample_3mf():
-    with Archive3mf("sample.3mf", 'w') as archive:
+    with Archive("sample.3mf", 'w') as archive:
         # Add files without context object name
         add_file("readme.txt", "Created with context functions")
         add_file("metadata.json", '{"version": "1.0"}')

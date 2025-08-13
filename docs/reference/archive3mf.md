@@ -1,4 +1,4 @@
-## Archive3mf class
+## Archive class
 
 A 3mf (3D Manufacturing Format) file is a ZIP archive, the structure is discussed in this section.
 
@@ -8,7 +8,7 @@ You use it in  a nested with blocks:
 ```python
 from noah123d import *
 
-with Archive3mf('example.3mf') as archive:
+with Archive('example.3mf') as archive:
     with Directory('3D') as directory:
         # Perform operations on the directory
         print(f"Directory contents: {directory.list_contents()}")
@@ -51,7 +51,7 @@ A 3MF archive is essentially a ZIP file with a specific directory structure. Her
 > **Note:** The 3MF specification does not define an "attachments" directory. Custom files should be placed in the `Metadata/` directory or other appropriately named custom directories with proper content types and relationships.
 
 
-::: noah123d.archive3mf.Archive3mf
+::: noah123d.archive.archive
     options:
       show_source: true
       show_signature_annotations: true

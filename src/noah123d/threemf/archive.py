@@ -1,4 +1,4 @@
-"""Archive3mf class for managing 3MF zip archives."""
+"""Archive class for managing 3MF zip archives."""
 
 import zipfile
 import tempfile
@@ -11,14 +11,14 @@ from rich import print
 from rich.console import Console
 
 from .xml_3mf import content_types_header, relationships_header
+from ..core.context_decorators import context_function
 
 # Context variable to track the current archive
-current_archive: ContextVar[Optional['Archive3mf']] = ContextVar('current_archive', default=None)
+current_archive: ContextVar[Optional['Archive']] = ContextVar('current_archive', default=None)
 
 
-class Archive3mf:
+class Archive:
     """Manages a 3MF zip archive using Python's standard library."""
-    
     def __init__(self, file_path: Union[str, Path], mode: str = 'r'):
         """
         Initialize the Archive3mf.
@@ -129,50 +129,19 @@ class Archive3mf:
         return self.mode in ('w', 'a')
 
 
-# Import decorator utilities
-from .context_decorators import context_function
-
 # Module-level convenience functions using decorators
 @context_function(current_archive)
 def list_contents() -> list[str]:
-    """List all files in the current archive.
-    
-    Must be called within an Archive3mf context manager.
-    """
-    pass  # Implementation handled by decorator
-
-
+    pass
 @context_function(current_archive)
 def extract_file(filename: str) -> Optional[bytes]:
-    """Extract a specific file from the current archive.
-    
-    Must be called within an Archive3mf context manager.
-    """
-    pass  # Implementation handled by decorator
-
-
+    pass
 @context_function(current_archive)
 def add_file(filename: str, data: Union[str, bytes]) -> None:
-    """Add a file to the current archive.
-    
-    Must be called within an Archive3mf context manager.
-    """
-    pass  # Implementation handled by decorator
-
-
+    pass
 @context_function(current_archive)
 def get_temp_path() -> Optional[Path]:
-    """Get the temporary directory path for file operations from the current archive.
-    
-    Must be called within an Archive3mf context manager.
-    """
-    pass  # Implementation handled by decorator
-
-
+    pass
 @context_function(current_archive)
 def is_writable() -> bool:
-    """Check if the current archive is opened in a writable mode.
-    
-    Must be called within an Archive3mf context manager.
-    """
-    pass  # Implementation handled by decorator
+    pass

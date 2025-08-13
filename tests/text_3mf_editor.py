@@ -10,7 +10,7 @@ Usage:
     python text_3mf_editor.py input.3mf output.3mf --interactive
     python text_3mf_editor.py input.3mf --list-text
 
-Author: Noah123d Project
+authors: Noah123d Project
 License: MIT
 """
 
@@ -20,7 +20,7 @@ import shutil
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from noah123d import Archive3mf
+from noah123d import Archive
 
 
 class Text3MFEditor:
@@ -53,7 +53,7 @@ class Text3MFEditor:
         text_strings = []
         
         try:
-            with Archive3mf(file_path, 'r') as archive:
+            with Archive(file_path, 'r') as archive:
                 for config_file in self.config_files:
                     config_content = archive.extract_file(config_file)
                     if config_content:
@@ -159,7 +159,7 @@ class Text3MFEditor:
         try:
             modifications_made = False
             
-            with Archive3mf(input_file, 'r') as source_archive:
+            with Archive(input_file, 'r') as source_archive:
                 # Find which config files exist and contain text
                 existing_configs = {}
                 
@@ -201,7 +201,7 @@ class Text3MFEditor:
                     return False
                 
                 # Create the output file
-                with Archive3mf(output_file, 'w') as dest_archive:
+                with Archive(output_file, 'w') as dest_archive:
                     # Copy all files from source
                     for filename in source_archive.list_contents():
                         if filename in modified_configs:

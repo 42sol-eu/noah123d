@@ -6,7 +6,7 @@ The development architecture of the noah123d library is designed to facilitate t
 
 ## Core components
 
-- [`Archive3mf`](../reference/archive3mf.md): Handles the 3MF file zip archive, including reading and writing 3MF files.
+- [`Archive`](../reference/Archive.md): Handles the 3MF file zip archive, including reading and writing 3MF files.
 - [`Directory`](../reference/directory.md): Manages directories inside the archive.
 - [`Model`](../reference/model.md): Represents the 3D model structure, including parts and assemblies.
 

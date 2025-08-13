@@ -180,7 +180,7 @@ def analyze_grid_files():
         console.print("[yellow]No grid files found to analyze[/yellow]")
         return
     
-    from noah123d import Archive3mf, Directory, Model, analyze_3mf, get_model_center_of_mass, get_model_dimensions
+    from noah123d import Archive, Directory, Model, analyze_3mf, get_model_center_of_mass, get_model_dimensions
     
     analysis_table = Table(title="Grid File Analysis")
     analysis_table.add_column("File", style="cyan")
@@ -191,7 +191,7 @@ def analyze_grid_files():
     
     for grid_file in sorted(grid_files):
         try:
-            with Archive3mf(grid_file, 'r') as archive:
+            with Archive(grid_file, 'r') as archive:
                 with Directory('3D') as models_dir:
                     with Model() as model:
                         object_count = model.get_object_count()

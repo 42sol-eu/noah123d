@@ -11,11 +11,19 @@
         "pytest",
         "rels",
         "threed",
+        "threemf",
         "venv"
     ],
     "python.testing.pytestArgs": [
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python-envs.pythonProjects": [],
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.advanced": {
+        
+    },
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.shellIntegration.enabled": true
 }

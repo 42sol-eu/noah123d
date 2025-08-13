@@ -84,7 +84,7 @@ Tests are organized by module:
 ```
 tests/
 ├── test_converters.py      # STLConverter tests
-├── test_archive3mf.py      # Archive3mf tests
+├── test_Archive.py      # Archive tests
 ├── test_model.py           # Model tests
 ├── test_analyzer.py        # Analysis3MF tests
 ├── test_main.py           # CLI and main function tests

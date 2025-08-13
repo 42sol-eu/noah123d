@@ -5,9 +5,9 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from noah123d.model import Model, add_object, add_object_from_stl, list_objects, get_object_count, clear_objects
-from noah123d.directories import ThreeD
-from noah123d import Archive3mf
+from noah123d import Model, add_object, add_object_from_stl, list_objects, get_object_count, clear_objects
+from noah123d import ThreeD
+from noah123d import Archive
 
 
 def test_model_context_function_with_checks():
@@ -15,7 +15,7 @@ def test_model_context_function_with_checks():
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("test.model") as model:
                     # Test adding object using context function
@@ -52,7 +52,7 @@ def test_model_context_function_with_checks_vs_instance_methods():
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("test.model") as model:
                     vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
@@ -98,7 +98,7 @@ def test_model_context_function_with_checks_outside_context():
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 # Model functions should not work in directory context without model
                 with pytest.raises(RuntimeError, match="must be called within a context manager"):
@@ -120,7 +120,7 @@ def test_add_object_from_stl_context_function_with_check(mock_stl_from_file):
         stl_path = Path(temp_dir) / "test.stl"
         stl_path.touch()  # Create empty STL file
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("test.model") as model:
                     # Test adding STL using context function
@@ -140,7 +140,7 @@ def test_complex_model_workflow_with_context_function_with_checks():
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("complex.model") as model:
                     # Build a complex model using only context functions
@@ -160,7 +160,7 @@ def test_complex_model_workflow_with_context_function_with_checks():
                     assert list_objects() == [1, 2]
                     
                     # Remove the triangle
-                    from noah123d.model import remove_object, get_object
+                    from noah123d.threemf.model import remove_object, get_object
                     removed = remove_object(obj1)
                     assert removed == True
                     

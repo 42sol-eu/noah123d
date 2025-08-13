@@ -1,7 +1,7 @@
 """Example 2: Batch processing and multiple models in a single 3MF archive."""
 
 from pathlib import Path
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 import json
 
 
@@ -9,7 +9,7 @@ def create_multi_model_3mf():
     """Create a 3MF file with multiple models and complex structure."""
     output_path = Path("complex_assembly.3mf")
     
-    with Archive3mf(output_path, 'w') as archive:
+    with Archive(output_path, 'w') as archive:
         print(f"Creating complex assembly: {archive.file_path}")
         
         # Create main 3D directory
@@ -152,7 +152,7 @@ def analyze_3mf_structure(file_path: Path):
     """Analyze and display the structure of a 3MF file."""
     print(f"\nAnalyzing 3MF file: {file_path}")
     
-    with Archive3mf(file_path, 'r') as archive:
+    with Archive(file_path, 'r') as archive:
         print("\\n=== Archive Structure ===")
         contents = archive.list_contents()
         directories = [c for c in contents if c.endswith('/')]

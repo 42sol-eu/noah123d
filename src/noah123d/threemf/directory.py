@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from typing import Optional, List, Union
 from contextvars import ContextVar
-
-from .archive3mf import Archive3mf, current_archive
+from ..core.context_decorators import context_function
+from .archive import Archive, current_archive
 
 # Context variable to track the current directory
 current_directory: ContextVar[Optional['Directory']] = ContextVar('current_directory', default=None)
@@ -25,7 +25,7 @@ class Directory:
         self.path = Path(path)
         self.create = create
         self._context_token = None
-        self._parent_archive: Optional[Archive3mf] = None
+        self._parent_archive: Optional[Archive] = None
         
     def __enter__(self) -> 'Directory':
         """Enter the context manager."""
@@ -35,7 +35,7 @@ class Directory:
         # Get the parent archive from context
         self._parent_archive = current_archive.get()
         if not self._parent_archive:
-            raise RuntimeError("Directory must be used within an Archive3mf context")
+            raise RuntimeError("Directory must be used within an Archive context")
             
         # Create directory in the temporary location if needed
         if self.create:
@@ -55,7 +55,7 @@ class Directory:
         return current_directory.get()
         
     @classmethod
-    def get_parent_archive(cls) -> Optional[Archive3mf]:
+    def get_parent_archive(cls) -> Optional[Archive]:
         """Get the parent archive from context."""
         return current_archive.get()
 
@@ -137,5 +137,49 @@ class Directory:
                 file_path.unlink()
                 return True
         return False
-        
-        
+
+
+# Generic directory functions (work with any directory type)
+@context_function(current_directory)
+def create_file(filename: str, content: Union[str, bytes]) -> None:
+    """Create a file in the current directory.
+    
+    Must be called within a directory context manager.
+    """
+    pass  # Implementation handled by decorator
+
+
+@context_function(current_directory)
+def read_file(filename: str) -> Optional[bytes]:
+    """Read a file from the current directory.
+    
+    Must be called within a directory context manager.
+    """
+    pass  # Implementation handled by decorator
+
+
+@context_function(current_directory)
+def delete_file(filename: str) -> bool:
+    """Delete a file from the current directory.
+    
+    Must be called within a directory context manager.
+    """
+    pass  # Implementation handled by decorator
+
+
+@context_function(current_directory)
+def list_files() -> List[str]:
+    """List files in the current directory.
+    
+    Must be called within a directory context manager.
+    """
+    pass  # Implementation handled by decorator
+
+
+@context_function(current_directory)
+def list_subdirectories() -> List[str]:
+    """List subdirectories in the current directory.
+    
+    Must be called within a directory context manager.
+    """
+    pass  # Implementation handled by decorator

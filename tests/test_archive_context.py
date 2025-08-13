@@ -1,10 +1,10 @@
-"""Test context-aware Archive3mf functions."""
+"""Test context-aware Archive functions."""
 
 import pytest
 import tempfile
 from pathlib import Path
 
-from noah123d.archive3mf import Archive3mf, list_contents, extract_file, add_file, get_temp_path, is_writable
+from noah123d import Archive, list_contents, extract_file, add_file, get_temp_path, is_writable
 
 
 def test_archive_context_function_with_checks():
@@ -13,7 +13,7 @@ def test_archive_context_function_with_checks():
         archive_path = Path(temp_dir) / "test.3mf"
         
         # Test write mode
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             # Test is_writable using context function
             assert is_writable() == True
             
@@ -43,7 +43,7 @@ def test_archive_context_function_with_checks_vs_instance_methods():
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "test.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             # Add file using instance method
             archive.add_file("instance.txt", "instance content")
             
@@ -93,7 +93,7 @@ def test_archive_context_function_with_checks_read_write_modes():
         archive_path = Path(temp_dir) / "test.3mf"
         
         # Test write mode functionality
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             assert is_writable() == True
             add_file("data.txt", "initial data")
             
@@ -105,7 +105,7 @@ def test_archive_context_function_with_checks_read_write_modes():
             assert "data.txt" in initial_contents
         
         # Note: Reading back from closed archive is currently not working properly
-        # This is an issue with the Archive3mf implementation, not the decorators
+        # This is an issue with the Archive implementation, not the decorators
         # The archive doesn't properly save data added via add_file method
 
 
@@ -114,7 +114,7 @@ def test_complex_archive_workflow_with_context_function_with_checks():
     with tempfile.TemporaryDirectory() as temp_dir:
         archive_path = Path(temp_dir) / "complex.3mf"
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             # Build archive using only context functions
             
             # Check initial state
@@ -139,7 +139,7 @@ def test_complex_archive_workflow_with_context_function_with_checks():
             assert temp_path is not None
             assert temp_path.exists()
         
-        # Verify archive was created correctly (Note: current Archive3mf implementation
+        # Verify archive was created correctly (Note: current Archive implementation
         # has issues with repacking, so reading back from closed archive may not work)
         # The decorators themselves work correctly within the same context.
         print("Archive created successfully. Note: repacking issue prevents full verification.")

@@ -3,7 +3,7 @@
 from pathlib import Path
 from rich import print
 from rich.console import Console
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 
 def demo_context_aware_methods():
@@ -12,7 +12,7 @@ def demo_context_aware_methods():
     console.print("[bold blue]🎯 Context-Aware Model Methods Demo[/bold blue]")
     
     console.print("\n[green]The Model class now uses the proper context system:[/green]")
-    console.print("• Methods work within existing Archive3mf and Directory contexts")
+    console.print("• Methods work within existing Archive and Directory contexts")
     console.print("• No duplicate context creation")
     console.print("• Proper separation of concerns")
     console.print("• Better integration with the library's architecture")
@@ -33,7 +33,7 @@ def demo_context_aware_methods():
     # Example 1: Using instance methods within context
     console.print("\n1️⃣ Working within existing context:")
     console.print("```python")
-    console.print("with Archive3mf('output.3mf', 'w') as archive:")
+    console.print("with Archive('output.3mf', 'w') as archive:")
     console.print("    with Directory('3D') as models_dir:")
     console.print("        with Model() as model:")
     console.print("            obj_id = model.load_stl_with_info(Path('model.stl'))")
@@ -85,7 +85,7 @@ def demo_advanced_context_usage():
     console.print("\n[yellow]Advanced usage with custom context management:[/yellow]")
     console.print("```python")
     console.print("# Create archive with custom structure")
-    console.print("with Archive3mf('custom.3mf', 'w') as archive:")
+    console.print("with Archive('custom.3mf', 'w') as archive:")
     console.print("    # Add multiple models in the same directory")
     console.print("    with Directory('3D') as models_dir:")
     console.print("        ")

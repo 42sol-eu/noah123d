@@ -102,7 +102,7 @@ Noah123d is built with a modular architecture:
 ```mermaid
 graph TD
     A[STL Files] --> B[STLConverter]
-    B --> C[Archive3mf]
+    B --> C[Archive]
     C --> D[Directory]
     D --> E[Model]
     E --> F[3MF Output]

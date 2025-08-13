@@ -4,14 +4,14 @@ from pathlib import Path
 import tempfile
 
 # Archive context functions
-from noah123d.archive3mf import Archive3mf, add_file, list_contents, is_writable, get_temp_path
+from noah123d.archive import Archive, add_file, list_contents, is_writable, get_temp_path
 
 # Directory context functions
 from noah123d.directories import ThreeD, add_thumbnail, create_model_file
 from noah123d.directories import Metadata, add_conversion_info, add_properties
 
 # Model context functions
-from noah123d.model import Model, add_object, get_object_count, list_objects, analyze_model_content
+from noah123d import Model, add_object, get_object_count, list_objects, analyze_model_content
 
 
 def complete_context_example():
@@ -22,7 +22,7 @@ def complete_context_example():
         
         print("🚀 Creating complete 3MF archive using context functions...")
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             print(f"✓ Created archive: {archive.file_path}")
             print(f"✓ Archive is writable: {is_writable()}")
             
@@ -137,7 +137,7 @@ def nested_context_comparison():
         context_path = Path(temp_dir) / "context_approach.3mf"
         
         print("\n🔵 Using Context Functions:")
-        with Archive3mf(context_path, 'w') as archive:
+        with Archive(context_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("shapes.model") as model:
                     # All using context functions - no object names needed!
@@ -153,7 +153,7 @@ def nested_context_comparison():
         instance_path = Path(temp_dir) / "instance_approach.3mf"
         
         print("\n🔴 Using Instance Methods:")
-        with Archive3mf(instance_path, 'w') as archive:
+        with Archive(instance_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("shapes.model") as model:
                     # Traditional approach - need object names

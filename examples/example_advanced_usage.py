@@ -1,7 +1,7 @@
 """Example 3: Advanced context manager usage, error handling, and nested operations."""
 
 from pathlib import Path
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 import json
 import contextlib
 
@@ -11,7 +11,7 @@ def safe_3mf_operations():
     output_path = Path("safe_operations.3mf")
     
     try:
-        with Archive3mf(output_path, 'w') as archive:
+        with Archive(output_path, 'w') as archive:
             print(f"Safely creating archive: {archive.file_path}")
             
             # Demonstrate nested context managers with error recovery
@@ -90,7 +90,7 @@ def demonstrate_context_nesting():
     
     print("\\n=== Demonstrating Advanced Context Nesting ===")
     
-    with Archive3mf(output_path, 'w') as archive:
+    with Archive(output_path, 'w') as archive:
         print(f"Archive context: {archive.file_path}")
         
         # Multiple nested directories
@@ -180,7 +180,7 @@ def batch_archive_processing():
             archive_path = Path(config["name"])
             print(f"\\nCreating {archive_path}...")
             
-            with Archive3mf(archive_path, 'w') as archive:
+            with Archive(archive_path, 'w') as archive:
                 with Directory('3D') as models_dir:
                     for shape_name in config["shapes"]:
                         with Model() as model:

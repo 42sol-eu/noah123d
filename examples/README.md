@@ -5,7 +5,7 @@ This directory contains comprehensive examples demonstrating how to use the Noah
 ## Examples Overview
 
 ### 1. `example_3mf.py` - Basic Usage
-**Purpose**: Demonstrates fundamental usage of Archive3mf, Directory, and Model classes.
+**Purpose**: Demonstrates fundamental usage of Archive, Directory, and Model classes.
 
 **Key Features**:
 - Creating a simple 3MF archive
@@ -106,7 +106,7 @@ Examples demonstrate creating organized 3MF archives with:
 
 ### Basic Archive Creation
 ```python
-with Archive3mf(output_path, 'w') as archive:
+with Archive(output_path, 'w') as archive:
     with Directory('3D') as models_dir:
         with Model() as model:
             obj_id = model.add_object(vertices, triangles, name="MyObject")
@@ -114,7 +114,7 @@ with Archive3mf(output_path, 'w') as archive:
 
 ### Reading Archives
 ```python
-with Archive3mf(input_path, 'r') as archive:
+with Archive(input_path, 'r') as archive:
     contents = archive.list_contents()
     with Directory('3D') as models_dir:
         with Model() as model:
@@ -124,7 +124,7 @@ with Archive3mf(input_path, 'r') as archive:
 ### Error Handling
 ```python
 try:
-    with Archive3mf(path, 'w') as archive:
+    with Archive(path, 'w') as archive:
         # ... operations ...
 except Exception as e:
     print(f"Error: {e}")

@@ -5,7 +5,7 @@ from contextvars import ContextVar
 from typing import Optional
 from unittest.mock import MagicMock
 
-from noah123d.context_decorators import context_function_with_check, context_function, auto_context_function_with_checks
+from noah123d import context_function_with_check, context_function, auto_context_function_with_checks
 
 
 # Test classes and context variables

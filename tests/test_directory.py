@@ -22,7 +22,7 @@ def mock_archive(tmp_path):
     return mock
 
 def test_directory_context_sets_and_resets_current_directory(mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         dir_path = "dir1"
         d = Directory(dir_path)
@@ -31,7 +31,7 @@ def test_directory_context_sets_and_resets_current_directory(mock_archive):
         assert Directory.get_current() is None
 
 def test_ensure_directory_exists_creates_directory(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir2")
         with d:
@@ -40,7 +40,7 @@ def test_ensure_directory_exists_creates_directory(tmp_path, mock_archive):
             assert full_path.is_dir()
 
 def test_create_and_read_file(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir3")
         with d:
@@ -51,7 +51,7 @@ def test_create_and_read_file(tmp_path, mock_archive):
             assert content == b"hello world"
 
 def test_create_file_with_bytes(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir4")
         with d:
@@ -60,7 +60,7 @@ def test_create_file_with_bytes(tmp_path, mock_archive):
             assert content == b"\x01\x02"
 
 def test_delete_file(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir5")
         with d:
@@ -70,7 +70,7 @@ def test_delete_file(tmp_path, mock_archive):
             assert d.delete_file("file.txt") is False
 
 def test_list_subdirectories(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir6")
         with d:
@@ -85,14 +85,14 @@ def test_get_archive_path_slash_conversion():
     assert d.get_archive_path() == "foo/bar/baz"
 
 def test_exists_returns_true_when_directory_exists(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir7")
         with d:
             assert d.exists() is True
 
 def test_exists_returns_false_when_directory_does_not_exist(tmp_path, mock_archive):
-    with patch("noah123d.directory.current_archive") as mock_current_archive:
+    with patch("noah123d.threemf.directory.current_archive") as mock_current_archive:
         mock_current_archive.get.return_value = mock_archive
         d = Directory("dir8")
         # Do not enter context, so directory is not created

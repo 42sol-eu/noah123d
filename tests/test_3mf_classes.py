@@ -1,27 +1,27 @@
-"""Test the Archive3mf, Directory, and Model classes."""
+"""Test the Archive, Directory, and Model classes."""
 
 import tempfile
 import pytest
 from pathlib import Path
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 
 def test_archive_context_manager():
-    """Test Archive3mf context manager."""
+    """Test Archive context manager."""
     with tempfile.NamedTemporaryFile(suffix='.3mf', delete=False) as tmp:
         tmp_path = Path(tmp.name)
     
     try:
         # Test creating a new archive
-        with Archive3mf(tmp_path, 'w') as archive:
+        with Archive(tmp_path, 'w') as archive:
             assert archive is not None
-            assert Archive3mf.get_current() == archive
+            assert Archive.get_current() == archive
             contents = archive.list_contents()
             assert '[Content_Types].xml' in contents
             assert '_rels/.rels' in contents
             
         # Context should be reset after exit
-        assert Archive3mf.get_current() is None
+        assert Archive.get_current() is None
         
     finally:
         tmp_path.unlink(missing_ok=True)
@@ -33,7 +33,7 @@ def test_directory_context_manager():
         tmp_path = Path(tmp.name)
     
     try:
-        with Archive3mf(tmp_path, 'w') as archive:
+        with Archive(tmp_path, 'w') as archive:
             with Directory('3D') as directory:
                 assert directory is not None
                 assert Directory.get_current() == directory
@@ -57,7 +57,7 @@ def test_model_context_manager():
         tmp_path = Path(tmp.name)
     
     try:
-        with Archive3mf(tmp_path, 'w') as archive:
+        with Archive(tmp_path, 'w') as archive:
             with Directory('3D') as directory:
                 with Model("3dmodel.model") as model:
                     assert model is not None
@@ -102,7 +102,7 @@ def test_nested_contexts():
         tmp_path = Path(tmp.name)
     
     try:
-        with Archive3mf(tmp_path, 'w') as archive:
+        with Archive(tmp_path, 'w') as archive:
             # Create main 3D directory
             with Directory('3D') as main_dir:
                 # Create a model
@@ -136,23 +136,23 @@ def test_context_isolation():
     
     try:
         # First archive context
-        with Archive3mf(tmp1_path, 'w') as archive1:
-            assert Archive3mf.get_current() == archive1
+        with Archive(tmp1_path, 'w') as archive1:
+            assert Archive.get_current() == archive1
             
             with Directory('3D') as dir1:
                 assert Directory.get_current() == dir1
                 assert Directory.get_parent_archive() == archive1
                 
                 # Second archive context (nested)
-                with Archive3mf(tmp2_path, 'w') as archive2:
-                    assert Archive3mf.get_current() == archive2
+                with Archive(tmp2_path, 'w') as archive2:
+                    assert Archive.get_current() == archive2
                     
                     with Directory('Models') as dir2:
                         assert Directory.get_current() == dir2
                         assert Directory.get_parent_archive() == archive2
                         
                 # Back to first context
-                assert Archive3mf.get_current() == archive1
+                assert Archive.get_current() == archive1
                 assert Directory.get_current() == dir1
                 assert Directory.get_parent_archive() == archive1
                 

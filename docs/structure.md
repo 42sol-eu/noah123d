@@ -32,7 +32,7 @@ docs/
 ├── reference/             # API reference documentation
 │   ├── index.md
 │   ├── converters.md
-│   ├── archive3mf.md
+│   ├── Archive.md
 │   ├── model.md
 │   ├── directory.md
 │   └── analyzer.md

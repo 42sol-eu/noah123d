@@ -2,13 +2,13 @@
 
 ## Overview
 
-The Model class has been refactored to properly use the existing Archive3mf and Directory context system instead of creating its own contexts within class methods. This improves architecture consistency and follows the library's design patterns.
+The Model class has been refactored to properly use the existing Archive and Directory context system instead of creating its own contexts within class methods. This improves architecture consistency and follows the library's design patterns.
 
 ## Changes Made
 
 ### 1. New Instance Methods (Context-Aware)
 
-These methods work within existing Archive3mf and Directory contexts:
+These methods work within existing Archive and Directory contexts:
 
 - **`load_stl_with_info(stl_path)`** - Load STL with rich console output
 - **`analyze_model_content()`** - Analyze and display model statistics 
@@ -18,7 +18,7 @@ These methods work within existing Archive3mf and Directory contexts:
 
 Updated existing class methods to properly use the context system:
 
-- **`convert_stl_to_3mf()`** - Now uses proper Archive3mf → Directory → Model context chain
+- **`convert_stl_to_3mf()`** - Now uses proper Archive → Directory → Model context chain
 - **`analyze_3mf_content()`** - Uses context system and delegates to instance method
 - **`batch_convert_stl_files()`** - Already correct, uses convert_stl_to_3mf()
 
@@ -35,7 +35,7 @@ Model.analyze_3mf_content(Path("output.3mf"))
 ### Pattern 2: Instance Methods (Context-Aware)
 ```python
 # Work within existing contexts
-with Archive3mf('output.3mf', 'w') as archive:
+with Archive('output.3mf', 'w') as archive:
     with Directory('3D') as models_dir:
         with Model() as model:
             obj_id = model.load_stl_with_info(Path('model.stl'))
@@ -45,7 +45,7 @@ with Archive3mf('output.3mf', 'w') as archive:
 
 ### Pattern 3: Advanced Multi-Model Usage
 ```python
-with Archive3mf('assembly.3mf', 'w') as archive:
+with Archive('assembly.3mf', 'w') as archive:
     with Directory('3D') as models_dir:
         # Multiple models in same archive
         with Model('part1.model') as model1:
@@ -58,7 +58,7 @@ with Archive3mf('assembly.3mf', 'w') as archive:
 ## Benefits
 
 ✅ **Proper Context Management** - No duplicate context creation or resource leaks
-✅ **Architecture Consistency** - Follows established Archive3mf → Directory → Model pattern  
+✅ **Architecture Consistency** - Follows established Archive → Directory → Model pattern  
 ✅ **Flexibility** - Can work within existing contexts or create new ones
 ✅ **Single Responsibility** - Class methods handle high-level operations, instance methods handle model operations
 ✅ **Maintainability** - Clear separation between context creation and model manipulation
@@ -85,7 +85,7 @@ Model.convert_stl_to_3mf(stl_path, output_path)
 Model.convert_stl_to_3mf(stl_path, output_path)
 
 # Option 2: Context-aware (new capability)
-with Archive3mf(output_path, 'w') as archive:
+with Archive(output_path, 'w') as archive:
     with Directory('3D') as models_dir:
         with Model() as model:
             model.load_stl_with_info(stl_path)

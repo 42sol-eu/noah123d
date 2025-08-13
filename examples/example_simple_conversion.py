@@ -3,7 +3,7 @@
 from pathlib import Path
 from rich import print
 from rich.console import Console
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 
 def demo_context_aware_conversion():
@@ -20,8 +20,8 @@ def demo_context_aware_conversion():
     
     console.print(f"[green]Converting using context-aware methods...[/green]")
     
-    # Use the context system properly - Archive3mf -> Directory -> Model
-    with Archive3mf(output_path, 'w') as archive:
+    # Use the context system properly - Archive -> Directory -> Model
+    with Archive(output_path, 'w') as archive:
         console.print(f"✓ Created 3MF archive: {archive.file_path}")
         
         with Directory('3D') as models_dir:
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     
     # Example 4: Create empty 3MF
     console.print("\n[yellow]Example 4: Create empty 3MF[/yellow]")
-    with Archive3mf('empty.3mf', 'w') as archive:
+    with Archive('empty.3mf', 'w') as archive:
         with Directory('3D') as models_dir:
             with Model() as model:
                 model.analyze_3mf_content()

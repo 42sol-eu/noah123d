@@ -83,10 +83,10 @@ for file_path, file_stats in stats.items():
 ### Manual 3MF creation with STL data
 
 ```python
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 # Create 3MF manually with STL data
-with Archive3mf("output.3mf", 'w') as archive:
+with Archive("output.3mf", 'w') as archive:
     with Directory('3D') as models_dir:
         with Model() as model:
             # Add STL file to model
@@ -248,7 +248,7 @@ This metadata is stored in `Metadata/conversion_report.txt` within the 3MF archi
 
 The converter integrates seamlessly with the existing noah123d workflow:
 
-1. Use `archive3mf` for 3MF file management
+1. Use `Archive` for 3MF file management
 2. Use `directory` for organizing 3MF content
 3. Use `model` for 3D object management
 4. Use `stlconverter` for STL file processing

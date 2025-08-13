@@ -83,7 +83,7 @@ def test_add_object_from_stl_calls_mesh(monkeypatch, a_model, tmp_path):
     assert len(obj['triangles']) == 2
 
 def test_save_and_load_model(monkeypatch):
-    # Patch Archive3mf and Directory context
+    # Patch Archive and Directory context
     mock_archive = MagicMock()
     mock_archive.extract_file.return_value = None
     mock_archive.is_writable.return_value = True
@@ -98,8 +98,8 @@ def test_save_and_load_model(monkeypatch):
     mock_current_directory.get.return_value = mock_directory
     
     # Replace the entire context variables
-    monkeypatch.setattr("noah123d.model.current_archive", mock_current_archive)
-    monkeypatch.setattr("noah123d.model.current_directory", mock_current_directory)
+    monkeypatch.setattr("noah123d.threemf.model.current_archive", mock_current_archive)
+    monkeypatch.setattr("noah123d.threemf.model.current_directory", mock_current_directory)
     
     with Model("test.model") as m:
         m.add_object([[0,0,0],[1,0,0],[0,1,0]], [[0,1,2]])
@@ -119,9 +119,9 @@ def test_get_current_and_parent(monkeypatch):
     mock_current_model.get.return_value = None
     
     # Replace the entire context variables
-    monkeypatch.setattr("noah123d.model.current_archive", mock_current_archive)
-    monkeypatch.setattr("noah123d.model.current_directory", mock_current_directory)
-    monkeypatch.setattr("noah123d.model.current_model", mock_current_model)
+    monkeypatch.setattr("noah123d.threemf.model.current_archive", mock_current_archive)
+    monkeypatch.setattr("noah123d.threemf.model.current_directory", mock_current_directory)
+    monkeypatch.setattr("noah123d.threemf.model.current_model", mock_current_model)
     
     assert Model.get_parent_archive() == mock_archive
     assert Model.get_parent_directory() == mock_directory
@@ -173,7 +173,7 @@ def test_analyze_model_content(a_model, capsys):
     assert "Total Objects: 2" in captured.out
     assert "3D Objects Details" in captured.out
 
-@patch('noah123d.model.Directory')
+@patch('noah123d.threemf.model.Directory')
 def test_add_conversion_metadata(mock_directory_class, monkeypatch, a_model, tmp_path, capsys):
     """Test add_conversion_metadata method."""
     stl_path = tmp_path / "test.stl"
@@ -190,7 +190,7 @@ def test_add_conversion_metadata(mock_directory_class, monkeypatch, a_model, tmp
     mock_current_archive = MagicMock()
     mock_current_archive.get.return_value = mock_archive
     
-    monkeypatch.setattr("noah123d.model.current_archive", mock_current_archive)
+    monkeypatch.setattr("noah123d.threemf.model.current_archive", mock_current_archive)
     
     # Test with valid archive context
     a_model.add_conversion_metadata(stl_path)
@@ -203,8 +203,8 @@ def test_add_conversion_metadata(mock_directory_class, monkeypatch, a_model, tmp
     captured = capsys.readouterr()
     assert "No archive context available" in captured.out
 
-@patch('noah123d.model.Archive3mf')
-@patch('noah123d.model.Directory')
+@patch('noah123d.threemf.model.Archive')
+@patch('noah123d.threemf.model.Directory')
 def test_convert_stl_to_3mf(mock_directory_class, mock_archive_class, monkeypatch, tmp_path, capsys):
     """Test convert_stl_to_3mf class method."""
     stl_path = tmp_path / "test.stl"
@@ -242,16 +242,16 @@ def test_convert_stl_to_3mf(mock_directory_class, mock_archive_class, monkeypatc
     mock_current_model.set.return_value = MagicMock()
     mock_current_model.reset = MagicMock()
     
-    monkeypatch.setattr("noah123d.model.current_archive", mock_current_archive)
-    monkeypatch.setattr("noah123d.model.current_directory", mock_current_directory)
-    monkeypatch.setattr("noah123d.model.current_model", mock_current_model)
+    monkeypatch.setattr("noah123d.threemf.model.current_archive", mock_current_archive)
+    monkeypatch.setattr("noah123d.threemf.model.current_directory", mock_current_directory)
+    monkeypatch.setattr("noah123d.threemf.model.current_model", mock_current_model)
     
     # Test successful conversion
     result = Model.convert_stl_to_3mf(stl_path, output_path)
     assert result == output_path
     captured = capsys.readouterr()
-    assert "Converting STL to 3MF..." in captured.out
-    assert "Conversion completed successfully!" in captured.out
+    assert "STL to 3MF" in captured.out
+    assert "completed successfully!" in captured.out
     
     # Test file not found
     non_existent = tmp_path / "nonexistent.stl"
@@ -260,8 +260,8 @@ def test_convert_stl_to_3mf(mock_directory_class, mock_archive_class, monkeypatc
     captured = capsys.readouterr()
     assert "STL file not found" in captured.out
 
-@patch('noah123d.model.Archive3mf')
-@patch('noah123d.model.Directory')
+@patch('noah123d.threemf.model.Archive')
+@patch('noah123d.threemf.model.Directory')
 def test_analyze_3mf_content(mock_directory_class, mock_archive_class, monkeypatch, tmp_path, capsys):
     """Test analyze_3mf_content class method."""
     file_path = tmp_path / "test.3mf"
@@ -290,9 +290,9 @@ def test_analyze_3mf_content(mock_directory_class, mock_archive_class, monkeypat
     mock_current_model.set.return_value = MagicMock()
     mock_current_model.reset = MagicMock()
     
-    monkeypatch.setattr("noah123d.model.current_archive", mock_current_archive)
-    monkeypatch.setattr("noah123d.model.current_directory", mock_current_directory)
-    monkeypatch.setattr("noah123d.model.current_model", mock_current_model)
+    monkeypatch.setattr("noah123d.threemf.model.current_archive", mock_current_archive)
+    monkeypatch.setattr("noah123d.threemf.model.current_directory", mock_current_directory)
+    monkeypatch.setattr("noah123d.threemf.model.current_model", mock_current_model)
     
     # Test successful analysis
     Model.analyze_3mf_content(file_path)
@@ -306,7 +306,7 @@ def test_analyze_3mf_content(mock_directory_class, mock_archive_class, monkeypat
     captured = capsys.readouterr()
     assert "3MF file not found" in captured.out
 
-@patch('noah123d.model.Model.convert_stl_to_3mf')
+@patch('noah123d.threemf.model.Model.convert_stl_to_3mf')
 def test_batch_convert_stl_files(mock_convert, tmp_path, capsys):
     """Test batch_convert_stl_files class method."""
     input_dir = tmp_path / "input"

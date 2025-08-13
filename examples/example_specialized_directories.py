@@ -4,14 +4,14 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from noah123d import Archive3mf, ThreeD, Metadata, Textures, Model
+from noah123d import Archive, ThreeD, Metadata, Textures, Model
 
 def demonstrate_specialized_directories():
     """Demonstrate the new specialized directory classes."""
     
     output_path = Path("example_specialized.3mf")
     
-    with Archive3mf(output_path, 'w') as archive:
+    with Archive(output_path, 'w') as archive:
         print(f"✓ Created 3MF archive: {archive.file_path}")
         
         # Using the specialized ThreeD directory

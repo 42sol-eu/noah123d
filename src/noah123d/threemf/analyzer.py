@@ -2,12 +2,13 @@
 
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Union
-from .archive3mf import Archive3mf
-from .directory import Directory
+
+from .archive import Archive
+from .directory import Directory, current_directory
 from .model import Model
 
 
-class Analysis3MF:
+class Analyzer:
     """3MF file analyzer for extracting model information."""
     
     def __init__(self):
@@ -36,7 +37,7 @@ class Analysis3MF:
                 'summary': {}
             }
             
-            with Archive3mf(file_path, 'r') as archive:
+            with Archive(file_path, 'r') as archive:
                 contents = archive.list_contents()
                 analysis['archive_contents'] = contents
                 
@@ -202,7 +203,7 @@ def analyze_3mf(file_path: Path) -> Dict[str, Any]:
     Returns:
         Analysis results dictionary
     """
-    analyzer = Analysis3MF()
+    analyzer = Analyzer()
     return analyzer.analyze_file(file_path)
 
 
@@ -217,7 +218,7 @@ def get_model_center_of_mass(file_path: Path, model_id: int = None) -> Optional[
     Returns:
         Center of mass coordinates [x, y, z] or None if not found
     """
-    analyzer = Analysis3MF()
+    analyzer = Analyzer()
     analysis = analyzer.analyze_file(file_path)
     
     if 'error' in analysis:
@@ -244,7 +245,7 @@ def get_model_dimensions(file_path: Path, model_id: int = None) -> Optional[List
     Returns:
         Dimensions [width, height, depth] or None if not found
     """
-    analyzer = Analysis3MF()
+    analyzer = Analyzer()
     analysis = analyzer.analyze_file(file_path)
     
     if 'error' in analysis:
@@ -258,3 +259,4 @@ def get_model_dimensions(file_path: Path, model_id: int = None) -> Optional[List
             return model['dimensions']
     
     return None
+

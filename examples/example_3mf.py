@@ -1,8 +1,8 @@
-"""Example usage of the Archive3mf, Directory, and Model classes."""
+"""Example usage of the Archive, Directory, and Model classes."""
 
 from pathlib import Path
 from rich import print
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 
 def create_sample_3mf():
@@ -10,7 +10,7 @@ def create_sample_3mf():
     output_path = Path("arc.3mf")
     
     # Create the 3MF archive
-    with Archive3mf(output_path, 'w') as archive:
+    with Archive(output_path, 'w') as archive:
         print(f"Created archive: {archive.file_path}")
         
         # Create the 3D directory
@@ -61,7 +61,7 @@ def read_3mf_info(file_path: Path):
     """Read and display information about a 3MF file."""
     print(f"\nReading 3MF file: {file_path}")
     
-    with Archive3mf(file_path, 'r') as archive:
+    with Archive(file_path, 'r') as archive:
         print("Archive contents:")
         for content in archive.list_contents():
             print(f"  - {content}")

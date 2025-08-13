@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Detailed analysis of the text strings in text.3mf."""
 
-from noah123d import Archive3mf
+from noah123d import Archive
 import xml.etree.ElementTree as ET
 
 def detailed_text_analysis():
     """Provide detailed analysis of text modification possibilities."""
     try:
-        with Archive3mf('text.3mf', 'r') as archive:
+        with Archive('text.3mf', 'r') as archive:
             # Read the Slic3r_PE_model.config file which contains the text
             config_content = archive.extract_file('Metadata/Slic3r_PE_model.config')
             if config_content:

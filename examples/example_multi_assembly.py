@@ -41,13 +41,13 @@ for obj in valid_objects:
 try:
     success = multi_stl_to_3mf(
         valid_objects, 
-        'printer_kit.3mf', 
+        'ark_kit.3mf', 
         layout_mode='grid',
         include_metadata=True  # Explicitly enable metadata
     )
     
     if success:
-        output_file = Path('printer_kit.3mf')
+        output_file = Path('ark_kit.3mf')
         if output_file.exists():
             size_mb = output_file.stat().st_size / (1024 * 1024)
             print(f"✅ Successfully created: {output_file.name} ({size_mb:.2f} MB)")
@@ -60,9 +60,9 @@ try:
         from noah123d import STLConverter
         converter = STLConverter()
         stats = converter.get_conversion_stats()
-        if 'printer_kit.3mf' in stats and 'error' in stats['printer_kit.3mf']:
-            print(f"Error details: {stats['printer_kit.3mf']['error']}")
-        
+        if 'ark_kit.3mf' in stats and 'error' in stats['ark_kit.3mf']:
+            print(f"Error details: {stats['ark_kit.3mf']['error']}")
+
 except Exception as e:
     print(f"❌ Error during conversion: {e}")
     import traceback

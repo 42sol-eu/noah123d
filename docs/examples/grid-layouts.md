@@ -182,7 +182,7 @@ python examples/example_grid_layout.py
 The grid feature integrates seamlessly with existing noah123d workflow:
 
 1. **STL Analysis**: Uses existing `get_stl_info()` for dimensions
-2. **3MF Creation**: Uses `Archive3mf`, `Directory`, `model` classes
+2. **3MF Creation**: Uses `Archive`, `Directory`, `model` classes
 3. **Object Management**: Leverages existing object handling
 4. **Metadata**: Enhanced metadata with grid information
 

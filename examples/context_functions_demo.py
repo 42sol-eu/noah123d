@@ -3,9 +3,9 @@
 from pathlib import Path
 import tempfile
 
-from noah123d import Archive3mf
-from noah123d.directories import ThreeD, add_thumbnail, create_model_file
-from noah123d.model import Model, add_object, get_object_count, list_objects
+from noah123d import Archive
+from noah123d import ThreeD, add_thumbnail, create_model_file
+from noah123d import Model, add_object, get_object_count, list_objects
 
 
 def example_context_function_with_checks():
@@ -16,7 +16,7 @@ def example_context_function_with_checks():
         
         print("Creating 3MF archive with context functions...")
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             print(f"✓ Created archive: {archive.file_path}")
             
             with ThreeD() as threed:
@@ -63,7 +63,7 @@ def example_mixed_usage():
         
         print("\nCreating 3MF archive with mixed function usage...")
         
-        with Archive3mf(archive_path, 'w') as archive:
+        with Archive(archive_path, 'w') as archive:
             with ThreeD() as threed:
                 with Model("mixed.model") as model:
                     

@@ -6,7 +6,7 @@ This script provides a comprehensive analysis and demonstration of the 3MF text
 modification capabilities for the text.3mf file.
 """
 
-from noah123d import Archive3mf
+from noah123d import Archive
 from pathlib import Path
 import os
 
@@ -27,7 +27,7 @@ def main():
     print("-" * 50)
     
     # Analyze the file structure
-    with Archive3mf(input_file, 'r') as archive:
+    with Archive(input_file, 'r') as archive:
         contents = archive.list_contents()
         print(f"📦 Archive contains {len(contents)} files:")
         for content in sorted(contents):
@@ -143,7 +143,7 @@ def main():
                 print(f"✅ {file}")
                 # Show what text this file contains
                 try:
-                    with Archive3mf(file, 'r') as archive:
+                    with Archive(file, 'r') as archive:
                         config = archive.extract_file('Metadata/Slic3r_PE_model.config')
                         if config:
                             config_str = config.decode('utf-8')

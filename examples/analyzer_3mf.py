@@ -7,7 +7,7 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 
 class Model3MFAnalyzer:
@@ -38,7 +38,7 @@ class Model3MFAnalyzer:
                 'summary': {}
             }
             
-            with Archive3mf(file_path, 'r') as archive:
+            with Archive(file_path, 'r') as archive:
                 # Get archive contents
                 contents = archive.list_contents()
                 analysis['archive_contents'] = contents

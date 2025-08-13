@@ -8,7 +8,7 @@ from pathlib import Path
 
 console = Console()
 
-from . import __version__
+__version__ = "0.1.0"
 
 G_all_models = {}
 
@@ -27,30 +27,30 @@ def process_model(model : Path, verbose : bool =False):
 def load_model(model : Path, verbose : bool =False):
     """Load an STL model file and print its details."""
     if not model.is_file():
-        console.print(f"[red]✗[/red] Model file not found: {model}")
+        console.print(f"[red]\u2717[/red] Model file not found: {model}")
         return None
     console.print(f"[blue]Loading STL model file:[/blue] {model}")
     try:
         # Load the STL file
         stl_mesh = mesh.Mesh.from_file(model)
-        console.print(f"[green]✓[/green] Successfully loaded STL with {len(stl_mesh.vectors)} triangles")
+        console.print(f"[green]\u2713[/green] Successfully loaded STL with {len(stl_mesh.vectors)} triangles")
         
         if verbose:
             show_mesh_bounds(f"[dim]Mesh bounds:[/dim]", stl_mesh)
             
     except Exception as e:
-        console.print(f"[red]✗[/red] Error loading STL file: {e}")
+        console.print(f"[red]\u2717[/red] Error loading STL file: {e}")
 
     return stl_mesh 
 
 def center_model_origin(stl_mesh: mesh.Mesh, verbose: bool = False):
     """Center the model at the origin."""
     if not isinstance(stl_mesh, mesh.Mesh):
-        console.print(f"[red]✗[/red] Invalid model type: {type(stl_mesh)}")
+        console.print(f"[red]\u2717[/red] Invalid model type: {type(stl_mesh)}")
         return None
     center = np.mean(stl_mesh.vectors, axis=(0, 1))
     stl_mesh.vectors -= center
-    console.print(f"[green]✓[/green] Model centered at origin: {center}")
+    console.print(f"[green]\u2713[/green] Model centered at origin: {center}")
     
     if verbose:
         show_mesh_bounds("[dim]New mesh bounds[/dim]", stl_mesh)
@@ -59,11 +59,11 @@ def center_model_origin(stl_mesh: mesh.Mesh, verbose: bool = False):
 def move_model_origin(stl_mesh: mesh.Mesh, verbose: bool =False):
     """This moves the bounding box to the origin point (0,0,0)"""
     if not isinstance(stl_mesh, mesh.Mesh):
-        console.print(f"[red]✗[/red] Invalid model type: {type(stl_mesh)}")
+        console.print(f"[red]\u2717[/red] Invalid model type: {type(stl_mesh)}")
         return None
     min = np.min(stl_mesh.vectors, axis=(0, 1))
     stl_mesh.vectors -= min
-    console.print(f"[green]✓[/green] Model moved to origin: {min}")
+    console.print(f"[green]\u2713[/green] Model moved to origin: {min}")
 
     if verbose:
         show_mesh_bounds("[dim]New mesh bounds[/dim]", stl_mesh)
@@ -107,3 +107,4 @@ def main(model, directory, verbose, version):
 
 if __name__ == "__main__":
     main()
+

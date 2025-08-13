@@ -22,7 +22,7 @@ High-level convenience functions for common tasks:
 Low-level classes for advanced control:
 
 - **[`STLConverter`](converters.md)** - STL conversion engine
-- **[`Archive3mf`](archive3mf.md)** - 3MF archive management
+- **[`Archive`](Archive.md)** - 3MF archive management
 - **[`Model`](model.md)** - 3D model handling
 - **[`Directory`](directory.md)** - 3MF directory structure
 - **[`Analysis3MF`](analyzer.md)** - 3MF analysis engine
@@ -43,7 +43,7 @@ from noah123d import (
 # Core classes
 from noah123d import (
     STLConverter,
-    Archive3mf,
+    Archive,
     Model,
     Directory,
     Analysis3MF
@@ -306,6 +306,6 @@ DEFAULT_VALIDATE = False
 Explore the detailed documentation for each module:
 
 - **[STLConverter](converters.md)** - Core conversion functionality
-- **[Archive3mf](archive3mf.md)** - 3MF file format handling
+- **[Archive](Archive.md)** - 3MF file format handling
 - **[Model](model.md)** - 3D model operations
 - **[Analysis3MF](analyzer.md)** - Analysis and statistics

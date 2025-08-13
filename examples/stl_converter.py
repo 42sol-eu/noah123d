@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from typing import Optional, Union
-from noah123d import Archive3mf, Directory, Model
+from noah123d import Archive, Directory, Model
 
 
 def stl_to_3mf(stl_path: Union[str, Path], output_path: Union[str, Path], 
@@ -32,7 +32,7 @@ def stl_to_3mf(stl_path: Union[str, Path], output_path: Union[str, Path],
             return False
             
         # Create the 3MF archive
-        with Archive3mf(output_path, 'w') as archive:
+        with Archive(output_path, 'w') as archive:
             # Create the 3D directory
             with Directory('3D') as models_dir:
                 # Create a model and add the STL
