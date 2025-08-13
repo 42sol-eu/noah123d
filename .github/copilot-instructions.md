@@ -1,5 +1,5 @@
-For Python code, a library import should look like this : `from {module} import (\n    {elements} )\n#!md| [docs]({url_to_the_docs})`.
-For Python code, dataclasses should align their field name, type and value in a column style.
+For Python code, a library import should look like this : `from {module} import (\n    {elements} )\n#!md| [docs](https://github.com/42sol-eu/noah123d)`.
+For Python code, `dataclasses` should align their field name, type and value in a column style.
 For Python code, a files doc string must be present and must look like this: 
 ```python
 # -*- coding: utf-8 -*-

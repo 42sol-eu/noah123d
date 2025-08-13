@@ -4,6 +4,8 @@ from noah123d import tasks
 from noah123d import threemf
 from noah123d import visual
 
+#TODO: improve __all__ handling in the package
+
 from noah123d.converters import (STLConverter, batch_stl_to_3mf, get_stl_info,
                                  multi_stl_to_3mf, stl_to_3mf,
                                  stl_to_3mf_grid,)
