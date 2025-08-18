@@ -2,6 +2,11 @@
 """
 Script to convert title case headings and numbered lists to sentence case
 in markdown documentation files.
+----
+project:
+    name:        a7d
+    uuid:        2cc2a024-ae2a-4d2c-91c2-f41348980f7f
+    url:         https://github.com/42sol-eu/a7d
 """
 
 import os

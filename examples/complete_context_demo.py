@@ -4,11 +4,11 @@ from pathlib import Path
 import tempfile
 
 # Archive context functions
-from noah123d.archive import Archive, add_file, list_contents, is_writable, get_temp_path
+from noah123d import Archive, add_file, list_contents, is_writable, get_temp_path
 
 # Directory context functions
-from noah123d.directories import ThreeD, add_thumbnail, create_model_file
-from noah123d.directories import Metadata, add_conversion_info, add_properties
+from noah123d import ThreeD, add_thumbnail, create_model_file
+from noah123d import Metadata, add_conversion_info, add_properties
 
 # Model context functions
 from noah123d import Model, add_object, get_object_count, list_objects, analyze_model_content

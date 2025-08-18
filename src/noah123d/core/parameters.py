@@ -44,7 +44,7 @@ class ModelParameters:
     material: Optional[str] = None
 
     def __post_init__(self) -> None:
-        logging.debug(
+        Log.debug(
             "ModelParameters initialized with name=%s, width=%.2f, height=%.2f, depth=%.2f, material=%s",
             self.name, self.width, self.height, self.depth, self.material
         )

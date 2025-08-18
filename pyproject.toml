@@ -7,11 +7,13 @@ readme = "README.md"
 packages = [{include = "noah123d", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.14"
 rich = "^14.1.0"
 click = "^8.2.1"
 numpy-stl = "^3.2.0"
 toml = "^0.10.2"
+build123d = "^0.9.1"
+ocp-vscode = "^2.9.0"
 
 
 [tool.poetry.scripts]

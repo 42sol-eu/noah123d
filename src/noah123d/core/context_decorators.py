@@ -20,12 +20,12 @@ from typing import Callable, TypeVar, Type, Any, Optional
 from contextvars import ContextVar
 
 # %% [Context Variables]
-T = TypeVar('T')
+_T = TypeVar('T')
 
 # %% [Functions]
 
-def context_function_with_check(context_var: ContextVar[Optional[T]], 
-                    expected_type: Type[T] = None,
+def context_function_with_check(context_var: ContextVar[Optional[_T]], 
+                    expected_type: Type[_T] = None,
                     context_name: str = None) -> Callable:
     """
     Decorator factory to create context-aware functions that delegate to instance methods.
@@ -93,10 +93,11 @@ def context_function(context_var: ContextVar) -> Callable:
     return decorator
 
 
-def auto_context_function_with_checks(context_var: ContextVar[Optional[T]], 
-                                     expected_type: Type[T],
-                                     context_name: str,
-                                     methods: Optional[list[str]] = None) -> dict[str, Callable]:
+def auto_context_function_with_checks(  context_var: ContextVar[Optional[_T]], 
+                                        expected_type: Type[_T],
+                                        context_name: str,
+                                        methods: Optional[list[str]] = None
+    ) -> dict[str, Callable]:
     """
     Utility to automatically create multiple context-aware functions for specified methods.
     

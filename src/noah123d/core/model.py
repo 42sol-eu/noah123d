@@ -13,7 +13,7 @@ class BaseModel(ABC):
     """Abstract base class for all noah123d models."""
 
     def __init__(self, params: ModelParameters) -> None:
-        logging.debug("Initializing BaseModel with params: %s", params)
+        Log.debug("Initializing BaseModel with params: %s", params)
         self.params = params
         self.model = None
 
@@ -23,7 +23,7 @@ class BaseModel(ABC):
         Build the model using build123d or noah123d operations.
         Must set self.model to the built object.
         """
-        logging.debug(f"Building model '{self.params.name}' with {self.params}")
+        Log.debug(f"Building model '{self.params.name}' with {self.params}")
         # Implement model building logic here
         self.model = None
         return self
@@ -33,10 +33,10 @@ class BaseModel(ABC):
         Export the model to the given file path.
         This is a placeholder — in practice, hook into build123d exporters.
         """
-        logging.debug("Exporting model '%s' to %s", self.params.name, file_path)
+        Log.debug("Exporting model '%s' to %s", self.params.name, file_path)
         if self.model is None:
             raise ValueError("Model not built. Call build() first.")
         # Example: Replace with actual build123d export code
         file_path.write_text(f"Exported model: {self.params.name}")
-        logging.info("Model '%s' exported to %s", self.params.name, file_path)
+        info("Model '%s' exported to %s", self.params.name, file_path)
         return self

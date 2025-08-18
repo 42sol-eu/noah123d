@@ -1,9 +1,10 @@
 from pathlib import Path
 from noah123d.core import ModelParameters, BaseModel
+from noah123d import *
 
 class BoxModel(BaseModel):
     def build(self) -> None:
-        logging.debug("Building BoxModel with parameters: %s", self.params)
+        Log.debug("Building BoxModel with parameters: %s", self.params)
         # Placeholder for build123d code
         self.model = f"Box({self.params.width} x {self.params.height} x {self.params.depth})"
 

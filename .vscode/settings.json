@@ -12,6 +12,7 @@
         "Pylance",
         "pytest",
         "rels",
+        "secho",
         "threed",
         "threemf",
         "venv"

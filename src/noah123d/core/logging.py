@@ -17,13 +17,38 @@ from rich.logging import (
     RichHandler
 )  #!md| [docs](https://rich.readthedocs.io/en/stable/logging.html)
 from logging import (
-    basicConfig, DEBUG, INFO, WARNING, ERROR, CRITICAL
+    basicConfig,
+    debug, info, warning, error, critical
 )  #!md| [docs](https://docs.python.org/3/library/logging.html)
+
+import logging
+
 
 # Configure logging to use RichHandler for beautiful output
 basicConfig(
-    level=DEBUG,
+    level=logging.DEBUG,
     format="%(message)s",
     datefmt="[%X]",
     handlers=[RichHandler()]
 )
+
+class Log:
+    @staticmethod
+    def debug(msg, *args, **kwargs):
+        logging.debug(msg, *args, **kwargs)
+
+    @staticmethod
+    def info(msg, *args, **kwargs):
+        logging.info(msg, *args, **kwargs)
+
+    @staticmethod
+    def warning(msg, *args, **kwargs):
+        logging.warning(msg, *args, **kwargs)
+
+    @staticmethod
+    def error(cls, msg, *args, **kwargs):
+        logging.error(msg, *args, **kwargs)
+
+    @staticmethod
+    def critical(msg, *args, **kwargs):
+        logging.critical(msg, *args, **kwargs)
