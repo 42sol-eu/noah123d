@@ -16,7 +16,9 @@ project:
 # [[[cog
 # import sys
 # from pathlib import Path
-# sys.path.insert(0, str(Path(cog.inFile).parent.parent.parent.parent / "a7d"))
+# # Use absolute path to ensure a7d is found regardless of working directory
+# project_root = Path(cog.inFile).resolve().parent.parent.parent.parent
+# sys.path.insert(0, str(project_root / "a7d"))
 # from cog_helpers import generate_subpackage_imports_and_all
 # content = generate_subpackage_imports_and_all(str(Path(cog.inFile).parent), group_by_file=True)
 # cog.out(content)

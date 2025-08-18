@@ -24,11 +24,19 @@ from click import (
     command,
     argument,
     option,
-    secho,
-    echo,
-    style,
     Path as ClickPath,
 )
+from rich.console import Console
+from rich.table import Table
+from rich.text import Text
+from rich.panel import Panel
+from rich.columns import Columns
+from rich.status import Status
+from rich import box
+from rich.progress import Progress, SpinnerColumn, TextColumn
+
+# %% [Constants]
+console = Console()
 
 # %% [Classes]
 @dataclass
@@ -115,17 +123,18 @@ def run_cog_check(file_path: Path, show_diff: bool = False) -> COGResult:
     )
     
     try:
-        # Run COG check
-        cmd = ["cog", "--check"]
+        # Run COG check with checksum verification from project root to avoid path issues
+        cmd = ["cog", "-c", "--check"]
         if show_diff:
             cmd.append("--diff")
-        cmd.append(str(file_path))
+        cmd.append(str(file_path))  # Use full path when running from project root
         
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            cwd=file_path.parent
+            # Run from project root to ensure consistent paths
+            cwd=Path.cwd()
         )
         
         if result.returncode == 0:
@@ -135,12 +144,22 @@ def run_cog_check(file_path: Path, show_diff: bool = False) -> COGResult:
                 changed=False
             )
         else:
-            return COGResult(
-                file=cog_file,
-                success=False,
-                changed=True,
-                error_message=result.stdout + result.stderr
-            )
+            # Check if it's a checksum protection warning
+            error_output = result.stdout + result.stderr
+            if "Output has been edited!" in error_output:
+                return COGResult(
+                    file=cog_file,
+                    success=False,
+                    changed=True,
+                    warning_message="Manual edits detected - checksum protection active"
+                )
+            else:
+                return COGResult(
+                    file=cog_file,
+                    success=False,
+                    changed=True,
+                    error_message=error_output
+                )
             
     except FileNotFoundError:
         return COGResult(
@@ -167,17 +186,18 @@ def run_cog_generate(file_path: Path, with_checksum: bool = True) -> COGResult:
     )
     
     try:
-        # Run COG generation
+        # Run COG generation from project root to avoid path issues
         cmd = ["cog"]
         if with_checksum:
             cmd.append("-c")
-        cmd.extend(["-r", str(file_path)])
+        cmd.extend(["-r", str(file_path)])  # Use full path when running from project root
         
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            cwd=file_path.parent
+            # Run from project root to ensure consistent paths
+            cwd=Path.cwd()
         )
         
         if result.returncode == 0:
@@ -219,6 +239,366 @@ def run_cog_generate(file_path: Path, with_checksum: bool = True) -> COGResult:
             error_message=f"Error running COG: {e}"
         )
 
+# %% [Functions]
+def get_status_icon(status: str) -> str:
+    """Get the appropriate icon for a status."""
+    icons = {
+        "file": "📁",
+        "generate": "⚙️",
+        "check": "🔍", 
+        "success": "✅",
+        "change": "🔄",
+        "warning": "⚠️",
+        "error": "❌",
+        "summary": "📊"
+    }
+    return icons.get(status, "•")
+
+def get_status_color(status: str) -> str:
+    """Get the appropriate color for a status."""
+    colors = {
+        "file": "cyan",
+        "generate": "blue",
+        "check": "yellow", 
+        "success": "green",
+        "change": "blue",
+        "warning": "yellow",
+        "error": "red",
+        "summary": "magenta",
+        "info": "bright_black"
+    }
+    return colors.get(status, "white")
+
+def create_file_table(cog_file: COGFile, result: COGResult, mode: str, verbose: bool = False) -> Table:
+    """Create a Rich table for a single file's COG processing."""
+    
+    table = Table(
+        title=f"[bold cyan]{cog_file.relative_path}[/bold cyan]",
+        box=box.ROUNDED,
+        show_header=True,
+        header_style="bold cyan"
+    )
+    
+    table.add_column("Step", justify="right", style="dim", width=4)
+    table.add_column("Status", justify="center", width=6)
+    table.add_column("Description", style="white")
+    
+    step = 1
+    
+    # Step 1: File discovery
+    table.add_row(
+        str(step),
+        get_status_icon("file"),
+        "Discovered COG file",
+        style=get_status_color("file")
+    )
+    step += 1
+    
+    if verbose:
+        table.add_row(
+            "",
+            "",
+            f"[{get_status_color('info')}]Blocks: {cog_file.cog_blocks}, Checksum: {'Yes' if cog_file.has_checksum else 'No'}[/{get_status_color('info')}]"
+        )
+        if cog_file.description:
+            table.add_row(
+                "",
+                "",
+                f"[{get_status_color('info')}]Type: {cog_file.description}[/{get_status_color('info')}]"
+            )
+    
+    # Step 2: Processing
+    if mode == "check":
+        table.add_row(
+            str(step),
+            get_status_icon("check"),
+            "Checking consistency",
+            style=get_status_color("check")
+        )
+    else:
+        table.add_row(
+            str(step),
+            get_status_icon("generate"),
+            "Running generation",
+            style=get_status_color("generate")
+        )
+    step += 1
+    
+    # Step 3: Result
+    if result.success:
+        if mode == "check":
+            if result.changed:
+                table.add_row(
+                    str(step),
+                    get_status_icon("change"),
+                    "Needs regeneration",
+                    style=get_status_color("change")
+                )
+                if verbose:
+                    table.add_row(
+                        "",
+                        "",
+                        f"[{get_status_color('info')}]File content differs from expected[/{get_status_color('info')}]"
+                    )
+            else:
+                table.add_row(
+                    str(step),
+                    get_status_icon("success"),
+                    "Up-to-date",
+                    style=get_status_color("success")
+                )
+                if verbose:
+                    table.add_row(
+                        "",
+                        "",
+                        f"[{get_status_color('info')}]File matches expected content[/{get_status_color('info')}]"
+                    )
+        else:  # generate mode
+            if result.changed:
+                table.add_row(
+                    str(step),
+                    get_status_icon("success"),
+                    "Generated and updated",
+                    style=get_status_color("change")
+                )
+                if verbose:
+                    table.add_row(
+                        "",
+                        "",
+                        f"[{get_status_color('info')}]File content was updated[/{get_status_color('info')}]"
+                    )
+            else:
+                table.add_row(
+                    str(step),
+                    get_status_icon("success"),
+                    "No changes needed",
+                    style=get_status_color("success")
+                )
+                if verbose:
+                    table.add_row(
+                        "",
+                        "",
+                        f"[{get_status_color('info')}]File already up-to-date[/{get_status_color('info')}]"
+                    )
+                    
+    elif result.warning_message:
+        table.add_row(
+            str(step),
+            get_status_icon("warning"),
+            "Protected (manual edits)",
+            style=get_status_color("warning")
+        )
+        if verbose:
+            table.add_row(
+                "",
+                "",
+                f"[{get_status_color('info')}]{result.warning_message}[/{get_status_color('info')}]"
+            )
+            
+    else:
+        # Determine error type for better messaging
+        error_type = "Error occurred"
+        if result.error_message:
+            if "ModuleNotFoundError" in result.error_message:
+                error_type = "Import error"
+            elif "NameError" in result.error_message:
+                error_type = "Python error"
+            elif "FileNotFoundError" in result.error_message:
+                error_type = "File not found"
+            elif "Check failed" in result.error_message:
+                error_type = "Content mismatch"
+        
+        table.add_row(
+            str(step),
+            get_status_icon("error"),
+            error_type,
+            style=get_status_color("error")
+        )
+        if verbose and result.error_message:
+            # Show first 2 lines of error
+            error_lines = result.error_message.split('\n')[:2]
+            for line in error_lines:
+                if line.strip():
+                    table.add_row(
+                        "",
+                        "",
+                        f"[{get_status_color('error')}]{line[:60]}[/{get_status_color('error')}]"
+                    )
+    
+    return table
+
+def create_summary_table(results: List[COGResult], mode: str) -> Table:
+    """Create a Rich summary table for all results."""
+    
+    if not results:
+        return None
+        
+    total = len(results)
+    successful = sum(1 for r in results if r.success)
+    changed = sum(1 for r in results if r.changed)
+    errors = sum(1 for r in results if not r.success and not r.warning_message)
+    warnings = sum(1 for r in results if r.warning_message)
+    
+    table = Table(
+        title=f"[bold magenta]COG {mode.title()} Summary[/bold magenta]",
+        box=box.ROUNDED,
+        show_header=True,
+        header_style="bold magenta"
+    )
+    
+    table.add_column("Step", justify="right", style="dim", width=4)
+    table.add_column("Status", justify="center", width=6)
+    table.add_column("Description", style="white")
+    
+    step = 1
+    table.add_row(
+        str(step),
+        get_status_icon("summary"),
+        f"Total files processed: {total}",
+        style=get_status_color("summary")
+    )
+    step += 1
+    
+    if mode == "check":
+        if successful == total:
+            table.add_row(
+                str(step),
+                get_status_icon("success"),
+                f"All files up-to-date: {successful}",
+                style=get_status_color("success")
+            )
+        else:
+            table.add_row(
+                str(step),
+                get_status_icon("success"),
+                f"Up-to-date: {successful}",
+                style=get_status_color("success")
+            )
+            step += 1
+            if changed > 0:
+                table.add_row(
+                    str(step),
+                    get_status_icon("change"),
+                    f"Need regeneration: {changed}",
+                    style=get_status_color("change")
+                )
+    else:  # generate mode
+        if successful > 0:
+            table.add_row(
+                str(step),
+                get_status_icon("success"),
+                f"Successfully processed: {successful}",
+                style=get_status_color("success")
+            )
+            step += 1
+        if changed > 0:
+            table.add_row(
+                str(step),
+                get_status_icon("change"),
+                f"Files changed: {changed}",
+                style=get_status_color("change")
+            )
+            step += 1
+            
+    if warnings > 0:
+        table.add_row(
+            str(step),
+            get_status_icon("warning"),
+            f"Protected files (manual edits): {warnings}",
+            style=get_status_color("warning")
+        )
+        step += 1
+    if errors > 0:
+        table.add_row(
+            str(step),
+            get_status_icon("error"),
+            f"Errors: {errors}",
+            style=get_status_color("error")
+        )
+        
+    return table
+
+@command()
+@argument("folder", type=ClickPath(exists=True, file_okay=False, dir_okay=True))
+
+def print_table_footer(width: int = 80):
+    """Print a table footer."""
+    secho("└" + "─" * (width - 2) + "┘", fg="cyan")
+
+def print_file_table(cog_file: COGFile, result: COGResult, mode: str, verbose: bool = False, step_counter: int = 1):
+    """Print a table for a single file's COG processing."""
+    width = 80
+    
+    # Table header with file name
+    title = f"{cog_file.relative_path}"
+    print_table_header(title, width)
+    
+    current_step = step_counter
+    
+    # Step 1: File discovery
+    print_table_row(current_step, "�", f"Discovered COG file", width, "white")
+    current_step += 1
+    
+    if verbose:
+        print_table_detail_row(f"    Blocks: {cog_file.cog_blocks}, Checksum: {'Yes' if cog_file.has_checksum else 'No'}", width)
+        if cog_file.description:
+            print_table_detail_row(f"    Type: {cog_file.description}", width)
+    
+    # Step 2: Processing
+    if mode == "check":
+        print_table_row(current_step, "?", "Checking consistency", width, "cyan")
+    else:
+        print_table_row(current_step, "G", "Running generation", width, "cyan")
+    current_step += 1
+    
+    # Step 3: Result
+    if result.success:
+        if mode == "check":
+            if result.changed:
+                print_table_row(current_step, "!", "Needs regeneration", width, "yellow")
+                if verbose:
+                    print_table_detail_row("    File content differs from expected", width)
+            else:
+                print_table_row(current_step, "+", "Up-to-date", width, "green")
+                if verbose:
+                    print_table_detail_row("    File matches expected content", width)
+        else:  # generate mode
+            if result.changed:
+                print_table_row(current_step, "+", "Generated and updated", width, "blue")
+                if verbose:
+                    print_table_detail_row("    File content was updated", width)
+            else:
+                print_table_row(current_step, "+", "No changes needed", width, "green")
+                if verbose:
+                    print_table_detail_row("    File already up-to-date", width)
+                    
+    elif result.warning_message:
+        print_table_row(current_step, "W", "Protected (manual edits)", width, "yellow")
+        if verbose:
+            print_table_detail_row(f"    {result.warning_message}", width)
+            
+    else:
+        # Determine error type for better messaging
+        error_type = "Error occurred"
+        if result.error_message:
+            if "ModuleNotFoundError" in result.error_message:
+                error_type = "Import error"
+            elif "NameError" in result.error_message:
+                error_type = "Python error"
+            elif "FileNotFoundError" in result.error_message:
+                error_type = "File not found"
+            elif "Check failed" in result.error_message:
+                error_type = "Content mismatch"
+                
+        print_table_row(current_step, "X", error_type, width, "red")
+        if verbose and result.error_message:
+            for line in result.error_message.split('\n')[:2]:  # Show first 2 lines
+                if line.strip():
+                    print_table_detail_row(f"    {line[:width-8]}", width)
+    
+    print_table_footer(width)
+    echo()  # Add spacing between tables
+
 def print_results_summary(results: List[COGResult], mode: str):
     """Print a colorful summary of COG results."""
     if not results:
@@ -231,68 +611,36 @@ def print_results_summary(results: List[COGResult], mode: str):
     errors = sum(1 for r in results if not r.success and not r.warning_message)
     warnings = sum(1 for r in results if r.warning_message)
     
-    echo()
-    secho("=" * 60, fg="cyan")
-    secho(f"COG {mode.title()} Summary", fg="cyan", bold=True)
-    secho("=" * 60, fg="cyan")
+    width = 80
+    print_table_header(f"COG {mode.title()} Summary", width)
     
-    secho(f"📁 Total files: {total}", fg="white")
+    step = 1
+    print_table_row(step, "S", f"Total files processed: {total}", width, "white")
+    step += 1
     
     if mode == "check":
         if successful == total:
-            secho(f"✅ All files up-to-date: {successful}", fg="green")
+            print_table_row(step, "+", f"All files up-to-date: {successful}", width, "green")
         else:
-            secho(f"✅ Up-to-date: {successful}", fg="green")
+            print_table_row(step, "+", f"Up-to-date: {successful}", width, "green")
+            step += 1
             if changed > 0:
-                secho(f"🔄 Need regeneration: {changed}", fg="yellow")
+                print_table_row(step, "!", f"Need regeneration: {changed}", width, "yellow")
     else:  # generate mode
         if successful > 0:
-            secho(f"✅ Successfully processed: {successful}", fg="green")
+            print_table_row(step, "+", f"Successfully processed: {successful}", width, "green")
+            step += 1
         if changed > 0:
-            secho(f"🔄 Files changed: {changed}", fg="blue")
+            print_table_row(step, "!", f"Files changed: {changed}", width, "blue")
+            step += 1
             
     if warnings > 0:
-        secho(f"⚠️  Protected files (manual edits): {warnings}", fg="yellow")
+        print_table_row(step, "W", f"Protected files (manual edits): {warnings}", width, "yellow")
+        step += 1
     if errors > 0:
-        secho(f"❌ Errors: {errors}", fg="red")
+        print_table_row(step, "X", f"Errors: {errors}", width, "red")
         
-    echo()
-
-def print_file_result(result: COGResult, mode: str, verbose: bool = False):
-    """Print the result for a single file."""
-    file_path = result.file.relative_path
-    
-    if result.success:
-        if mode == "check":
-            if result.changed:
-                secho(f"🔄 {file_path}", fg="yellow")
-                if verbose:
-                    echo(f"   Needs regeneration")
-            else:
-                secho(f"✅ {file_path}", fg="green")
-                if verbose:
-                    echo(f"   Up-to-date")
-        else:  # generate mode
-            if result.changed:
-                secho(f"🔄 {file_path}", fg="blue")
-                if verbose:
-                    echo(f"   Generated and updated")
-            else:
-                secho(f"✅ {file_path}", fg="green")
-                if verbose:
-                    echo(f"   No changes needed")
-                    
-    elif result.warning_message:
-        secho(f"⚠️  {file_path}", fg="yellow")
-        if verbose:
-            echo(f"   {result.warning_message}")
-            
-    else:
-        secho(f"❌ {file_path}", fg="red")
-        if verbose and result.error_message:
-            for line in result.error_message.split('\n')[:3]:  # Show first 3 lines
-                if line.strip():
-                    echo(f"   {line}")
+    print_table_footer(width)
 
 @command()
 @argument("folder", type=ClickPath(exists=True, file_okay=False, dir_okay=True))
@@ -334,55 +682,87 @@ def cli(folder, check, no_checksum, diff, verbose):
     """
     folder_path = Path(folder).resolve()
     
-    # Header
-    secho("🔧 COG Automation Runner", fg="cyan", bold=True)
-    secho("=" * 60, fg="cyan")
+    # Header with Rich
+    console.print()
+    console.print(Panel.fit(
+        "[bold cyan]🔧 COG Automation Runner[/bold cyan]",
+        border_style="cyan"
+    ))
+    console.print()
     
     mode = "check" if check else "generate"
-    secho(f"Mode: {mode.title()}", fg="white")
-    secho(f"Folder: {folder_path}", fg="white")
+    
+    # Info panel
+    info_content = [
+        f"[bold]Mode:[/bold] {mode.title()}",
+        f"[bold]Folder:[/bold] {folder_path}",
+    ]
     if not check:
         checksum_status = "disabled" if no_checksum else "enabled"
-        secho(f"Checksum protection: {checksum_status}", fg="white")
-    echo()
+        info_content.append(f"[bold]Checksum protection:[/bold] {checksum_status}")
+    
+    console.print(Panel("\n".join(info_content), title="Configuration", border_style="blue"))
+    console.print()
     
     # Find all COG files
-    secho("🔍 Discovering COG files...", fg="cyan")
-    cog_files = find_cog_files(folder_path)
+    with Status("[cyan]🔍 Discovering COG files...", console=console) as status:
+        cog_files = find_cog_files(folder_path)
     
     if not cog_files:
-        secho("No files with COG automation found.", fg="yellow")
+        console.print("[yellow]No files with COG automation found.[/yellow]")
         return
-        
-    secho(f"Found {len(cog_files)} files with COG automation:", fg="green")
+    
+    # Show discovered files
+    console.print(f"[green]Found {len(cog_files)} files with COG automation:[/green]")
+    console.print()
+    
+    files_table = Table(box=box.SIMPLE)
+    files_table.add_column("File", style="cyan")
+    files_table.add_column("Blocks", justify="center", style="yellow")
+    files_table.add_column("Checksum", justify="center", style="green")
+    if verbose:
+        files_table.add_column("Description", style="bright_black")
     
     for cog_file in cog_files:
         checksum_icon = "🔒" if cog_file.has_checksum else "🔓"
-        blocks_info = f"({cog_file.cog_blocks} block{'s' if cog_file.cog_blocks != 1 else ''})"
-        secho(f"  {checksum_icon} {cog_file.relative_path} {blocks_info}", fg="white")
-        if verbose and cog_file.description:
-            secho(f"     {cog_file.description}", fg="dim_white")
+        row = [
+            str(cog_file.relative_path),
+            str(cog_file.cog_blocks),
+            checksum_icon
+        ]
+        if verbose:
+            row.append(cog_file.description or "")
+        files_table.add_row(*row)
     
-    echo()
+    console.print(files_table)
+    console.print()
     
     # Process files
     if check:
-        secho("🔍 Checking COG consistency...", fg="cyan")
+        console.print("[cyan]🔍 Checking COG consistency...[/cyan]")
     else:
-        secho("⚙️  Running COG generation...", fg="cyan")
+        console.print("[cyan]⚙️ Running COG generation...[/cyan]")
+    console.print()
     
     results = []
-    for cog_file in cog_files:
+    for i, cog_file in enumerate(cog_files, 1):
         if check:
             result = run_cog_check(cog_file.path, show_diff=diff)
         else:
             result = run_cog_generate(cog_file.path, with_checksum=not no_checksum)
         
         results.append(result)
-        print_file_result(result, mode, verbose)
+        
+        # Show individual file table
+        file_table = create_file_table(cog_file, result, mode, verbose)
+        console.print(file_table)
+        console.print()
     
     # Summary
-    print_results_summary(results, mode)
+    summary_table = create_summary_table(results, mode)
+    if summary_table:
+        console.print(summary_table)
+        console.print()
     
     # Exit with appropriate code
     if any(not r.success and not r.warning_message for r in results):

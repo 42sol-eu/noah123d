@@ -69,7 +69,48 @@ python a7d/collect_init.py --update-first --include-private --group-by-file src/
 - **Hierarchical organization**: Separates main directory and subpackage exports
 - **All update_init.py features**: Inherits all features from the underlying tool
 
-## Tool 3: COG Integration
+## Tool 4: COG Automation Runner
+
+A unified script that discovers and runs all COG automation in a project with professional table-style output.
+
+### Usage
+
+```bash
+# Run COG generation on all files in a folder
+./a7d/run_cog.py src/noah123d
+
+# Check if files need regeneration (don't modify)
+./a7d/run_cog.py src/noah123d --check
+
+# Generate without checksum protection (not recommended)
+./a7d/run_cog.py src/noah123d --no-checksum
+
+# Show detailed output with file information
+./a7d/run_cog.py src/noah123d --verbose
+
+# Check with diff output to see what would change
+./a7d/run_cog.py src/noah123d --check --diff
+```
+
+### Features
+
+- **Auto-discovery**: Finds all files with COG markers recursively
+- **Table output**: Professional table format with step numbers, icons, and descriptions
+- **File-specific tables**: Each file gets its own processing table
+- **Summary reporting**: Overall statistics in a summary table
+- **Checksum protection**: Integrated with COG's checksum safety features
+- **Verbose mode**: Detailed information about file types and processing steps
+- **Icon legend**: Clear legend explaining all status icons (F=File, G=Generate, ?=Check, +=Success, !=Change, W=Warning, X=Error, S=Summary)
+
+### Output Format
+
+Each file is processed in its own table showing:
+1. **Step 1**: File discovery with metadata
+2. **Step 2**: Processing (generation or checking)
+3. **Step 3**: Results with status
+4. **Details**: Additional information in verbose mode
+
+The tool provides a professional interface for managing all COG automation across the project.
 
 Uses [COG (Code Generator)](https://nedbatchelder.com/code/cog/) for automated `__init__.py` generation via embedded comments.
 

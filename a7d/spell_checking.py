@@ -1,0 +1,1 @@
+# TODO: design a spell checker that uses vscodes .vscode/workingSet.json ("cSpell.words") to add special words and the dictionary of the plugin if possible

@@ -1,3 +1,5 @@
+For Python code, use rich for command line output or textualize if necessary
+For Python code, use click for command line tools add trogon if helpful
 For Python code, a library import should look like this : `from {module} import (\n    {elements} )\n#!md| [docs](https://github.com/42sol-eu/noah123d)`.
 For Python code, `dataclasses` should align their field name, type and value in a column style.
 For Python code, a files doc string must be present and must look like this: 
